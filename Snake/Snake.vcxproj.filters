@@ -5,10 +5,63 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Sources\Views">
+      <UniqueIdentifier>{e58c224f-2a73-4706-a719-621bcc2e14e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Settings">
+      <UniqueIdentifier>{c74274f4-9407-4b1b-b993-a278f2f35fee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Core">
+      <UniqueIdentifier>{55ab6a38-d51d-4037-9db5-73f81a915900}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Snake">
+      <UniqueIdentifier>{467e7b97-d40c-47b7-93b7-29c2d2357c99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Snake.cpp">
+      <Filter>Sources\Snake</Filter>
+    </ClCompile>
+    <ClCompile Include="Segment.cpp">
+      <Filter>Sources\Snake</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="SnakeBodyAssets.cpp">
+      <Filter>Sources\Views</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SnakeBodyAssets.h">
+      <Filter>Sources\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Sources\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Sources\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>Sources\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Sources\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Snake.h">
+      <Filter>Sources\Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="Segment.h">
+      <Filter>Sources\Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="Direction.h">
+      <Filter>Sources\Snake</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

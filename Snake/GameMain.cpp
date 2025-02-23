@@ -1,35 +1,54 @@
 ﻿// ©2023, XYZ School. All rights reserved.
 // Authored by Aleksandr Rybalka (polterageist@gmail.com)
 
-#include <SFML/Graphics.hpp>
+#include "Settings.h"
+#include "Controller.h"
+#include "Snake.h"
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
 
 const std::string RESOURCES_PATH = "Resources/";
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(330, 400), "SFML works!");
+    bool isStart = false;
+    sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
+    auto settings = Settings::Settings();
+    auto snake = Snake::Snake();
 
-	sf::Texture logo;
-	if (!logo.loadFromFile(RESOURCES_PATH + "xyz-logo.png"))
-	{
-		return EXIT_FAILURE;
-	}
-	sf::Sprite logo_sprite(logo);
+    sf::Clock game_clock;
+    sf::Time lastTime = game_clock.getElapsedTime();
 
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+            }
+        }
 
-		window.clear();
-		window.draw(logo_sprite);
-		window.display();
-	}
+        sf::Time currentTime = game_clock.getElapsedTime();
+        snake.deltaTime = currentTime.asSeconds() - lastTime.asSeconds();
+        lastTime = currentTime;
 
-	return 0;
+        if (isStart == false)
+        {
+            snake.Initialize(settings);
+
+            isStart = true;
+        }
+
+        Core_Controller::MoveInput(snake);
+
+        window.clear();
+
+        snake.Draw(window);
+
+        window.display();
+    }
+
+    return 0;
 }
