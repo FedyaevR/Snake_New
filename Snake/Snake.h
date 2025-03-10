@@ -2,13 +2,19 @@
 #include <vector>
 #include "SnakeBodyAssets.h"
 #include "Segment.h"
+#include "Math.h"
 
 namespace Snake
 {
+    struct Turn
+    {
+
+    };
 
     struct Snake
     {
         std::vector<Snake_Segment::Segment> segments;
+        std::vector<Math::Position> turnPositions;
         Snake_Segment::Segment* head = nullptr;
 
         Views::SnakeBodyViews bodyAssets;
@@ -24,6 +30,8 @@ namespace Snake
         Snake_Segment::Segment InitSegment(sf::Texture texture, Math::Position position);
 
         void MoveHead(Snake_Direction::Direction setDirection);
+
+        void MoveBody();
 
         void SegmentStep(Snake_Segment::Segment& segment, Snake_Direction::Direction setDirection);
 

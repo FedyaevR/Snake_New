@@ -7,10 +7,12 @@ namespace Snake
     {
         deltaTime = settings.deltaTime;
 
-        auto head = InitSegment(bodyAssets.head.up, {500 / 2, 500 / 2}); // Заменить потом на настройки высоты и ширина экрана
+        auto head = InitSegment(bodyAssets.head.up, { 500 / 2, 500 / 2 }); // Заменить потом на настройки высоты и ширина экрана
         head.isHead = true;
+        auto body1 = InitSegment(bodyAssets.body.vertical, {head.position.x, head.position.y + Settings::SNAKE_PART_SIZE });
 
         segments.push_back(head);
+        segments.push_back(body1);
 
         this->head = &segments[0];
 
@@ -37,18 +39,41 @@ namespace Snake
     void Snake::Update(Snake_Direction::Direction setDirection)
     {
         MoveHead(setDirection);
+        MoveBody();
     }
 
     void Snake::MoveHead(Snake_Direction::Direction setDirection)
     {
+        //// Запоминаем точку поворота, если направление изменилось
+        //if (head->direction != setDirection)
+        //{
+        //    turnPositions.push_back(head->position);
+        //    head->direction = setDirection;
+        //}
+
         SegmentStep(*head, setDirection);
+    }
+
+    void Snake::MoveBody()
+    {
+        for (int i = 1; i < segments.size(); i++)
+        {
+            segments[i].SetTurnFlag(segments[i - 1].direction);
+            SegmentStep(segments[i], segments[i].direction);
+        }
     }
 
     void Snake::SegmentStep(Snake_Segment::Segment& segment, Snake_Direction::Direction setDirection)
     {
         float distance = std::min(speed * deltaTime, Settings::SNAKE_PART_SIZE / 2.f);
 
-        segment.SetTurnFlag(setDirection);
+        //segment.SetTurnFlag(setDirection);
+
+        if (segment.isTurn)
+        {
+            turnPositions.push_back(segment.position);
+            setDirection = head->direction;
+        }
 
         switch (setDirection)
         {
@@ -72,6 +97,12 @@ namespace Snake
 
         UpdateSegmentsTexture(setDirection, bodyAssets);
         segment.UpdateSpritePosition();
+
+        //if (segment.isTurn)
+        //{
+        //    turnPositions.push_back(segment.position);
+        //    setDirection = head->direction;
+        //}
 
         segment.direction = setDirection;
     }

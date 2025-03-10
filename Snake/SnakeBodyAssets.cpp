@@ -39,7 +39,7 @@ namespace Views
         }
         else if (previousDirection == setDirection)
         {
-            GetStandartBodyTexture(setDirection);
+            return GetStandartBodyTexture(setDirection);
         }
     }
 

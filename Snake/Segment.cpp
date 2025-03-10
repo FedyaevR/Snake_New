@@ -22,8 +22,6 @@ namespace Snake_Segment
         }
     }
 
-
-    // Тут надо добавить обновление текстуры тела, сейчас только голова и хвост
     void Segment::SetTexture(Snake_Direction::Direction setDirection, Views::SnakeBodyViews bodyAssets)
     {
         switch (setDirection)
