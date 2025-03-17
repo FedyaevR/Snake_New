@@ -1,5 +1,6 @@
 #include "Snake.h"
 #include "Math.h"
+#include <iostream>
 
 namespace Snake
 {
@@ -10,9 +11,12 @@ namespace Snake
         auto head = InitSegment(bodyAssets.head.up, { 500 / 2, 500 / 2 }); // Заменить потом на настройки высоты и ширина экрана
         head.isHead = true;
         auto body1 = InitSegment(bodyAssets.body.vertical, {head.position.x, head.position.y + Settings::SNAKE_PART_SIZE });
+        auto body2 = InitSegment(bodyAssets.body.vertical, { body1.position.x, body1.position.y + Settings::SNAKE_PART_SIZE });
+
 
         segments.push_back(head);
         segments.push_back(body1);
+        segments.push_back(body2);
 
         this->head = &segments[0];
 
@@ -40,25 +44,43 @@ namespace Snake
     {
         MoveHead(setDirection);
         MoveBody();
+        UpdateSegmentsTexture(bodyAssets);
     }
 
     void Snake::MoveHead(Snake_Direction::Direction setDirection)
     {
         //// Запоминаем точку поворота, если направление изменилось
-        //if (head->direction != setDirection)
-        //{
-        //    turnPositions.push_back(head->position);
-        //    head->direction = setDirection;
-        //}
+        if (head->direction != setDirection)
+        {
+            turnPositions.push_back({ head->position, setDirection });
+            head->direction = setDirection;
+            std::cout << "Turn point added: (" << head->position.x << ", " << head->position.y << ")\n";
+        }
 
         SegmentStep(*head, setDirection);
     }
 
     void Snake::MoveBody()
     {
+        //for (int i = 1; i < segments.size(); i++)
+        //{
+        //    segments[i].SetTurnFlag(segments[i - 1].direction);
+        //    SegmentStep(segments[i], segments[i].direction);
+        //}
+
         for (int i = 1; i < segments.size(); i++)
         {
-            segments[i].SetTurnFlag(segments[i - 1].direction);
+            // Проверяем, достиг ли сегмент точки поворота
+            if (!turnPositions.empty() && IsAtTurnPoint(segments[i].position, turnPositions.front().position))
+            {
+                segments[i].direction = turnPositions.front().direction;
+                segments[i].position = turnPositions.front().position;
+                if (i == segments.size() - 1) // Если это последний сегмент, удаляем точку поворота
+                {
+                    turnPositions.pop_front();
+                }
+            }
+
             SegmentStep(segments[i], segments[i].direction);
         }
     }
@@ -69,11 +91,11 @@ namespace Snake
 
         //segment.SetTurnFlag(setDirection);
 
-        if (segment.isTurn)
+      /*  if (segment.isTurn)
         {
-            turnPositions.push_back(segment.position);
+            turnPositions.push_back({ segment.position, setDirection});
             setDirection = head->direction;
-        }
+        }*/
 
         switch (setDirection)
         {
@@ -95,7 +117,11 @@ namespace Snake
                 break;
         }
 
-        UpdateSegmentsTexture(setDirection, bodyAssets);
+
+        //UpdateSegmentsTexture(setDirection, bodyAssets);
+        //UpdateSegmentsTexture(bodyAssets);
+
+        //std::cout << "Segment moved to: (" << segment.position.x << ", " << segment.position.y << ")\n";
         segment.UpdateSpritePosition();
 
         //if (segment.isTurn)
@@ -107,11 +133,30 @@ namespace Snake
         segment.direction = setDirection;
     }
 
-    void Snake::UpdateSegmentsTexture(Snake_Direction::Direction setDirection, Views::SnakeBodyViews bodyAssets)
+    bool Snake::IsAtTurnPoint(Math::Position segmentPosition, Math::Position turnPosition)
     {
-        for (auto& segment : segments)
+        const float epsilon = 1.f; // Допуск для точности
+        // Отладочный вывод
+        std::cout << "Segment position: (" << segmentPosition.x << ", " << segmentPosition.y << ")\n";
+        std::cout << "Turn position: (" << turnPosition.x << ", " << turnPosition.y << ")\n";
+        return std::abs(segmentPosition.x - turnPosition.x) <= epsilon &&
+               std::abs(segmentPosition.y - turnPosition.y) <= epsilon;
+    }
+
+    //void Snake::UpdateSegmentsTexture(Snake_Direction::Direction setDirection, Views::SnakeBodyViews bodyAssets)
+    //{
+    //    for (auto& segment : segments)
+    //    {
+    //        segment.SetTexture(setDirection, bodyAssets);
+    //    }
+    //}
+
+    void Snake::UpdateSegmentsTexture(Views::SnakeBodyViews bodyAssets)
+    {
+        for (size_t i = 0; i < segments.size(); i++)
         {
-            segment.SetTexture(setDirection, bodyAssets);
+            Snake_Direction::Direction prevDirection = (i == 0) ? head->direction : segments[i - 1].direction;
+            segments[i].SetTexture(segments[i].direction, bodyAssets);
         }
     }
 

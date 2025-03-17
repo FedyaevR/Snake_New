@@ -14,7 +14,7 @@ namespace Snake_Segment
         
         Snake_Direction::Direction direction;
 
-        Segment* previousSegment = nullptr;
+        Segment* previousSegment;
 
         bool isTail = false;
         bool isHead = false;
