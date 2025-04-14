@@ -40,7 +40,7 @@ namespace Snake_Segment
                     break;
                 }
 
-                texture = bodyAssets.GetBodyTexture(direction, setDirection);
+                texture = bodyAssets.GetBodyTexture(previousDirection, setDirection);
 
                 break;
             case Snake_Direction::Direction::Down:
@@ -57,7 +57,7 @@ namespace Snake_Segment
                     break;
                 }
 
-                texture = bodyAssets.GetBodyTexture(direction, setDirection);
+                texture = bodyAssets.GetBodyTexture(previousDirection, setDirection);
 
                 break;
             case Snake_Direction::Direction::Left:
@@ -74,7 +74,7 @@ namespace Snake_Segment
                     break;
                 }
 
-                texture = bodyAssets.GetBodyTexture(direction, setDirection);
+                texture = bodyAssets.GetBodyTexture(previousDirection, setDirection);
 
                 break;
             case Snake_Direction::Direction::Right:
@@ -91,7 +91,7 @@ namespace Snake_Segment
                     break;
                 }
 
-                texture = bodyAssets.GetBodyTexture(direction, setDirection);
+                texture = bodyAssets.GetBodyTexture(previousDirection, setDirection);
 
                 break;
         }

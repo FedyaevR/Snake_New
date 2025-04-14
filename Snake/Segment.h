@@ -13,6 +13,7 @@ namespace Snake_Segment
         sf::Sprite sprite;
         
         Snake_Direction::Direction direction;
+        Snake_Direction::Direction previousDirection;
 
         Segment* previousSegment;
 

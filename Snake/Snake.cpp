@@ -31,6 +31,7 @@ namespace Snake
 
         segment.SetPosition(position);
         segment.direction = Snake_Direction::Direction::Up;
+        segment.previousDirection = Snake_Direction::Direction::Up;
 
         segment.sprite.setTexture(segment.texture);
         segment.sprite.setOrigin(Math::GetItemOrigin(segment.sprite, { 0.5f, 0.5f }));
@@ -70,11 +71,14 @@ namespace Snake
 
         for (int i = 1; i < segments.size(); i++)
         {
+            segments[i].previousDirection = segments[i].direction;
             // Проверяем, достиг ли сегмент точки поворота
             if (!turnPositions.empty() && IsAtTurnPoint(segments[i].position, turnPositions.front().position))
             {
                 segments[i].direction = turnPositions.front().direction;
+
                 segments[i].position = turnPositions.front().position;
+
                 if (i == segments.size() - 1) // Если это последний сегмент, удаляем точку поворота
                 {
                     turnPositions.pop_front();
@@ -151,6 +155,7 @@ namespace Snake
     //    }
     //}
 
+    // Косяк тут. В метод SetTexture передаем направление сегмента, с которым внутри и сравниваем. ПОлучается, что поворота быть просто не может.
     void Snake::UpdateSegmentsTexture(Views::SnakeBodyViews bodyAssets)
     {
         for (size_t i = 0; i < segments.size(); i++)
