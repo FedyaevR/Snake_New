@@ -22,7 +22,7 @@ namespace Snake
 
         Views::SnakeBodyViews bodyAssets;
 
-        float speed = 3.0f;  // Уменьшаем скорость с 5 до 3
+        float speed = 1.0f;  // Уменьшаем скорость с 5 до 3
         float deltaTime;
         float accumulator = 0.0f; // Накопитель времени для контроля скорости движения
         float minTurnDistance = Settings::SNAKE_PART_SIZE * 0.9f; // Минимальное расстояние между поворотами

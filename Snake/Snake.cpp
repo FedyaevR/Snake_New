@@ -39,19 +39,25 @@ namespace Snake
         body1.previousPosition = body1.position;
         body1.direction = Snake_Direction::Direction::Up;
         body1.previousDirection = Snake_Direction::Direction::Up;
-        
-        auto body2 = InitSegment(bodyAssets.body.vertical, {centerX, centerY + 2 * segmentGap});
+
+        auto body2 = InitSegment(bodyAssets.body.vertical, { centerX, centerY + segmentGap });
         body2.previousPosition = body2.position;
         body2.direction = Snake_Direction::Direction::Up;
         body2.previousDirection = Snake_Direction::Direction::Up;
         
+        auto tail = InitSegment(bodyAssets.body.vertical, {centerX, centerY + 2 * segmentGap});
+        tail.previousPosition = tail.position;
+        tail.direction = Snake_Direction::Direction::Up;
+        tail.previousDirection = Snake_Direction::Direction::Up;
+        
         // Последний сегмент делаем хвостом
-        body2.isTail = true;
+        tail.isTail = true;
 
         // Добавляем сегменты в вектор
         segments.push_back(head);
         segments.push_back(body1);
         segments.push_back(body2);
+        segments.push_back(tail);
 
         // Сохраняем указатель на голову для быстрого доступа
         this->head = &segments[0];
@@ -93,12 +99,16 @@ namespace Snake
     void Snake::Update(float deltaTime)
     {
         if (!alive)
+        {
             return;
+        }
         
         // Аккумулятор для контроля скорости движения
         accumulator += deltaTime;
         if (accumulator < settings.moveSpeed)
+        {
             return;
+        }
         
         accumulator = 0.0f;
         
@@ -151,14 +161,21 @@ namespace Snake
 
         // Проверяем границы экрана и при необходимости переносим голову на противоположную сторону
         if (newPosition.x < 0)
+        {
             newPosition.x = settings.screenWidth - settings.partSize;
+        }
         else if (newPosition.x >= settings.screenWidth)
+        {
             newPosition.x = 0;
-        
+        }
         if (newPosition.y < 0)
+        {
             newPosition.y = settings.screenHeight - settings.partSize;
+        }
         else if (newPosition.y >= settings.screenHeight)
+        {
             newPosition.y = 0;
+        }
         
         // Устанавливаем новую позицию головы
         head->SetPosition(newPosition);
