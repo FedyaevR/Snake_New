@@ -1,22 +1,27 @@
 #include "Segment.h"
+#include <cmath>
+#include <iostream>
 
 namespace Snake_Segment
 {
-    void Snake_Segment::Segment::SetPosition(Math::Position setPosition)
+    void Segment::SetPosition(Math::Position setPosition)
     {
+        previousPosition = position;
         position.x = setPosition.x;
         position.y = setPosition.y;
 
         UpdateSpritePosition();
     }
 
-    void Segment::SetTurnFlag(Snake_Direction::Direction setDirection)
+    void Segment::SetTurnFlag(Snake_Direction::Direction newDirection)
     {
-        if (direction != setDirection)
+        
+        if (direction != newDirection)
         {
             isTurn = true;
+            previousDirection = direction;
         }
-        else if (direction == setDirection)
+        else
         {
             isTurn = false;
         }
@@ -24,76 +29,110 @@ namespace Snake_Segment
 
     void Segment::SetTexture(Snake_Direction::Direction setDirection, Views::SnakeBodyViews bodyAssets)
     {
-        switch (setDirection)
+        // Для головы
+        if (isHead)
         {
-            case Snake_Direction::Direction::Up:
-                if (isHead)
-                {
+            switch (setDirection)
+            {
+                case Snake_Direction::Direction::Up:
                     texture = bodyAssets.head.up;
-
                     break;
-                }
-                else if (isTail)
-                {
-                    texture = bodyAssets.tail.up;
-
-                    break;
-                }
-
-                texture = bodyAssets.GetBodyTexture(previousDirection, setDirection);
-
-                break;
-            case Snake_Direction::Direction::Down:
-                if (isHead)
-                {
+                case Snake_Direction::Direction::Down:
                     texture = bodyAssets.head.down;
-
                     break;
-                }
-                else if (isTail)
-                {
-                    texture = bodyAssets.tail.down;
-
-                    break;
-                }
-
-                texture = bodyAssets.GetBodyTexture(previousDirection, setDirection);
-
-                break;
-            case Snake_Direction::Direction::Left:
-                if (isHead)
-                {
+                case Snake_Direction::Direction::Left:
                     texture = bodyAssets.head.left;
-
                     break;
-                }
-                else if (isTail)
-                {
-                    texture = bodyAssets.tail.left;
-
-                    break;
-                }
-
-                texture = bodyAssets.GetBodyTexture(previousDirection, setDirection);
-
-                break;
-            case Snake_Direction::Direction::Right:
-                if (isHead)
-                {
+                case Snake_Direction::Direction::Right:
                     texture = bodyAssets.head.right;
-
                     break;
-                }
-                else if (isTail)
-                {
+                default:
+                    texture = bodyAssets.head.up;
+                    break;
+            }
+        }
+        // Для хвоста
+        else if (isTail)
+        {
+            switch (setDirection)
+            {
+                case Snake_Direction::Direction::Up:
+                    texture = bodyAssets.tail.down; 
+                    break;
+                case Snake_Direction::Direction::Down:
+                    texture = bodyAssets.tail.up; 
+                    break;
+                case Snake_Direction::Direction::Left:
                     texture = bodyAssets.tail.right;
-
                     break;
+                case Snake_Direction::Direction::Right:
+                    texture = bodyAssets.tail.left;
+                    break;
+                default:
+                    texture = bodyAssets.tail.up;
+                    break;
+            }
+        }
+        else
+        {
+            if (isTurn)
+            {
+                // Используем другую логику определения типа поворота для правильного соединения
+                // Определяем тип поворота по тому, откуда приходим и куда идем
+                
+                // Поворот из UP в LEFT (или наоборот) - правый нижний угол
+                if ((previousDirection == Snake_Direction::Direction::Up && setDirection == Snake_Direction::Direction::Left) ||
+                    (previousDirection == Snake_Direction::Direction::Left && setDirection == Snake_Direction::Direction::Up))
+                {
+                    texture = bodyAssets.body.bottomRight;
                 }
-
-                texture = bodyAssets.GetBodyTexture(previousDirection, setDirection);
-
-                break;
+                // Поворот из UP в RIGHT (или наоборот) - левый нижний угол
+                else if ((previousDirection == Snake_Direction::Direction::Up && setDirection == Snake_Direction::Direction::Right) ||
+                         (previousDirection == Snake_Direction::Direction::Right && setDirection == Snake_Direction::Direction::Up))
+                {
+                    texture = bodyAssets.body.bottomLeft;
+                }
+                // Поворот из DOWN в LEFT (или наоборот) - правый верхний угол
+                else if ((previousDirection == Snake_Direction::Direction::Down && setDirection == Snake_Direction::Direction::Left) ||
+                         (previousDirection == Snake_Direction::Direction::Left && setDirection == Snake_Direction::Direction::Down))
+                {
+                    texture = bodyAssets.body.topRight;
+                }
+                // Поворот из DOWN в RIGHT (или наоборот) - левый верхний угол
+                else if ((previousDirection == Snake_Direction::Direction::Down && setDirection == Snake_Direction::Direction::Right) ||
+                         (previousDirection == Snake_Direction::Direction::Right && setDirection == Snake_Direction::Direction::Down))
+                {
+                    texture = bodyAssets.body.topLeft;
+                }
+                else
+                {
+                    // Если не определен конкретный поворот, используем стандартную текстуру
+                    if (setDirection == Snake_Direction::Direction::Up || setDirection == Snake_Direction::Direction::Down)
+                    {
+                        texture = bodyAssets.body.vertical;
+                    }
+                    else
+                    {
+                        texture = bodyAssets.body.horizontal;
+                    }
+                }
+            }
+            else
+            {
+                // Задаем стандартные текстуры для тела (вертикальная или горизонтальная)
+                if (setDirection == Snake_Direction::Direction::Up || setDirection == Snake_Direction::Direction::Down)
+                {
+                    texture = bodyAssets.body.vertical;
+                }
+                else if (setDirection == Snake_Direction::Direction::Left || setDirection == Snake_Direction::Direction::Right)
+                {
+                    texture = bodyAssets.body.horizontal;
+                }
+                else
+                {
+                    texture = bodyAssets.body.vertical; // По умолчанию
+                }
+            }
         }
 
         sprite.setTexture(texture);
@@ -102,5 +141,69 @@ namespace Snake_Segment
     void Segment::UpdateSpritePosition()
     {
         sprite.setPosition(position.x, position.y);
+    }
+    
+    float Segment::CalculateDistance(const Math::Position& pos1, const Math::Position& pos2)
+    {
+        float dx = pos1.x - pos2.x;
+        float dy = pos1.y - pos2.y;
+        return std::sqrt(dx * dx + dy * dy);
+    }
+    
+    void Segment::FollowPreviousSegment()
+    {
+        // Проверяем наличие предыдущего сегмента
+        if (previousSegment == nullptr) return;
+        
+        // Сохраняем текущую позицию и направление
+        previousPosition = position;
+        
+        // Получаем позицию предыдущего сегмента для следования
+        Math::Position prevPos = previousSegment->previousPosition;
+        
+        // Рассчитываем вектор движения
+        float dx = prevPos.x - position.x;
+        float dy = prevPos.y - position.y;
+        
+        // Определяем основное направление движения
+        Snake_Direction::Direction newDirection;
+        
+        if (std::abs(dx) > std::abs(dy))
+        {
+            // Горизонтальное движение
+            newDirection = (dx > 0) ? Snake_Direction::Direction::Right : Snake_Direction::Direction::Left;
+        }
+        else
+        {
+            // Вертикальное движение
+            newDirection = (dy > 0) ? Snake_Direction::Direction::Down : Snake_Direction::Direction::Up;
+        }
+        
+        // Если направление изменилось, устанавливаем флаг поворота
+        if (newDirection != direction)
+        {
+            // Сначала сохраняем предыдущее направление, затем устанавливаем флаг поворота
+            previousDirection = direction;
+            isTurn = true;
+        }
+        
+        // Обновляем направление
+        direction = newDirection;
+        
+        // Устанавливаем новую позицию
+        position = prevPos;
+        
+        // Обновляем позицию спрайта
+        UpdateSpritePosition();
+    }
+
+    bool Segment::CheckCollision(const Segment& other)
+    {
+        // Расчет расстояния между центрами сегментов
+        float distance = CalculateDistance(position, other.position);
+        
+        // Считаем столкновением, если расстояние меньше размера сегмента
+        // Используем коэффициент 0.8 для создания небольшого зазора
+        return distance < targetDistance * 0.8f;
     }
 }

@@ -41,6 +41,9 @@ namespace Views
         {
             return GetStandartBodyTexture(setDirection);
         }
+        
+        // Возвращаем стандартную текстуру по умолчанию, если ни одно условие не выполнено
+        return GetStandartBodyTexture(setDirection);
     }
 
     sf::Texture SnakeBodyViews::GetStandartBodyTexture(Snake_Direction::Direction direction)
@@ -53,5 +56,8 @@ namespace Views
         {
             return body.horizontal;
         }
+        
+        // Возвращаем вертикальную текстуру по умолчанию, если ни одно условие не выполнено
+        return body.vertical;
     }
 }

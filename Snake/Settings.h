@@ -13,5 +13,9 @@ namespace Settings
     struct Settings
     {
         float deltaTime;
+        float partSize;
+        float screenWidth;
+        float screenHeight;
+        float moveSpeed;
     };
 }

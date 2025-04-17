@@ -8,6 +8,8 @@ namespace Snake_Segment
     struct Segment
     {
         Math::Position position;
+        Math::Position previousPosition;
+        float targetDistance = 35.0f;
 
         sf::Texture texture;
         sf::Sprite sprite;
@@ -25,5 +27,8 @@ namespace Snake_Segment
         void SetTurnFlag(Snake_Direction::Direction setDirection);
         void SetTexture(Snake_Direction::Direction setDirection, Views::SnakeBodyViews bodyAssets);
         void UpdateSpritePosition();
+        void FollowPreviousSegment();
+        bool CheckCollision(const Segment& other);
+        float CalculateDistance(const Math::Position& pos1, const Math::Position& pos2);
     };
 }

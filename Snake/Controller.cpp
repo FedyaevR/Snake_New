@@ -1,39 +1,41 @@
 #include "Controller.h"
+#include "SFML/Window/Keyboard.hpp"
 
 namespace Core_Controller
 {
     void MoveInput(Snake::Snake& snake)
     {
-        //auto setDirection = Snake_Direction::Direction::Up;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) and sf::Keyboard::isKeyPressed(sf::Keyboard::Down) == false and snake.head->direction != Snake_Direction::Direction::Down)
-        {
-            //setDirection = Snake_Direction::Direction::Up;
-            snake.Update(Snake_Direction::Direction::Up);
-
+        // Проверяем, жива ли змейка
+        if (!snake.IsAlive())
             return;
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) and sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == false and snake.head->direction != Snake_Direction::Direction::Up)
+            
+        // Получаем текущее направление
+        Snake_Direction::Direction currentDirection = snake.GetDirection();
+        
+        // Определяем новое направление на основе ввода пользователя
+        Snake_Direction::Direction newDirection = currentDirection;
+        
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && currentDirection != Snake_Direction::Direction::Down)
         {
-            //setDirection = Snake_Direction::Direction::Down;
-            snake.Update(Snake_Direction::Direction::Down);
-
-            return;
+            newDirection = Snake_Direction::Direction::Up;
         }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) and sf::Keyboard::isKeyPressed(sf::Keyboard::Right) == false and snake.head->direction != Snake_Direction::Direction::Right)
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && currentDirection != Snake_Direction::Direction::Up)
         {
-            //setDirection = Snake_Direction::Direction::Left;
-            snake.Update(Snake_Direction::Direction::Left);
-
-            return;
+            newDirection = Snake_Direction::Direction::Down;
         }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) and sf::Keyboard::isKeyPressed(sf::Keyboard::Left) == false and snake.head->direction != Snake_Direction::Direction::Left)
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && currentDirection != Snake_Direction::Direction::Right)
         {
-            //setDirection = Snake_Direction::Direction::Right;
-            snake.Update(Snake_Direction::Direction::Right);
-
-            return;
+            newDirection = Snake_Direction::Direction::Left;
         }
-
-        snake.Update(snake.head->direction);
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && currentDirection != Snake_Direction::Direction::Left)
+        {
+            newDirection = Snake_Direction::Direction::Right;
+        }
+        
+        // Устанавливаем новое направление только если оно изменилось
+        if (newDirection != currentDirection)
+        {
+            snake.SetDirection(newDirection);
+        }
     }
 }
