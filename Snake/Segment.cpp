@@ -85,7 +85,6 @@ namespace Snake_Segment
                     (previousDirection == Snake_Direction::Direction::Right && setDirection == Snake_Direction::Direction::Down))
                 {
                     texture = bodyAssets.body.bottomLeft;
-                    //texture = bodyAssets.body.bottomRight;
                 }
                 else if ((previousDirection == Snake_Direction::Direction::Up && setDirection == Snake_Direction::Direction::Right) ||
                          (previousDirection == Snake_Direction::Direction::Left && setDirection == Snake_Direction::Direction::Down))

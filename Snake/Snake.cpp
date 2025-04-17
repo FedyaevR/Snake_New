@@ -231,7 +231,6 @@ namespace Snake
             // Перемещаем сегмент следуя за предыдущим сегментом
             segments[i].FollowPreviousSegment();
             
-            
             // Обновляем позицию спрайта
             segments[i].UpdateSpritePosition();
             
