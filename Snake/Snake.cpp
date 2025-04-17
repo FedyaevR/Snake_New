@@ -225,12 +225,12 @@ namespace Snake
                     }
                 }
             }
+            // Обновляем текстуру сегмента
+            segments[i].SetTexture(segments[i].direction, bodyAssets);
             
             // Перемещаем сегмент следуя за предыдущим сегментом
             segments[i].FollowPreviousSegment();
             
-            // Обновляем текстуру сегмента
-            segments[i].SetTexture(segments[i].direction, bodyAssets);
             
             // Обновляем позицию спрайта
             segments[i].UpdateSpritePosition();

@@ -82,31 +82,26 @@ namespace Snake_Segment
                 
                 // Поворот из UP в LEFT (или наоборот) - правый нижний угол
                 if ((previousDirection == Snake_Direction::Direction::Up && setDirection == Snake_Direction::Direction::Left) ||
-                    (previousDirection == Snake_Direction::Direction::Right && setDirection == Snake_Direction::Direction::Up))
+                    (previousDirection == Snake_Direction::Direction::Right && setDirection == Snake_Direction::Direction::Down))
                 {
                     texture = bodyAssets.body.bottomLeft;
                     //texture = bodyAssets.body.bottomRight;
                 }
-                // Поворот из UP в RIGHT (или наоборот) - левый нижний угол
                 else if ((previousDirection == Snake_Direction::Direction::Up && setDirection == Snake_Direction::Direction::Right) ||
-                         (previousDirection == Snake_Direction::Direction::Left && setDirection == Snake_Direction::Direction::Up))
+                         (previousDirection == Snake_Direction::Direction::Left && setDirection == Snake_Direction::Direction::Down))
                 {
                     texture = bodyAssets.body.bottomRight;
-                    //texture = bodyAssets.body.bottomLeft;
                 }
-                // Поворот из DOWN в LEFT (или наоборот) - правый верхний угол
-                else if ((previousDirection == Snake_Direction::Direction::Down && setDirection == Snake_Direction::Direction::Left) ||
-                         (previousDirection == Snake_Direction::Direction::Right && setDirection == Snake_Direction::Direction::Down))
+                else if ((previousDirection == Snake_Direction::Direction::Right && setDirection == Snake_Direction::Direction::Down) || 
+                         (previousDirection == Snake_Direction::Direction::Down && setDirection == Snake_Direction::Direction::Left) ||
+                         (previousDirection == Snake_Direction::Direction::Right && setDirection == Snake_Direction::Direction::Up))
                 {
                     texture = bodyAssets.body.topLeft;
-                    //texture = bodyAssets.body.topRight;
                 }
-                // Поворот из DOWN в RIGHT (или наоборот) - левый верхний угол
                 else if ((previousDirection == Snake_Direction::Direction::Down && setDirection == Snake_Direction::Direction::Right) ||
-                    (previousDirection == Snake_Direction::Direction::Left && setDirection == Snake_Direction::Direction::Down))
+                        (previousDirection == Snake_Direction::Direction::Left && setDirection == Snake_Direction::Direction::Up))
                 {
                     texture = bodyAssets.body.topRight;
-                    //texture = bodyAssets.body.topLeft;
                 }
                 else
                 {
