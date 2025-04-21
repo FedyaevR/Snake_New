@@ -306,6 +306,7 @@ namespace Snake
     {
         float dx = p1.x - p2.x;
         float dy = p1.y - p2.y;
+
         return std::sqrt(dx * dx + dy * dy);
     }
 
@@ -355,9 +356,11 @@ namespace Snake
             if (head->CheckCollision(segments[i]))
             {
                 alive = false;
+
                 return true;
             }
         }
+
         return false;
     }
 
@@ -372,51 +375,33 @@ namespace Snake
 
     void Snake::SetDirection(Snake_Direction::Direction setDirection)
     {
-        // Игнорируем изменение направления, если змейка мертва
-        if (!alive) return;
-        
-        // Проверяем, является ли новое направление противоположным текущему направлению
-        // (предотвращаем разворот на 180 градусов)
-        if ((setDirection == Snake_Direction::Direction::Up && head->direction == Snake_Direction::Direction::Down) ||
-            (setDirection == Snake_Direction::Direction::Down && head->direction == Snake_Direction::Direction::Up) ||
-            (setDirection == Snake_Direction::Direction::Left && head->direction == Snake_Direction::Direction::Right) ||
-            (setDirection == Snake_Direction::Direction::Right && head->direction == Snake_Direction::Direction::Left))
+        // Игнорируем изменение направления, если змейка мертва. Временный стоп
+        if (alive == false)
         {
-            return; // Игнорируем противоположное направление
+            return;
         }
         
-        // Если новое направление совпадает с текущим, ничего не делаем
         if (setDirection == head->direction)
         {
             return;
         }
         
-        // Запоминаем предыдущее направление головы до изменения
         head->previousDirection = head->direction;
         
-        // Проверяем, можно ли добавить точку поворота
         if (CanAddTurnPoint(head->position))
         {
-            // Создаём структуру для новой точки поворота
             Turn turnPoint;
             
-            // Используем ТЕКУЩУЮ позицию головы (до смещения)
             turnPoint.position = head->position;
             turnPoint.direction = setDirection;
             
-            // Добавляем точку поворота в список
             turnPositions.push_back(turnPoint);
             
             // Установим флаг поворота для головы
             head->isTurn = true;
-            
-            // Устанавливаем новое направление для головы
             head->direction = setDirection;
-            
-            // Обновляем текстуру головы немедленно
             head->SetTexture(head->direction, bodyAssets);
             
-            // Сразу перемещаем змейку в новом направлении
             MoveSnake();
         }
         else
