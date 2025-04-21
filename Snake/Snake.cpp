@@ -207,15 +207,15 @@ namespace Snake
         // Перемещаем каждый сегмент тела, начиная со второго (после головы)
         for (size_t i = 1; i < segments.size(); i++)
         {
-            // Проверяем, достиг ли сегмент точки поворота
+            // Сначала перемещаем сегмент
+            segments[i].FollowPreviousSegment();
+            
+            // Проверяем точки поворота если они есть
             if (!turnPositions.empty())
             {
                 Math::Position turnPos = turnPositions.front().position;
                 
-                // Сначала перемещаем сегмент
-                segments[i].FollowPreviousSegment();
-                
-                // Теперь проверяем, достиг ли сегмент точки поворота
+                // Проверяем, достиг ли сегмент точки поворота
                 if (IsAtTurnPoint(segments[i].position, turnPos))
                 {
                     // Сохраняем предыдущее направление
@@ -240,50 +240,18 @@ namespace Snake
                     }
                 }
             }
-            else
-            {
-                // Если нет точек поворота, просто следуем за предыдущим сегментом
-                segments[i].FollowPreviousSegment();
-            }
             
-            // Обновляем текстуру сегмента
-            if (segments[i].isTail)
-            {
-                // Для хвоста устанавливаем специальную текстуру в зависимости от направления
-                switch (segments[i].direction)
-                {
-                    case Snake_Direction::Direction::Up:
-                        segments[i].texture = bodyAssets.tail.down;
-                        break;
-                    case Snake_Direction::Direction::Down:
-                        segments[i].texture = bodyAssets.tail.up;
-                        break;
-                    case Snake_Direction::Direction::Left:
-                        segments[i].texture = bodyAssets.tail.right;
-                        break;
-                    case Snake_Direction::Direction::Right:
-                        segments[i].texture = bodyAssets.tail.left;
-                        break;
-                    default:
-                        break;
-                }
-                segments[i].sprite.setTexture(segments[i].texture);
-            }
-            else
-            {
-                // Для остальных сегментов используем стандартный метод
-                segments[i].SetTexture(segments[i].direction, bodyAssets);
-            }
+
+            segments[i].SetTexture(segments[i].direction, bodyAssets);
             
             // Обновляем позицию спрайта
             segments[i].UpdateSpritePosition();
             
-            // Увеличиваем счетчик поворота и сбрасываем флаг после достаточного количества шагов
+            // Увеличиваем счетчик поворота и сбрасываем флаг после определенного количества шагов
             if (segments[i].isTurn)
             {
                 turnCounters[i]++;
-                // Уменьшаем период до 2 шагов для более быстрого отклика
-                if (turnCounters[i] >= 2)
+                if (turnCounters[i] >= 3) // Увеличиваем до 3 для более плавного поворота
                 {
                     segments[i].isTurn = false;
                     turnCounters[i] = 0;
@@ -293,6 +261,19 @@ namespace Snake
         
         // Обновляем текстуру головы
         head->SetTexture(head->direction, bodyAssets);
+        
+        // Дополнительная проверка для предотвращения "залипания" поворотов
+        for (size_t i = 1; i < segments.size() - 1; i++)
+        {
+            // Если сегмент в состоянии поворота, но его направление совпадает с соседними сегментами,
+            // сбрасываем флаг поворота - это уже не реальный поворот
+            if (segments[i].isTurn && 
+                segments[i].direction == segments[i-1].direction &&
+                segments[i].direction == segments[i+1].direction)
+            {
+                segments[i].isTurn = false;
+            }
+        }
     }
 
     void Snake::SegmentStep(Snake_Segment::Segment& segment, Snake_Direction::Direction setDirection)
@@ -323,7 +304,7 @@ namespace Snake
     bool Snake::IsAtTurnPoint(Math::Position segmentPosition, Math::Position turnPosition)
     {
         // Увеличиваем порог для более надежного определения точки поворота
-        const float epsilon = settings.partSize * 0.1f;
+        const float epsilon = settings.partSize * 0.15f;
         
         // Вычисляем точное расстояние между позициями
         float distance = GetDistance(segmentPosition, turnPosition);
@@ -341,22 +322,22 @@ namespace Snake
 
     bool Snake::CanAddTurnPoint(const Math::Position& position)
     {
-        // Проверяем расстояние до существующих точек поворота
-        for (const auto& turnPoint : turnPositions)
+        // Если список точек поворота пуст, всегда можно добавить новую точку
+        if (turnPositions.empty())
         {
-            // Вычисляем расстояние между точками
-            float distanceX = std::abs(position.x - turnPoint.position.x);
-            float distanceY = std::abs(position.y - turnPoint.position.y);
-            
-            // Если расстояние слишком маленькое, отклоняем новую точку поворота
-            if (distanceX < minTurnDistance && distanceY < minTurnDistance)
-            {
-                return false;
-            }
+            return true;
         }
         
-        // Если нет близких точек поворота, можно добавить новую
-        return true;
+        // Проверяем расстояние до последней добавленной точки поворота
+        const auto& lastTurn = turnPositions.back();
+        float distance = GetDistance(position, lastTurn.position);
+        
+        // Увеличиваем минимальное расстояние между точками поворота
+        // чтобы избежать проблем с близкими точками поворота
+        float minDistance = settings.partSize * 1.2f;
+        
+        // Возвращаем true, если расстояние достаточно большое
+        return distance >= minDistance;
     }
 
     void Snake::UpdateSegmentsTexture(Views::SnakeBodyViews bodyAssets)
@@ -459,7 +440,7 @@ namespace Snake
         // Запоминаем предыдущее направление головы до изменения
         head->previousDirection = head->direction;
         
-        // Если можно добавить точку поворота в текущей позиции головы
+        // Проверяем, можно ли добавить точку поворота
         if (CanAddTurnPoint(head->position))
         {
             // Создаём структуру для новой точки поворота
@@ -471,21 +452,25 @@ namespace Snake
             
             // Добавляем точку поворота в список
             turnPositions.push_back(turnPoint);
+            
+            // Установим флаг поворота для головы
+            head->isTurn = true;
+            
+            // Устанавливаем новое направление для головы
+            head->direction = setDirection;
+            
+            // Обновляем текстуру головы немедленно
+            head->SetTexture(head->direction, bodyAssets);
+            
+            // Сразу перемещаем змейку в новом направлении
+            MoveSnake();
         }
-        
-        // Установим флаг поворота для головы
-        head->isTurn = true;
-        
-        // Устанавливаем новое направление для головы
-        head->direction = setDirection;
-        
-        // Сбрасываем флаг ожидания поворота, так как мы уже добавили точку поворота
-        pendingDirectionChange = false;
-        
-        // Обновляем текстуру головы немедленно
-        head->SetTexture(head->direction, bodyAssets);
-        
-        // Сразу перемещаем змейку в новом направлении
-        MoveSnake();
+        else
+        {
+            // Если не можем добавить точку поворота сейчас (слишком близко к предыдущей),
+            // установим флаг ожидания поворота
+            pendingDirectionChange = true;
+            pendingDirection = setDirection;
+        }
     }
 }

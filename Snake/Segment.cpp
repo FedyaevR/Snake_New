@@ -130,34 +130,80 @@ namespace Snake_Segment
         // Получаем позицию предыдущего сегмента для следования
         Math::Position prevPos = previousSegment->previousPosition;
         
-        // Рассчитываем вектор движения
-        float dx = prevPos.x - position.x;
-        float dy = prevPos.y - position.y;
-        
-        // Определяем основное направление движения
-        Snake_Direction::Direction newDirection;
-        
-        if (std::abs(dx) > std::abs(dy))
+        // Если сегмент следует за головой, используем направление головы
+        // для более точного следования
+        if (previousSegment->isHead)
         {
-            // Горизонтальное движение
-            newDirection = (dx > 0) ? Snake_Direction::Direction::Right : Snake_Direction::Direction::Left;
+            // Рассчитываем вектор движения только для определения направления
+            float dx = prevPos.x - position.x;
+            float dy = prevPos.y - position.y;
+            
+            // Определяем основное направление движения
+            Snake_Direction::Direction newDirection;
+            
+            if (std::abs(dx) > std::abs(dy))
+            {
+                // Горизонтальное движение
+                newDirection = (dx > 0) ? Snake_Direction::Direction::Right : Snake_Direction::Direction::Left;
+            }
+            else
+            {
+                // Вертикальное движение
+                newDirection = (dy > 0) ? Snake_Direction::Direction::Down : Snake_Direction::Direction::Up;
+            }
+            
+            // Если направление изменилось от предыдущего раза, считаем это поворотом
+            if (newDirection != direction)
+            {
+                // Сохраняем предыдущее направление и устанавливаем флаг поворота
+                previousDirection = direction;
+                isTurn = true;
+            }
+            
+            // Обновляем направление
+            direction = newDirection;
         }
         else
         {
-            // Вертикальное движение
-            newDirection = (dy > 0) ? Snake_Direction::Direction::Down : Snake_Direction::Direction::Up;
+            // Для остальных сегментов рассчитываем вектор движения
+            float dx = prevPos.x - position.x;
+            float dy = prevPos.y - position.y;
+            
+            // Определяем основное направление движения
+            Snake_Direction::Direction newDirection;
+            
+            if (std::abs(dx) > std::abs(dy))
+            {
+                // Горизонтальное движение
+                newDirection = (dx > 0) ? Snake_Direction::Direction::Right : Snake_Direction::Direction::Left;
+            }
+            else
+            {
+                // Вертикальное движение
+                newDirection = (dy > 0) ? Snake_Direction::Direction::Down : Snake_Direction::Direction::Up;
+            }
+            
+            // Если направление изменилось, устанавливаем флаг поворота
+            if (newDirection != direction)
+            {
+                // Сначала сохраняем предыдущее направление, затем устанавливаем флаг поворота
+                previousDirection = direction;
+                isTurn = true;
+            }
+            // Проверяем, не пора ли сбросить флаг поворота
+            else if (isTurn)
+            {
+                // Если текущий сегмент и предыдущий имеют одинаковое направление,
+                // и флаг поворота установлен, сбрасываем его
+                if (previousSegment && previousSegment->direction == direction)
+                {
+                    isTurn = false;
+                }
+            }
+            
+            // Обновляем направление
+            direction = newDirection;
         }
-        
-        // Если направление изменилось, устанавливаем флаг поворота
-        if (newDirection != direction)
-        {
-            // Сначала сохраняем предыдущее направление, затем устанавливаем флаг поворота
-            previousDirection = direction;
-            isTurn = true;
-        }
-        
-        // Обновляем направление
-        direction = newDirection;
         
         // Устанавливаем новую позицию
         position = prevPos;

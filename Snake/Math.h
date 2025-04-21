@@ -12,6 +12,6 @@ namespace Math
 
     sf::Vector2f GetItemOrigin(const sf::Sprite& sprite, const Position& relativePosition);
 
-    //А точно Positin тут нужен?)
+    //пїЅ пїЅпїЅпїЅпїЅпїЅ Positin пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ?)
     sf::Vector2f GetSpriteScale(const sf::Sprite& sprite, const Position& desiredSize);
 }
