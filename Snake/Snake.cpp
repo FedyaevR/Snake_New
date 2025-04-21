@@ -19,18 +19,17 @@ namespace Snake
         turnPositions.clear();
         segments.clear();
 
-
         // Инициализация головы
-        InitSegment(settings, true);
+        InitSegment(true);
 
         // Инициализация тела
         for (size_t i = 0; i < Settings::SNAKE_INIT_BODY_PART_COUNT; i++)
         {
-            InitSegment(settings);
+            InitSegment();
         }
 
         // Инициализация хвоста
-        InitSegment(settings, false, true);
+        InitSegment(false, true);
 
         // Сохраняем указатель на голову для быстрого доступа
         this->head = &segments[0];
@@ -51,9 +50,10 @@ namespace Snake
         score = 0;
         alive = true;
         accumulator = 0.0f;
+
     }
 
-    void Snake::InitSegment(Settings::Settings settings, bool isHead, bool isTail)
+    void Snake::InitSegment(bool isHead, bool isTail, Snake_Direction::Direction setDirection)
     {
         const float centerX = settings.screenWidth / 2.0f;
         const float centerY = settings.screenHeight / 2.0f;
@@ -70,8 +70,8 @@ namespace Snake
         segment.isHead = isHead;
         segment.isTail = isTail;
         segment.previousPosition = segment.position;
-        segment.direction = Snake_Direction::Direction::Up;
-        segment.previousDirection = Snake_Direction::Direction::Up;
+        segment.direction = setDirection;
+        segment.previousDirection = setDirection;
 
         segments.push_back(segment);
     }
@@ -82,9 +82,6 @@ namespace Snake
 
         segment.texture = texture;
         segment.position = position;
-        segment.previousPosition = position;
-        segment.direction = Snake_Direction::Direction::Up;
-        segment.previousDirection = Snake_Direction::Direction::Up;
 
         segment.sprite.setTexture(segment.texture);
         segment.sprite.setOrigin(Math::GetItemOrigin(segment.sprite, { 0.5f, 0.5f }));
@@ -198,11 +195,17 @@ namespace Snake
             }
         }
 
-        // Проблема в том, что сегмент меджу двумя точками поворота помечается как поворот. Если два поворота, разделяет один сегмент
+        MoveSegments(processedTurns, turnCounters);
+        
+        head->SetTexture(head->direction, bodyAssets);
+    }
+
+    void Snake::MoveSegments(static std::vector<std::vector<bool>>& processedTurns, static std::vector<int>& turnCounters)
+    {
         for (size_t i = 1; i < segments.size(); i++)
         {
             segments[i].FollowPreviousSegment();
-            
+
             for (size_t turnIndex = 0; turnIndex < turnPositions.size(); turnIndex++)
             {
                 // Если этот сегмент уже обработал эту точку поворота, пропускаем
@@ -211,34 +214,25 @@ namespace Snake
                     continue;
                 }
 
-                Math::Position turnPos = turnPositions[turnIndex].position;
-                std::cout << "Size of turn positions: " << turnPositions.size() << "\n";
-                
+                Math::Position turnPosition = turnPositions[turnIndex].position;
 
-                if (IsAtTurnPoint(segments[i].position, turnPos) == false)
+                if (IsAtTurnPoint(segments[i].position, turnPosition))
                 {
-                    std::cout << "Segment: " << i << " is not a turn point. Point: x:" << segments[i].position.x << " Y: " << segments[i].position.y << " Turn pos is: x:" << turnPos.x << " y: " << turnPos.y << " Turn index: " << turnIndex << "\n";
-                }
-
-                if (IsAtTurnPoint(segments[i].position, turnPos))
-                {
-                    std::cout << "Is at turn point: x:" << segments[i].position.x << " y: " << segments[i].position.y << " segment index: " << i << " turn: " << turnIndex << "\n";
-                    
                     segments[i].previousDirection = segments[i].direction;
                     Snake_Direction::Direction newDirection = turnPositions[turnIndex].direction;
 
                     segments[i].isTurn = true;
-                    turnCounters[i] = 0; 
+                    turnCounters[i] = 0;
                     segments[i].direction = newDirection;
-                    segments[i].position = turnPos;
+                    segments[i].position = turnPosition;
                     processedTurns[i][turnIndex] = true;
-                    
+
                     // Если это последний сегмент тела и он обработал самую первую точку поворота,
                     // удаляем эту точку и обновляем массив processedTurns
                     if (i == segments.size() - 1 && turnIndex == 0)
                     {
                         turnPositions.pop_front();
-                        
+
                         // Сдвигаем все отметки об обработанных поворотах влево
                         for (auto segIndex = 0; segIndex < processedTurns.size(); segIndex++)
                         {
@@ -260,7 +254,7 @@ namespace Snake
 
             segments[i].SetTexture(segments[i].direction, bodyAssets);
             segments[i].UpdateSpritePosition();
-            
+
             if (segments[i].isTurn)
             {
                 turnCounters[i]++;
@@ -272,15 +266,12 @@ namespace Snake
                 }
             }
         }
-        
-        head->SetTexture(head->direction, bodyAssets);
     }
 
     void Snake::SegmentStep(Snake_Segment::Segment& segment, Snake_Direction::Direction setDirection)
     {
         float step = settings.partSize;
         
-        // Перемещаем сегмент в заданном направлении
         switch (setDirection)
         {
             case Snake_Direction::Direction::Up:
@@ -297,16 +288,14 @@ namespace Snake
                 break;
         }
         
-        // Обновляем позицию спрайта
         segment.UpdateSpritePosition();
     }
 
     bool Snake::IsAtTurnPoint(Math::Position segmentPosition, Math::Position turnPosition)
     {
-        // Увеличиваем порог для более надежного определения точки поворота
+        // Порог для более надежного определения точки поворота
         const float epsilon = settings.partSize * 0.15f;
         
-        // Вычисляем точное расстояние между позициями
         float distance = GetDistance(segmentPosition, turnPosition);
         
         // Если расстояние меньше порога, считаем, что сегмент достиг точки поворота
@@ -328,7 +317,6 @@ namespace Snake
             return true;
         }
         
-        // Проверяем расстояние до последней добавленной точки поворота
         const auto& lastTurn = turnPositions.back();
         float distance = GetDistance(position, lastTurn.position);
         
@@ -342,7 +330,6 @@ namespace Snake
 
     void Snake::UpdateSegmentsTexture(Views::SnakeBodyViews bodyAssets)
     {
-        // Обновляем текстуры для всех сегментов
         for (size_t i = 0; i < segments.size(); i++)
         {
             segments[i].SetTexture(segments[i].direction, bodyAssets);
@@ -351,40 +338,10 @@ namespace Snake
 
     void Snake::AddSegment()
     {
-        // Получаем последний сегмент (текущий хвост)
         auto& lastSegment = segments.back();
-        lastSegment.isTail = false; // Убираем флаг хвоста с последнего сегмента
+        lastSegment.isTail = false;
         
-        // Создаем новый сегмент (новый хвост)
-        auto newSegment = Snake_Segment::Segment();
-        newSegment.isTail = true; // Устанавливаем флаг хвоста
-        
-        // Устанавливаем позицию нового сегмента равной позиции предыдущего хвоста
-        newSegment.position = lastSegment.position;
-        newSegment.previousPosition = lastSegment.previousPosition;
-        newSegment.direction = lastSegment.direction;
-        newSegment.previousDirection = lastSegment.previousDirection;
-        
-        // Устанавливаем текстуру для хвоста
-        if (lastSegment.direction == Snake_Direction::Direction::Up)
-            newSegment.texture = bodyAssets.tail.down; // Хвост смотрит вниз при движении вверх
-        else if (lastSegment.direction == Snake_Direction::Direction::Down)
-            newSegment.texture = bodyAssets.tail.up; // Хвост смотрит вверх при движении вниз
-        else if (lastSegment.direction == Snake_Direction::Direction::Left)
-            newSegment.texture = bodyAssets.tail.right; // Хвост смотрит вправо при движении влево
-        else
-            newSegment.texture = bodyAssets.tail.left; // Хвост смотрит влево при движении вправо
-            
-        newSegment.sprite.setTexture(newSegment.texture);
-        newSegment.sprite.setOrigin(Math::GetItemOrigin(newSegment.sprite, { 0.5f, 0.5f }));
-        newSegment.sprite.setScale(Math::GetSpriteScale(newSegment.sprite, { settings.partSize, settings.partSize }));
-        newSegment.UpdateSpritePosition();
-        
-        // Устанавливаем связь с предыдущим сегментом
-        newSegment.previousSegment = &segments.back();
-        
-        // Добавляем новый сегмент в вектор
-        segments.push_back(newSegment);
+        InitSegment(false, true, lastSegment.direction);
         
         // Увеличиваем счет
         score++;

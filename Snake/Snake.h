@@ -58,11 +58,12 @@ namespace Snake
     private:
         int score = 0; // Счет игрока
         
-        void InitSegment(Settings::Settings settings, bool isHead = false, bool isTail = false);
+        void InitSegment(bool isHead = false, bool isTail = false, Snake_Direction::Direction setDirection = Snake_Direction::Direction::Up);
         Snake_Segment::Segment InitSegment(sf::Texture texture, Math::Position position);
-        void MoveHead(); // Исправляем сигнатуру
+        void MoveHead(); 
         void MoveBody();
-        void MoveSnake(); // Метод для перемещения всей змейки
+        void MoveSegments(static std::vector<std::vector<bool>>& processedTurns, static std::vector<int>& turnCounters);
+        void MoveSnake();
         void SegmentStep(Snake_Segment::Segment& segment, Snake_Direction::Direction setDirection);
         bool IsAtTurnPoint(Math::Position segmentPosition, Math::Position turnPosition);
         float GetDistance(Math::Position p1, Math::Position p2);
