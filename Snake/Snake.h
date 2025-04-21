@@ -58,6 +58,7 @@ namespace Snake
     private:
         int score = 0; // Счет игрока
         
+        void InitSegment(Settings::Settings settings, bool isHead = false, bool isTail = false);
         Snake_Segment::Segment InitSegment(sf::Texture texture, Math::Position position);
         void MoveHead(); // Исправляем сигнатуру
         void MoveBody();

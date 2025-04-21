@@ -10,6 +10,8 @@ namespace Settings
 
     const float SNAKE_PART_SIZE = 35.f;
 
+    const int SNAKE_INIT_BODY_PART_COUNT = 3;
+
     struct Settings
     {
         float deltaTime;

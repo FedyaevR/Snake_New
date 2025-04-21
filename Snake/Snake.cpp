@@ -19,68 +19,31 @@ namespace Snake
         turnPositions.clear();
         segments.clear();
 
-        // Центр экрана
-        const float centerX = settings.screenWidth / 2.0f;
-        const float centerY = settings.screenHeight / 2.0f;
-        
-        // Расстояние между сегментами (уменьшенное для лучшего визуального соединения)
-        const float segmentGap = settings.partSize * 0.95f;
-        
-        // Создаем голову в центре экрана
-        auto head = InitSegment(bodyAssets.head.up, { centerX, centerY });
-        head.isHead = true;
-        head.previousPosition = head.position;
-        head.direction = Snake_Direction::Direction::Up;
-        head.previousDirection = Snake_Direction::Direction::Up;
-        
-        // Создаем сегменты тела под головой (вниз от головы)
-        // Располагаем сегменты с правильным расстоянием друг от друга
-        auto body1 = InitSegment(bodyAssets.body.vertical, {centerX, centerY + segmentGap});
-        body1.previousPosition = body1.position;
-        body1.direction = Snake_Direction::Direction::Up;
-        body1.previousDirection = Snake_Direction::Direction::Up;
 
-        auto body2 = InitSegment(bodyAssets.body.vertical, { centerX, centerY + 2 * segmentGap });
-        body2.previousPosition = body2.position;
-        body2.direction = Snake_Direction::Direction::Up;
-        body2.previousDirection = Snake_Direction::Direction::Up;
+        // Инициализация головы
+        InitSegment(settings, true);
 
-        auto body3 = InitSegment(bodyAssets.body.vertical, { centerX, centerY + 3 * segmentGap });
-        body3.previousPosition = body3.position;
-        body3.direction = Snake_Direction::Direction::Up;
-        body3.previousDirection = Snake_Direction::Direction::Up;
+        // Инициализация тела
+        for (size_t i = 0; i < Settings::SNAKE_INIT_BODY_PART_COUNT; i++)
+        {
+            InitSegment(settings);
+        }
 
-        auto body4 = InitSegment(bodyAssets.body.vertical, { centerX, centerY + 3 * segmentGap });
-        body4.previousPosition = body4.position;
-        body4.direction = Snake_Direction::Direction::Up;
-        body4.previousDirection = Snake_Direction::Direction::Up;
-        
-        auto tail = InitSegment(bodyAssets.tail.down, {centerX, centerY + 4 * segmentGap});
-        tail.previousPosition = tail.position;
-        tail.direction = Snake_Direction::Direction::Up;
-        tail.previousDirection = Snake_Direction::Direction::Up;
-        
-        // Последний сегмент делаем хвостом
-        tail.isTail = true;
-
-        // Добавляем сегменты в вектор
-        segments.push_back(head);
-        segments.push_back(body1);
-        segments.push_back(body2);
-        segments.push_back(body3);
-        segments.push_back(body4);
-        segments.push_back(tail);
+        // Инициализация хвоста
+        InitSegment(settings, false, true);
 
         // Сохраняем указатель на голову для быстрого доступа
         this->head = &segments[0];
         
         // Связываем сегменты между собой
-        for (size_t i = 1; i < segments.size(); i++) {
+        for (size_t i = 1; i < segments.size(); i++) 
+        {
             segments[i].previousSegment = &segments[i-1];
         }
 
         // Обновляем текстуры сегментов
-        for (auto& segment : segments) {
+        for (auto& segment : segments) 
+        {
             segment.SetTexture(segment.direction, bodyAssets);
         }
         
@@ -88,6 +51,30 @@ namespace Snake
         score = 0;
         alive = true;
         accumulator = 0.0f;
+    }
+
+    void Snake::InitSegment(Settings::Settings settings, bool isHead, bool isTail)
+    {
+        // Центр экрана
+        const float centerX = settings.screenWidth / 2.0f;
+        const float centerY = settings.screenHeight / 2.0f;
+
+        // Расстояние между сегментами (уменьшенное для лучшего визуального соединения)
+        float segmentGap = (settings.partSize * 0.95f) * segments.size();
+
+        if (isHead)
+        {
+            segmentGap = 0.f;
+        }
+
+        auto segment = InitSegment(bodyAssets.body.vertical, { centerX, centerY + segmentGap });
+        segment.isHead = isHead;
+        segment.isTail = isTail;
+        segment.previousPosition = segment.position;
+        segment.direction = Snake_Direction::Direction::Up;
+        segment.previousDirection = Snake_Direction::Direction::Up;
+
+        segments.push_back(segment);
     }
 
     Snake_Segment::Segment Snake::InitSegment(sf::Texture texture, Math::Position position)
@@ -410,9 +397,6 @@ namespace Snake
 
     void Snake::AddSegment()
     {
-        // Добавляем новый сегмент в конец змейки
-        if (segments.empty()) return;
-        
         // Получаем последний сегмент (текущий хвост)
         auto& lastSegment = segments.back();
         lastSegment.isTail = false; // Убираем флаг хвоста с последнего сегмента
