@@ -34,18 +34,23 @@ namespace Snake
         head.previousDirection = Snake_Direction::Direction::Up;
         
         // Создаем сегменты тела под головой (вниз от головы)
-        // Располагаем сегменты с небольшим уменьшенным расстоянием для лучшего визуального соединения
+        // Располагаем сегменты с правильным расстоянием друг от друга
         auto body1 = InitSegment(bodyAssets.body.vertical, {centerX, centerY + segmentGap});
         body1.previousPosition = body1.position;
         body1.direction = Snake_Direction::Direction::Up;
         body1.previousDirection = Snake_Direction::Direction::Up;
 
-        auto body2 = InitSegment(bodyAssets.body.vertical, { centerX, centerY + segmentGap });
+        auto body2 = InitSegment(bodyAssets.body.vertical, { centerX, centerY + 2 * segmentGap });
         body2.previousPosition = body2.position;
         body2.direction = Snake_Direction::Direction::Up;
         body2.previousDirection = Snake_Direction::Direction::Up;
+
+        auto body3 = InitSegment(bodyAssets.body.vertical, { centerX, centerY + 3 * segmentGap });
+        body3.previousPosition = body3.position;
+        body3.direction = Snake_Direction::Direction::Up;
+        body3.previousDirection = Snake_Direction::Direction::Up;
         
-        auto tail = InitSegment(bodyAssets.body.vertical, {centerX, centerY + 2 * segmentGap});
+        auto tail = InitSegment(bodyAssets.tail.down, {centerX, centerY + 4 * segmentGap});
         tail.previousPosition = tail.position;
         tail.direction = Snake_Direction::Direction::Up;
         tail.previousDirection = Snake_Direction::Direction::Up;
@@ -57,6 +62,7 @@ namespace Snake
         segments.push_back(head);
         segments.push_back(body1);
         segments.push_back(body2);
+        segments.push_back(body3);
         segments.push_back(tail);
 
         // Сохраняем указатель на голову для быстрого доступа
@@ -105,18 +111,24 @@ namespace Snake
         
         // Аккумулятор для контроля скорости движения
         accumulator += deltaTime;
-        if (accumulator < settings.moveSpeed)
+        
+        // Используем значение speed из класса для модификации скорости движения
+        // Чем больше speed, тем быстрее движение (меньше интервал)
+        float moveInterval = settings.moveSpeed / speed;
+        
+        if (accumulator < moveInterval)
         {
             return;
         }
         
         accumulator = 0.0f;
         
-        // Счетчик шагов для головы (уменьшаем период поворота до 2 шагов)
-        // Судя по всему, это лишнее...
-        static int headTurnCounter = 0;
-        headTurnCounter = (headTurnCounter + 1) % 2;
-        
+        // Перемещаем змейку
+        MoveSnake();
+    }
+
+    void Snake::MoveSnake()
+    {
         // Сохраняем предыдущую позицию головы
         head->previousPosition = head->position;
         
@@ -200,7 +212,10 @@ namespace Snake
             {
                 Math::Position turnPos = turnPositions.front().position;
                 
-                // Если сегмент достиг точки поворота с достаточной точностью
+                // Сначала перемещаем сегмент
+                segments[i].FollowPreviousSegment();
+                
+                // Теперь проверяем, достиг ли сегмент точки поворота
                 if (IsAtTurnPoint(segments[i].position, turnPos))
                 {
                     // Сохраняем предыдущее направление
@@ -225,11 +240,40 @@ namespace Snake
                     }
                 }
             }
-            // Обновляем текстуру сегмента
-            segments[i].SetTexture(segments[i].direction, bodyAssets);
+            else
+            {
+                // Если нет точек поворота, просто следуем за предыдущим сегментом
+                segments[i].FollowPreviousSegment();
+            }
             
-            // Перемещаем сегмент следуя за предыдущим сегментом
-            segments[i].FollowPreviousSegment();
+            // Обновляем текстуру сегмента
+            if (segments[i].isTail)
+            {
+                // Для хвоста устанавливаем специальную текстуру в зависимости от направления
+                switch (segments[i].direction)
+                {
+                    case Snake_Direction::Direction::Up:
+                        segments[i].texture = bodyAssets.tail.down;
+                        break;
+                    case Snake_Direction::Direction::Down:
+                        segments[i].texture = bodyAssets.tail.up;
+                        break;
+                    case Snake_Direction::Direction::Left:
+                        segments[i].texture = bodyAssets.tail.right;
+                        break;
+                    case Snake_Direction::Direction::Right:
+                        segments[i].texture = bodyAssets.tail.left;
+                        break;
+                    default:
+                        break;
+                }
+                segments[i].sprite.setTexture(segments[i].texture);
+            }
+            else
+            {
+                // Для остальных сегментов используем стандартный метод
+                segments[i].SetTexture(segments[i].direction, bodyAssets);
+            }
             
             // Обновляем позицию спрайта
             segments[i].UpdateSpritePosition();
@@ -278,9 +322,8 @@ namespace Snake
 
     bool Snake::IsAtTurnPoint(Math::Position segmentPosition, Math::Position turnPosition)
     {
-        // Используем меньший порог для точного определения точки поворота
-        // Это уменьшит запаздывание при определении поворота
-        const float epsilon = settings.partSize * 0.05f;
+        // Увеличиваем порог для более надежного определения точки поворота
+        const float epsilon = settings.partSize * 0.1f;
         
         // Вычисляем точное расстояние между позициями
         float distance = GetDistance(segmentPosition, turnPosition);
@@ -413,30 +456,36 @@ namespace Snake
             return;
         }
         
-        // Создаём новую точку поворота, если возможно
+        // Запоминаем предыдущее направление головы до изменения
+        head->previousDirection = head->direction;
+        
+        // Если можно добавить точку поворота в текущей позиции головы
         if (CanAddTurnPoint(head->position))
         {
             // Создаём структуру для новой точки поворота
             Turn turnPoint;
             
-            // Используем точную позицию головы - без модификаций
+            // Используем ТЕКУЩУЮ позицию головы (до смещения)
             turnPoint.position = head->position;
             turnPoint.direction = setDirection;
             
             // Добавляем точку поворота в список
             turnPositions.push_back(turnPoint);
-            
-            // Запоминаем предыдущее направление головы до изменения
-            head->previousDirection = head->direction;
-            
-            // Установим флаг поворота для головы
-            head->isTurn = true;
-            
-            // Устанавливаем новое направление для головы
-            head->direction = setDirection;
-            
-            // Обновляем текстуру головы немедленно
-            head->SetTexture(head->direction, bodyAssets);
         }
+        
+        // Установим флаг поворота для головы
+        head->isTurn = true;
+        
+        // Устанавливаем новое направление для головы
+        head->direction = setDirection;
+        
+        // Сбрасываем флаг ожидания поворота, так как мы уже добавили точку поворота
+        pendingDirectionChange = false;
+        
+        // Обновляем текстуру головы немедленно
+        head->SetTexture(head->direction, bodyAssets);
+        
+        // Сразу перемещаем змейку в новом направлении
+        MoveSnake();
     }
 }

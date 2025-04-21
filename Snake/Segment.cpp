@@ -57,15 +57,19 @@ namespace Snake_Segment
             switch (setDirection)
             {
                 case Snake_Direction::Direction::Up:
+                    // При движении вверх хвост направлен вниз (вид сверху)
                     texture = bodyAssets.tail.down; 
                     break;
                 case Snake_Direction::Direction::Down:
+                    // При движении вниз хвост направлен вверх (вид сверху)
                     texture = bodyAssets.tail.up; 
                     break;
                 case Snake_Direction::Direction::Left:
+                    // При движении влево хвост направлен вправо (вид сверху)
                     texture = bodyAssets.tail.right;
                     break;
                 case Snake_Direction::Direction::Right:
+                    // При движении вправо хвост направлен влево (вид сверху)
                     texture = bodyAssets.tail.left;
                     break;
                 default:
@@ -73,51 +77,18 @@ namespace Snake_Segment
                     break;
             }
         }
+        // Для сегментов тела
         else
         {
             if (isTurn)
             {
-                // Используем другую логику определения типа поворота для правильного соединения
-                // Определяем тип поворота по тому, откуда приходим и куда идем
-                
-                // Поворот из UP в LEFT (или наоборот) - правый нижний угол
-                if ((previousDirection == Snake_Direction::Direction::Up && setDirection == Snake_Direction::Direction::Left) ||
-                    (previousDirection == Snake_Direction::Direction::Right && setDirection == Snake_Direction::Direction::Down))
-                {
-                    texture = bodyAssets.body.bottomLeft;
-                }
-                else if ((previousDirection == Snake_Direction::Direction::Up && setDirection == Snake_Direction::Direction::Right) ||
-                         (previousDirection == Snake_Direction::Direction::Left && setDirection == Snake_Direction::Direction::Down))
-                {
-                    texture = bodyAssets.body.bottomRight;
-                }
-                else if ((previousDirection == Snake_Direction::Direction::Right && setDirection == Snake_Direction::Direction::Down) || 
-                         (previousDirection == Snake_Direction::Direction::Down && setDirection == Snake_Direction::Direction::Left) ||
-                         (previousDirection == Snake_Direction::Direction::Right && setDirection == Snake_Direction::Direction::Up))
-                {
-                    texture = bodyAssets.body.topLeft;
-                }
-                else if ((previousDirection == Snake_Direction::Direction::Down && setDirection == Snake_Direction::Direction::Right) ||
-                        (previousDirection == Snake_Direction::Direction::Left && setDirection == Snake_Direction::Direction::Up))
-                {
-                    texture = bodyAssets.body.topRight;
-                }
-                else
-                {
-                    // Если не определен конкретный поворот, используем стандартную текстуру
-                    if (setDirection == Snake_Direction::Direction::Up || setDirection == Snake_Direction::Direction::Down)
-                    {
-                        texture = bodyAssets.body.vertical;
-                    }
-                    else
-                    {
-                        texture = bodyAssets.body.horizontal;
-                    }
-                }
+                // Используем метод GetBodyTexture из SnakeBodyAssets для определения нужной текстуры поворота
+                // Этот метод содержит корректную логику определения всех типов угловых соединений
+                texture = bodyAssets.GetBodyTexture(previousDirection, setDirection);
             }
             else
             {
-                // Задаем стандартные текстуры для тела (вертикальная или горизонтальная)
+                // Для прямых участков используем стандартные текстуры
                 if (setDirection == Snake_Direction::Direction::Up || setDirection == Snake_Direction::Direction::Down)
                 {
                     texture = bodyAssets.body.vertical;
