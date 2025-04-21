@@ -122,97 +122,31 @@ namespace Snake_Segment
     
     void Segment::FollowPreviousSegment()
     {
-        // Проверяем наличие предыдущего сегмента
         if (previousSegment == nullptr)
         {
             return;
         }
 
-        // Сохраняем текущую позицию и направление
         previousPosition = position;
-        
-        // Получаем позицию предыдущего сегмента для следования
         Math::Position prevPos = previousSegment->previousPosition;
         
-        // Если сегмент следует за головой, используем направление головы
-        // для более точного следования
-        if (previousSegment->isHead)
+        float dx = prevPos.x - position.x;
+        float dy = prevPos.y - position.y;
+            
+        Snake_Direction::Direction newDirection;
+            
+        if (std::abs(dx) > std::abs(dy))
         {
-            // Рассчитываем вектор движения только для определения направления
-            float dx = prevPos.x - position.x;
-            float dy = prevPos.y - position.y;
-            
-            // Определяем основное направление движения
-            Snake_Direction::Direction newDirection;
-            
-            if (std::abs(dx) > std::abs(dy))
-            {
-                // Горизонтальное движение
-                newDirection = (dx > 0) ? Snake_Direction::Direction::Right : Snake_Direction::Direction::Left;
-            }
-            else
-            {
-                // Вертикальное движение
-                newDirection = (dy > 0) ? Snake_Direction::Direction::Down : Snake_Direction::Direction::Up;
-            }
-            
-            //// Если направление изменилось от предыдущего раза, считаем это поворотом
-            //if (newDirection != direction)
-            //{
-            //    // Сохраняем предыдущее направление и устанавливаем флаг поворота
-            //    previousDirection = direction;
-            //    isTurn = true;
-            //}
-            
-            // Обновляем направление
-            direction = newDirection;
+            newDirection = (dx > 0) ? Snake_Direction::Direction::Right : Snake_Direction::Direction::Left;
         }
         else
         {
-            // Для остальных сегментов рассчитываем вектор движения
-            float dx = prevPos.x - position.x;
-            float dy = prevPos.y - position.y;
-            
-            // Определяем основное направление движения
-            Snake_Direction::Direction newDirection;
-            
-            if (std::abs(dx) > std::abs(dy))
-            {
-                // Горизонтальное движение
-                newDirection = (dx > 0) ? Snake_Direction::Direction::Right : Snake_Direction::Direction::Left;
-            }
-            else
-            {
-                // Вертикальное движение
-                newDirection = (dy > 0) ? Snake_Direction::Direction::Down : Snake_Direction::Direction::Up;
-            }
-            
-            //// Если направление изменилось, устанавливаем флаг поворота
-            //if (newDirection != direction)
-            //{
-            //    // Сначала сохраняем предыдущее направление, затем устанавливаем флаг поворота
-            //    previousDirection = direction;
-            //    isTurn = true;
-            //}
-            // Проверяем, не пора ли сбросить флаг поворота
-            //else if (isTurn)
-            //{
-            //    // Если текущий сегмент и предыдущий имеют одинаковое направление,
-            //    // и флаг поворота установлен, сбрасываем его
-            //    if (previousSegment && previousSegment->direction == direction)
-            //    {
-            //        isTurn = false;
-            //    }
-            //}
-            
-            // Обновляем направление
-            direction = newDirection;
+            newDirection = (dy > 0) ? Snake_Direction::Direction::Down : Snake_Direction::Direction::Up;
         }
-        
-        // Устанавливаем новую позицию
+            
+        direction = newDirection;
         position = prevPos;
         
-        // Обновляем позицию спрайта
         UpdateSpritePosition();
     }
 

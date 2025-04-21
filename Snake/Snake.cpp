@@ -55,11 +55,10 @@ namespace Snake
 
     void Snake::InitSegment(Settings::Settings settings, bool isHead, bool isTail)
     {
-        // Центр экрана
         const float centerX = settings.screenWidth / 2.0f;
         const float centerY = settings.screenHeight / 2.0f;
 
-        // Расстояние между сегментами (уменьшенное для лучшего визуального соединения)
+        // Расстояние между сегментами
         float segmentGap = (settings.partSize * 0.95f) * segments.size();
 
         if (isHead)
@@ -97,16 +96,14 @@ namespace Snake
 
     void Snake::Update(float deltaTime)
     {
-        if (!alive)
+        if (alive == false)
         {
             return;
         }
         
-        // Аккумулятор для контроля скорости движения
+        // Закладка на возможное будущее, не уверен, что пока будет использоваться
         accumulator += deltaTime;
         
-        // Используем значение speed из класса для модификации скорости движения
-        // Чем больше speed, тем быстрее движение (меньше интервал)
         float moveInterval = settings.moveSpeed / speed;
         
         if (accumulator < moveInterval)
@@ -116,25 +113,17 @@ namespace Snake
         
         accumulator = 0.0f;
         
-        // Перемещаем змейку
         MoveSnake();
     }
 
     void Snake::MoveSnake()
     {
-        // Сохраняем предыдущую позицию головы
         head->previousPosition = head->position;
         
-        // Перемещаем голову
         MoveHead();
-        
-        // Перемещаем тело
         MoveBody();
-        
-        // Проверяем столкновения
         CheckCollisions();
         
-        // Обновляем текстуры всех сегментов
         for (auto& segment : segments)
         {
             segment.SetTexture(segment.direction, bodyAssets);
@@ -143,7 +132,6 @@ namespace Snake
 
     void Snake::MoveHead()
     {
-        // Вычисляем новую позицию головы в зависимости от направления
         Math::Position newPosition = head->position;
         
         switch (head->direction)
@@ -164,7 +152,6 @@ namespace Snake
                 break;
         }
 
-        // Проверяем границы экрана и при необходимости переносим голову на противоположную сторону
         if (newPosition.x < 0)
         {
             newPosition.x = settings.screenWidth - settings.partSize;
@@ -182,7 +169,6 @@ namespace Snake
             newPosition.y = 0;
         }
         
-        // Устанавливаем новую позицию головы
         head->SetPosition(newPosition);
     }
 
@@ -190,8 +176,7 @@ namespace Snake
     {
         // Массив для хранения счетчиков поворотов для каждого сегмента
         static std::vector<int> turnCounters(segments.size(), 0);
-        
-        // Если размеры изменились, обновляем массив
+
         if (turnCounters.size() != segments.size())
         {
             turnCounters.resize(segments.size(), 0);
@@ -200,11 +185,13 @@ namespace Snake
         // Создаем массив для отслеживания, какие сегменты уже обработали текущую точку поворота
         static std::vector<std::vector<bool>> processedTurns(segments.size(), std::vector<bool>(turnPositions.size(), false));
         
-        // Обновляем размер массива отслеживания при изменении количества сегментов или точек поворота
         if (processedTurns.size() != segments.size() || 
-            (!processedTurns.empty() && !turnPositions.empty() && processedTurns[0].size() != turnPositions.size()))
+           (processedTurns.empty() == false &&
+            turnPositions.empty() == false && 
+            processedTurns[0].size() != turnPositions.size()))
         {
             processedTurns.resize(segments.size(), std::vector<bool>(turnPositions.size(), false));
+
             for (auto& row : processedTurns)
             {
                 row.resize(turnPositions.size(), false);
@@ -212,15 +199,12 @@ namespace Snake
         }
         
 
-        // ПРоблема в том, что сегмент меджу двумя точками поворота помечается как поворот
+        // Проблема в том, что сегмент меджу двумя точками поворота помечается как поворот. Если два поворота, разделяет один сегмент
 
-        // Перемещаем каждый сегмент тела, начиная со второго (после головы)
         for (size_t i = 1; i < segments.size(); i++)
         {
-            // Сначала перемещаем сегмент
             segments[i].FollowPreviousSegment();
             
-            // Проверяем все точки поворота для каждого сегмента
             for (size_t turnIndex = 0; turnIndex < turnPositions.size(); turnIndex++)
             {
                 // Если этот сегмент уже обработал эту точку поворота, пропускаем
