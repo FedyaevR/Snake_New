@@ -273,21 +273,7 @@ namespace Snake
             }
         }
         
-        // Обновляем текстуру головы
         head->SetTexture(head->direction, bodyAssets);
-        
-        // Дополнительная проверка для предотвращения "залипания" поворотов
-        for (size_t i = 1; i < segments.size() - 1; i++)
-        {
-            // Если сегмент в состоянии поворота, но его направление совпадает с соседними сегментами,
-            // сбрасываем флаг поворота - это уже не реальный поворот
-            if (segments[i].isTurn && 
-                segments[i].direction == segments[i-1].direction &&
-                segments[i].direction == segments[i+1].direction)
-            {
-                segments[i].isTurn = false;
-            }
-        }
     }
 
     void Snake::SegmentStep(Snake_Segment::Segment& segment, Snake_Direction::Direction setDirection)
