@@ -10,6 +10,9 @@ namespace Settings
 
     const float SNAKE_PART_SIZE = 35.f;
 
+    // Значение для плавности поворота
+    const int SNAKE_TURNS_COUNTER_VALUE = 2;
+
     const int SNAKE_INIT_BODY_PART_COUNT = 3;
 
     struct Settings

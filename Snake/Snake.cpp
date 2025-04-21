@@ -240,14 +240,14 @@ namespace Snake
                         turnPositions.pop_front();
                         
                         // Сдвигаем все отметки об обработанных поворотах влево
-                        for (size_t segIndex = 0; segIndex < processedTurns.size(); segIndex++)
+                        for (auto segIndex = 0; segIndex < processedTurns.size(); segIndex++)
                         {
-                            for (size_t tIndex = 0; tIndex < processedTurns[segIndex].size() - 1; tIndex++)
+                            for (auto tIndex = 0; tIndex < processedTurns[segIndex].size() - 1; tIndex++)
                             {
                                 processedTurns[segIndex][tIndex] = processedTurns[segIndex][tIndex + 1];
                             }
 
-                            if (!processedTurns[segIndex].empty())
+                            if (processedTurns[segIndex].empty() == false)
                             {
                                 processedTurns[segIndex].back() = false;
                             }
@@ -259,15 +259,13 @@ namespace Snake
             }
 
             segments[i].SetTexture(segments[i].direction, bodyAssets);
-            
-            // Обновляем позицию спрайта
             segments[i].UpdateSpritePosition();
             
-            // Увеличиваем счетчик поворота и сбрасываем флаг после определенного количества шагов
             if (segments[i].isTurn)
             {
                 turnCounters[i]++;
-                if (turnCounters[i] >= 3) // Увеличиваем до 3 для более плавного поворота
+
+                if (turnCounters[i] >= Settings::SNAKE_TURNS_COUNTER_VALUE)
                 {
                     segments[i].isTurn = false;
                     turnCounters[i] = 0;
