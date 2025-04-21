@@ -116,14 +116,18 @@ namespace Snake_Segment
     {
         float dx = pos1.x - pos2.x;
         float dy = pos1.y - pos2.y;
+
         return std::sqrt(dx * dx + dy * dy);
     }
     
     void Segment::FollowPreviousSegment()
     {
         // Проверяем наличие предыдущего сегмента
-        if (previousSegment == nullptr) return;
-        
+        if (previousSegment == nullptr)
+        {
+            return;
+        }
+
         // Сохраняем текущую позицию и направление
         previousPosition = position;
         
@@ -152,13 +156,13 @@ namespace Snake_Segment
                 newDirection = (dy > 0) ? Snake_Direction::Direction::Down : Snake_Direction::Direction::Up;
             }
             
-            // Если направление изменилось от предыдущего раза, считаем это поворотом
-            if (newDirection != direction)
-            {
-                // Сохраняем предыдущее направление и устанавливаем флаг поворота
-                previousDirection = direction;
-                isTurn = true;
-            }
+            //// Если направление изменилось от предыдущего раза, считаем это поворотом
+            //if (newDirection != direction)
+            //{
+            //    // Сохраняем предыдущее направление и устанавливаем флаг поворота
+            //    previousDirection = direction;
+            //    isTurn = true;
+            //}
             
             // Обновляем направление
             direction = newDirection;
@@ -183,23 +187,23 @@ namespace Snake_Segment
                 newDirection = (dy > 0) ? Snake_Direction::Direction::Down : Snake_Direction::Direction::Up;
             }
             
-            // Если направление изменилось, устанавливаем флаг поворота
-            if (newDirection != direction)
-            {
-                // Сначала сохраняем предыдущее направление, затем устанавливаем флаг поворота
-                previousDirection = direction;
-                isTurn = true;
-            }
+            //// Если направление изменилось, устанавливаем флаг поворота
+            //if (newDirection != direction)
+            //{
+            //    // Сначала сохраняем предыдущее направление, затем устанавливаем флаг поворота
+            //    previousDirection = direction;
+            //    isTurn = true;
+            //}
             // Проверяем, не пора ли сбросить флаг поворота
-            else if (isTurn)
-            {
-                // Если текущий сегмент и предыдущий имеют одинаковое направление,
-                // и флаг поворота установлен, сбрасываем его
-                if (previousSegment && previousSegment->direction == direction)
-                {
-                    isTurn = false;
-                }
-            }
+            //else if (isTurn)
+            //{
+            //    // Если текущий сегмент и предыдущий имеют одинаковое направление,
+            //    // и флаг поворота установлен, сбрасываем его
+            //    if (previousSegment && previousSegment->direction == direction)
+            //    {
+            //        isTurn = false;
+            //    }
+            //}
             
             // Обновляем направление
             direction = newDirection;

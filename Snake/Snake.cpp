@@ -49,6 +49,11 @@ namespace Snake
         body3.previousPosition = body3.position;
         body3.direction = Snake_Direction::Direction::Up;
         body3.previousDirection = Snake_Direction::Direction::Up;
+
+        auto body4 = InitSegment(bodyAssets.body.vertical, { centerX, centerY + 3 * segmentGap });
+        body4.previousPosition = body4.position;
+        body4.direction = Snake_Direction::Direction::Up;
+        body4.previousDirection = Snake_Direction::Direction::Up;
         
         auto tail = InitSegment(bodyAssets.tail.down, {centerX, centerY + 4 * segmentGap});
         tail.previousPosition = tail.position;
@@ -63,6 +68,7 @@ namespace Snake
         segments.push_back(body1);
         segments.push_back(body2);
         segments.push_back(body3);
+        segments.push_back(body4);
         segments.push_back(tail);
 
         // Сохраняем указатель на голову для быстрого доступа
@@ -204,27 +210,61 @@ namespace Snake
             turnCounters.resize(segments.size(), 0);
         }
         
+        // Создаем массив для отслеживания, какие сегменты уже обработали текущую точку поворота
+        static std::vector<std::vector<bool>> processedTurns(segments.size(), std::vector<bool>(turnPositions.size(), false));
+        
+        // Обновляем размер массива отслеживания при изменении количества сегментов или точек поворота
+        if (processedTurns.size() != segments.size() || 
+            (!processedTurns.empty() && !turnPositions.empty() && processedTurns[0].size() != turnPositions.size()))
+        {
+            processedTurns.resize(segments.size(), std::vector<bool>(turnPositions.size(), false));
+            for (auto& row : processedTurns)
+            {
+                row.resize(turnPositions.size(), false);
+            }
+        }
+        
+
+        // ПРоблема в том, что сегмент меджу двумя точками поворота помечается как поворот
+
         // Перемещаем каждый сегмент тела, начиная со второго (после головы)
         for (size_t i = 1; i < segments.size(); i++)
         {
             // Сначала перемещаем сегмент
             segments[i].FollowPreviousSegment();
             
-            // Проверяем точки поворота если они есть
-            if (!turnPositions.empty())
+            // Проверяем все точки поворота для каждого сегмента
+            for (size_t turnIndex = 0; turnIndex < turnPositions.size(); turnIndex++)
             {
-                Math::Position turnPos = turnPositions.front().position;
+                // Если этот сегмент уже обработал эту точку поворота, пропускаем
+                if (processedTurns[i][turnIndex])
+                {
+                    continue;
+                }
+
+                Math::Position turnPos = turnPositions[turnIndex].position;
+                std::cout << "Size of turn positions: " << turnPositions.size() << "\n";
                 
+
+                if (IsAtTurnPoint(segments[i].position, turnPos) == false)
+                {
+                    std::cout << "Segment: " << i << " is not a turn point. Point: x:" << segments[i].position.x << " Y: " << segments[i].position.y << " Turn pos is: x:" << turnPos.x << " y: " << turnPos.y << " Turn index: " << turnIndex << "\n";
+                }
+
                 // Проверяем, достиг ли сегмент точки поворота
                 if (IsAtTurnPoint(segments[i].position, turnPos))
                 {
+                    /*std::cout << "Turn for segment: " << */
+                    std::cout << "Is at turn point: x:" << segments[i].position.x << " y: " << segments[i].position.y << " segment index: " << i << " turn: " << turnIndex << "\n";
+                    
                     // Сохраняем предыдущее направление
                     segments[i].previousDirection = segments[i].direction;
                     
                     // Устанавливаем новое направление из точки поворота
-                    Snake_Direction::Direction newDirection = turnPositions.front().direction;
+                    Snake_Direction::Direction newDirection = turnPositions[turnIndex].direction;
                     
                     // Отмечаем сегмент как совершающий поворот
+                    
                     segments[i].isTurn = true;
                     turnCounters[i] = 0; // Сбрасываем счетчик для этого сегмента
                     
@@ -234,13 +274,32 @@ namespace Snake
                     // Устанавливаем позицию точно в точке поворота для избежания смещений
                     segments[i].position = turnPos;
                     
-                    // Если это последний сегмент тела, удаляем точку поворота
-                    if (i == segments.size() - 1) {
+                    // Отмечаем, что этот сегмент обработал эту точку поворота
+                    processedTurns[i][turnIndex] = true;
+                    
+                    // Если это последний сегмент тела и он обработал самую первую точку поворота,
+                    // удаляем эту точку и обновляем массив processedTurns
+                    if (i == segments.size() - 1 && turnIndex == 0)
+                    {
                         turnPositions.pop_front();
+                        
+                        // Сдвигаем все отметки об обработанных поворотах влево
+                        for (size_t segIndex = 0; segIndex < processedTurns.size(); segIndex++)
+                        {
+                            for (size_t tIndex = 0; tIndex < processedTurns[segIndex].size() - 1; tIndex++)
+                            {
+                                processedTurns[segIndex][tIndex] = processedTurns[segIndex][tIndex + 1];
+                            }
+                            if (!processedTurns[segIndex].empty())
+                            {
+                                processedTurns[segIndex].back() = false;
+                            }
+                        }
                     }
+
+                    break;
                 }
             }
-            
 
             segments[i].SetTexture(segments[i].direction, bodyAssets);
             
