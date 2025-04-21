@@ -112,10 +112,10 @@ namespace Snake_Segment
         sprite.setPosition(position.x, position.y);
     }
     
-    float Segment::CalculateDistance(const Math::Position& pos1, const Math::Position& pos2)
+    float Segment::CalculateDistance(const Math::Position& position1, const Math::Position& position2)
     {
-        float dx = pos1.x - pos2.x;
-        float dy = pos1.y - pos2.y;
+        float dx = position1.x - position2.x;
+        float dy = position1.y - position2.y;
 
         return std::sqrt(dx * dx + dy * dy);
     }
@@ -128,10 +128,10 @@ namespace Snake_Segment
         }
 
         previousPosition = position;
-        Math::Position prevPos = previousSegment->previousPosition;
+        Math::Position prevSegmentPosition = previousSegment->previousPosition;
         
-        float dx = prevPos.x - position.x;
-        float dy = prevPos.y - position.y;
+        float dx = prevSegmentPosition.x - position.x;
+        float dy = prevSegmentPosition.y - position.y;
             
         Snake_Direction::Direction newDirection;
             
@@ -143,9 +143,9 @@ namespace Snake_Segment
         {
             newDirection = (dy > 0) ? Snake_Direction::Direction::Down : Snake_Direction::Direction::Up;
         }
-            
+
         direction = newDirection;
-        position = prevPos;
+        position = prevSegmentPosition;
         
         UpdateSpritePosition();
     }

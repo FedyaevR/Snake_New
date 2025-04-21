@@ -197,10 +197,8 @@ namespace Snake
                 row.resize(turnPositions.size(), false);
             }
         }
-        
 
         // Проблема в том, что сегмент меджу двумя точками поворота помечается как поворот. Если два поворота, разделяет один сегмент
-
         for (size_t i = 1; i < segments.size(); i++)
         {
             segments[i].FollowPreviousSegment();
@@ -222,30 +220,17 @@ namespace Snake
                     std::cout << "Segment: " << i << " is not a turn point. Point: x:" << segments[i].position.x << " Y: " << segments[i].position.y << " Turn pos is: x:" << turnPos.x << " y: " << turnPos.y << " Turn index: " << turnIndex << "\n";
                 }
 
-                // Проверяем, достиг ли сегмент точки поворота
                 if (IsAtTurnPoint(segments[i].position, turnPos))
                 {
-                    /*std::cout << "Turn for segment: " << */
                     std::cout << "Is at turn point: x:" << segments[i].position.x << " y: " << segments[i].position.y << " segment index: " << i << " turn: " << turnIndex << "\n";
                     
-                    // Сохраняем предыдущее направление
                     segments[i].previousDirection = segments[i].direction;
-                    
-                    // Устанавливаем новое направление из точки поворота
                     Snake_Direction::Direction newDirection = turnPositions[turnIndex].direction;
-                    
-                    // Отмечаем сегмент как совершающий поворот
-                    
+
                     segments[i].isTurn = true;
-                    turnCounters[i] = 0; // Сбрасываем счетчик для этого сегмента
-                    
-                    // Устанавливаем новое направление
+                    turnCounters[i] = 0; 
                     segments[i].direction = newDirection;
-                    
-                    // Устанавливаем позицию точно в точке поворота для избежания смещений
                     segments[i].position = turnPos;
-                    
-                    // Отмечаем, что этот сегмент обработал эту точку поворота
                     processedTurns[i][turnIndex] = true;
                     
                     // Если это последний сегмент тела и он обработал самую первую точку поворота,
@@ -261,6 +246,7 @@ namespace Snake
                             {
                                 processedTurns[segIndex][tIndex] = processedTurns[segIndex][tIndex + 1];
                             }
+
                             if (!processedTurns[segIndex].empty())
                             {
                                 processedTurns[segIndex].back() = false;
