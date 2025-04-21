@@ -3,8 +3,8 @@
 #include <iostream>
 #include <cmath>
 
-// Структура для хранения точек поворота
-struct TurnPoint {
+struct TurnPoint 
+{
     Math::Position position;
     Snake_Direction::Direction direction;
 };
@@ -13,7 +13,6 @@ namespace Snake
 {
     void Snake::Initialize(Settings::Settings settings)
     {
-        // Сохраняем настройки
         this->settings = settings;
         deltaTime = settings.deltaTime;
         turnPositions.clear();
@@ -374,13 +373,7 @@ namespace Snake
     }
 
     void Snake::SetDirection(Snake_Direction::Direction setDirection)
-    {
-        // Игнорируем изменение направления, если змейка мертва. Временный стоп
-        if (alive == false)
-        {
-            return;
-        }
-        
+    {        
         if (setDirection == head->direction)
         {
             return;

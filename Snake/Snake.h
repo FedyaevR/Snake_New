@@ -22,38 +22,30 @@ namespace Snake
 
         Views::SnakeBodyViews bodyAssets;
 
-        float speed = 0.5f;  // Уменьшаем скорость с 5 до 3
+        float speed = 0.5f; 
         float deltaTime;
         float accumulator = 0.0f; // Накопитель времени для контроля скорости движения
         float minTurnDistance = Settings::SNAKE_PART_SIZE * 0.9f; // Минимальное расстояние между поворотами
-        bool alive = true; // Флаг, показывающий жива ли змейка
-        Settings::Settings settings; // Добавляем настройки
+        bool alive = true;
+        Settings::Settings settings;
         
-        // Флаг для отслеживания поворота
+        // Флаг для отслеживания поворота. Пока не применяется
         bool pendingDirectionChange = false;
         Snake_Direction::Direction pendingDirection = Snake_Direction::Direction::None;
 
-        Snake() = default; // Конструктор по умолчанию
+        Snake() = default;
         void Initialize(Settings::Settings settings);
-        void Update(float deltaTime); // Исправляем параметр
+        void Update(float deltaTime);
         void SetDirection(Snake_Direction::Direction newDirection);
         void UpdateSegmentsTexture(Views::SnakeBodyViews bodyAssets);
         void Draw(sf::RenderWindow& window);
 
-        // Добавлю метод для добавления нового сегмента
         void AddSegment();
-        
-        // Метод для проверки столкновений
         bool CheckCollisions();
-        
-        // Метод для получения счета
-        int GetScore() const { return segments.size() - 3; } // Первые 3 сегмента исходные
-        
-        // Метод для проверки, жива ли змейка
         bool IsAlive() const { return alive; }
-        
-        // Метод для получения текущего направления
         Snake_Direction::Direction GetDirection() const { return head ? head->direction : Snake_Direction::Direction::None; }
+        
+        //int GetScore() const { return segments.size() - 3; } 
 
     private:
         int score = 0; // Счет игрока

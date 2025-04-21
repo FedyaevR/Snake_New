@@ -47,10 +47,8 @@ int main()
             isStart = true;
         }
 
-        // Обрабатываем ввод (только устанавливает направление)
         Core_Controller::MoveInput(snake);
-        
-        // Обновляем змейку один раз за кадр, передаем deltaTime
+
         snake.Update(deltaTime);
 
         window.clear();

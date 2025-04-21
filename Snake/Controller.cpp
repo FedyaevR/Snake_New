@@ -5,14 +5,12 @@ namespace Core_Controller
 {
     void MoveInput(Snake::Snake& snake)
     {
-        // Проверяем, жива ли змейка
-        if (!snake.IsAlive())
+        if (snake.IsAlive() == false)
+        {
             return;
+        }
             
-        // Получаем текущее направление
         Snake_Direction::Direction currentDirection = snake.GetDirection();
-        
-        // Определяем новое направление на основе ввода пользователя
         Snake_Direction::Direction newDirection = currentDirection;
         
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && currentDirection != Snake_Direction::Direction::Down)

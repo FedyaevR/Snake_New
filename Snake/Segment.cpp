@@ -57,19 +57,19 @@ namespace Snake_Segment
             switch (setDirection)
             {
                 case Snake_Direction::Direction::Up:
-                    // При движении вверх хвост направлен вниз (вид сверху)
+                    // При движении вверх хвост направлен вниз
                     texture = bodyAssets.tail.down; 
                     break;
                 case Snake_Direction::Direction::Down:
-                    // При движении вниз хвост направлен вверх (вид сверху)
+                    // При движении вниз хвост направлен вверх
                     texture = bodyAssets.tail.up; 
                     break;
                 case Snake_Direction::Direction::Left:
-                    // При движении влево хвост направлен вправо (вид сверху)
+                    // При движении влево хвост направлен вправо
                     texture = bodyAssets.tail.right;
                     break;
                 case Snake_Direction::Direction::Right:
-                    // При движении вправо хвост направлен влево (вид сверху)
+                    // При движении вправо хвост направлен влево
                     texture = bodyAssets.tail.left;
                     break;
                 default:
@@ -77,7 +77,6 @@ namespace Snake_Segment
                     break;
             }
         }
-        // Для сегментов тела
         else
         {
             if (isTurn)
@@ -88,7 +87,6 @@ namespace Snake_Segment
             }
             else
             {
-                // Для прямых участков используем стандартные текстуры
                 if (setDirection == Snake_Direction::Direction::Up || setDirection == Snake_Direction::Direction::Down)
                 {
                     texture = bodyAssets.body.vertical;
@@ -99,7 +97,7 @@ namespace Snake_Segment
                 }
                 else
                 {
-                    texture = bodyAssets.body.vertical; // По умолчанию
+                    texture = bodyAssets.body.vertical; 
                 }
             }
         }
