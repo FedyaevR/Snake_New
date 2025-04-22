@@ -17,6 +17,9 @@
     <Filter Include="Sources\Snake">
       <UniqueIdentifier>{467e7b97-d40c-47b7-93b7-29c2d2357c99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Apple">
+      <UniqueIdentifier>{e1ade97b-9eb6-4d31-92fd-2fd48f1a1fc7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -36,6 +39,9 @@
     </ClCompile>
     <ClCompile Include="SnakeBodyAssets.cpp">
       <Filter>Sources\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="Apple.cpp">
+      <Filter>Sources\Apple</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +68,12 @@
     </ClInclude>
     <ClInclude Include="Direction.h">
       <Filter>Sources\Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="Apple.h">
+      <Filter>Sources\Apple</Filter>
+    </ClInclude>
+    <ClInclude Include="AppleAsset.h">
+      <Filter>Sources\Views</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

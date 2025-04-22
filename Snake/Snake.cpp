@@ -363,6 +363,22 @@ namespace Snake
         return false;
     }
 
+    bool Snake::CheckCollisions(const Apple::Apple& apple, bool checkOnlyHead)
+    {
+        if (checkOnlyHead)
+        {
+            return head->CheckCollision(apple);
+        }
+
+        bool result = false;
+        for (size_t i = 0; i < segments.size(); i++)
+        {
+            result |= segments[i].CheckCollision(apple);
+        }
+
+        return result;
+    }
+
     void Snake::Draw(sf::RenderWindow& window)
     {
         // Рисуем сегменты в обратном порядке (сначала хвост, затем тело, в конце голова)

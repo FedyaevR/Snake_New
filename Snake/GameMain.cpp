@@ -11,17 +11,20 @@ const std::string RESOURCES_PATH = "Resources/";
 
 int main()
 {
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
     bool isStart = false;
     sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
     auto settings = Settings::Settings();
     settings.deltaTime = 0.0f;
-    
+
     settings.partSize = Settings::SNAKE_PART_SIZE;
     settings.screenWidth = 500;
     settings.screenHeight = 500;
     settings.moveSpeed = 0.25f;
-    
+
     auto snake = Snake::Snake();
+    auto apple = Apple::Apple();
 
     sf::Clock game_clock;
     sf::Time lastTime = game_clock.getElapsedTime();
@@ -44,6 +47,7 @@ int main()
         if (isStart == false)
         {
             snake.Initialize(settings);
+            apple.GenerateApplePosition(settings, snake);
             isStart = true;
         }
 
@@ -53,6 +57,7 @@ int main()
 
         window.clear();
         snake.Draw(window);
+        apple.Draw(window);
         window.display();
     }
 

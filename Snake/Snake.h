@@ -1,10 +1,11 @@
 #pragma once
-#include <vector>
-#include "SnakeBodyAssets.h"
-#include "Segment.h"
-#include <deque>
+#include "Apple.h"
 #include "Math.h"
+#include "Segment.h"
 #include "Settings.h"
+#include "SnakeBodyAssets.h"
+#include <deque>
+#include <vector>
 
 namespace Snake
 {
@@ -42,6 +43,7 @@ namespace Snake
 
         void AddSegment();
         bool CheckCollisions();
+        bool CheckCollisions(const Apple::Apple& apple, bool checkOnlyHead = false);
         bool IsAlive() const { return alive; }
         Snake_Direction::Direction GetDirection() const { return head ? head->direction : Snake_Direction::Direction::None; }
         

@@ -2,6 +2,7 @@
 #include "Math.h"
 #include "SnakeBodyAssets.h"
 #include "Direction.h"
+#include "Apple.h"
 
 namespace Snake_Segment
 {
@@ -29,6 +30,7 @@ namespace Snake_Segment
         void UpdateSpritePosition();
         void FollowPreviousSegment();
         bool CheckCollision(const Segment& other);
+        bool CheckCollision(const Apple::Apple& apple);
         float CalculateDistance(const Math::Position& pos1, const Math::Position& pos2);
     };
 }

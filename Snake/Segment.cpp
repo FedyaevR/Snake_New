@@ -150,7 +150,17 @@ namespace Snake_Segment
     {
         // Расчет расстояния между центрами сегментов
         float distance = CalculateDistance(position, other.position);
-        
+
+        // Считаем столкновением, если расстояние меньше размера сегмента
+        // Используем коэффициент 0.8 для создания небольшого зазора
+        return distance < targetDistance * 0.8f;
+    }
+
+    bool Segment::CheckCollision(const Apple::Apple& apple)
+    {
+        // Расчет расстояния между центрами сегмента и яблока
+        float distance = CalculateDistance(position, apple.position);
+
         // Считаем столкновением, если расстояние меньше размера сегмента
         // Используем коэффициент 0.8 для создания небольшого зазора
         return distance < targetDistance * 0.8f;
