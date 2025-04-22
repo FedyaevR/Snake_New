@@ -29,7 +29,6 @@ namespace Snake_Segment
 
     void Segment::SetTexture(Snake_Direction::Direction setDirection, Views::SnakeBodyViews bodyAssets)
     {
-        // Для головы
         if (isHead)
         {
             switch (setDirection)
@@ -51,7 +50,6 @@ namespace Snake_Segment
                     break;
             }
         }
-        // Для хвоста
         else if (isTail)
         {
             switch (setDirection)
