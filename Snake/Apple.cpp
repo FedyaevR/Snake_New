@@ -4,7 +4,7 @@
 
 namespace Apple
 {
-    void Apple::GenerateApplePosition(Settings::Settings settings, Snake::Snake snake)
+    void Apple::GenerateApplePosition(Settings::Settings settings, Snake::Snake& snake)
     {   
         auto ready = false;
         while (ready == false)

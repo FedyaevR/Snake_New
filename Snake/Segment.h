@@ -18,7 +18,7 @@ namespace Snake_Segment
         Snake_Direction::Direction direction;
         Snake_Direction::Direction previousDirection;
 
-        Segment* previousSegment;
+        std::shared_ptr<Segment> previousSegment;
 
         bool isTail = false;
         bool isHead = false;
@@ -29,7 +29,7 @@ namespace Snake_Segment
         void SetTexture(Snake_Direction::Direction setDirection, Views::SnakeBodyViews bodyAssets);
         void UpdateSpritePosition();
         void FollowPreviousSegment();
-        bool CheckCollision(const Segment& other);
+        bool CheckCollision(std::shared_ptr<Segment> other);
         bool CheckCollision(const Apple::Apple& apple);
         float CalculateDistance(const Math::Position& pos1, const Math::Position& pos2);
     };

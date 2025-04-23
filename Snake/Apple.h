@@ -18,7 +18,7 @@ namespace Apple
             asset = Views::AppleAsset();
         }
 
-        void GenerateApplePosition(Settings::Settings settings, Snake::Snake snake);
+        void GenerateApplePosition(Settings::Settings settings, Snake::Snake& snake);
         void UpdateSpritePosition();
         void Draw(sf::RenderWindow& window);
     };

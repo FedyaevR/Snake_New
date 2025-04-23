@@ -51,9 +51,9 @@ int main()
             isStart = true;
         }
 
-        Core_Controller::MoveInput(snake);
+        Core_Controller::MoveInput(snake, apple);
 
-        snake.Update(deltaTime);
+        snake.Update(deltaTime, apple);
 
         window.clear();
         snake.Draw(window);
