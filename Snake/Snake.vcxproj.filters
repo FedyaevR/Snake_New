@@ -20,6 +20,12 @@
     <Filter Include="Sources\Apple">
       <UniqueIdentifier>{e1ade97b-9eb6-4d31-92fd-2fd48f1a1fc7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\GameState">
+      <UniqueIdentifier>{02defb23-b0d6-4208-8c78-b3b964e81e00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Menu">
+      <UniqueIdentifier>{094ebd83-e12f-4cd3-840a-f8f8e8c5f464}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameMain.cpp">
@@ -43,6 +49,24 @@
     <ClCompile Include="Apple.cpp">
       <Filter>Sources\Apple</Filter>
     </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Sources\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateMainMenu.cpp">
+      <Filter>Sources\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateExitDialog.h">
+      <Filter>Sources\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateExitDialog.cpp">
+      <Filter>Sources\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStatePlaying.cpp">
+      <Filter>Sources\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateGameOver.cpp">
+      <Filter>Sources\GameState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SnakeBodyAssets.h">
@@ -55,9 +79,6 @@
       <Filter>Sources\Core</Filter>
     </ClInclude>
     <ClInclude Include="Controller.h">
-      <Filter>Sources\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
       <Filter>Sources\Core</Filter>
     </ClInclude>
     <ClInclude Include="Snake.h">
@@ -74,6 +95,21 @@
     </ClInclude>
     <ClInclude Include="AppleAsset.h">
       <Filter>Sources\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Sources\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateMainMenu.h">
+      <Filter>Sources\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Sources\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStatePlaying.h">
+      <Filter>Sources\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateGameOver.h">
+      <Filter>Sources\GameState</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
