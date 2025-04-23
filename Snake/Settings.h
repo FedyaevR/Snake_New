@@ -9,11 +9,12 @@ namespace Settings
     const std::string DEFAULT_FONT_PATH = RESOURCES_PATH + FONTS_PATH + "/Roboto-Regular.ttf";
 
     const float SNAKE_PART_SIZE = 35.f;
-
     // Значение для плавности поворота
     const int SNAKE_TURNS_COUNTER_VALUE = 2;
-
     const int SNAKE_INIT_BODY_PART_COUNT = 3;
+
+    const int APPLE_INIT_COUNT = 3;
+    const int APPLE_SIZE = 43.3f;
 
     struct Settings
     {

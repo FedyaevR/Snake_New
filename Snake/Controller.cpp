@@ -3,7 +3,7 @@
 
 namespace Core_Controller
 {
-    void MoveInput(Snake::Snake& snake)
+    void MoveInput(Snake::Snake& snake, Apple::Apple& apple)
     {
         if (snake.IsAlive() == false)
         {
@@ -34,7 +34,7 @@ namespace Core_Controller
         // Устанавливаем новое направление только если оно изменилось
         if (newDirection != currentDirection)
         {
-            snake.SetDirection(newDirection);
+            snake.SetDirection(newDirection, apple);
         }
     }
 

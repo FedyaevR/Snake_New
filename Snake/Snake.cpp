@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cmath>
 
-struct TurnPoint 
+struct TurnPoint
 {
     Math::Position position;
     Snake_Direction::Direction direction;
@@ -31,20 +31,20 @@ namespace Snake
         InitSegment(false, true);
 
         // Сохраняем указатель на голову для быстрого доступа
-        this->head = &segments[0];
-        
+        this->head = segments[0];
+
         // Связываем сегменты между собой
-        for (size_t i = 1; i < segments.size(); i++) 
+        for (size_t i = 1; i < segments.size(); i++)
         {
-            segments[i].previousSegment = &segments[i-1];
+            segments[i]->previousSegment = segments[i - 1];
         }
 
         // Обновляем текстуры сегментов
-        for (auto& segment : segments) 
+        for (auto& segment : segments)
         {
-            segment.SetTexture(segment.direction, bodyAssets);
+            segment->SetTexture(segment->direction, bodyAssets);
         }
-        
+
         // Сбрасываем счет и статус
         score = 0;
         alive = true;
@@ -66,86 +66,91 @@ namespace Snake
         }
 
         auto segment = InitSegment(bodyAssets.body.vertical, { centerX, centerY + segmentGap });
-        segment.isHead = isHead;
-        segment.isTail = isTail;
-        segment.previousPosition = segment.position;
-        segment.direction = setDirection;
-        segment.previousDirection = setDirection;
+        segment->isHead = isHead;
+        segment->isTail = isTail;
+        segment->previousPosition = segment->position;
+        segment->direction = setDirection;
+        segment->previousDirection = setDirection;
 
         segments.push_back(segment);
     }
 
-    Snake_Segment::Segment Snake::InitSegment(sf::Texture texture, Math::Position position)
+    std::shared_ptr<Snake_Segment::Segment> Snake::InitSegment(sf::Texture texture, Math::Position position)
     {
-        auto segment = Snake_Segment::Segment();
+        auto segment = std::make_shared<Snake_Segment::Segment>(Snake_Segment::Segment());
 
-        segment.texture = texture;
-        segment.position = position;
+        segment->texture = texture;
+        segment->position = position;
 
-        segment.sprite.setTexture(segment.texture);
-        segment.sprite.setOrigin(Math::GetItemOrigin(segment.sprite, { 0.5f, 0.5f }));
-        segment.sprite.setScale(Math::GetSpriteScale(segment.sprite, { settings.partSize, settings.partSize }));
-        segment.UpdateSpritePosition();
+        segment->sprite.setTexture(segment->texture);
+        segment->sprite.setOrigin(Math::GetItemOrigin(segment->sprite, { 0.5f, 0.5f }));
+        segment->sprite.setScale(Math::GetSpriteScale(segment->sprite, { settings.partSize, settings.partSize }));
+        segment->UpdateSpritePosition();
 
         return segment;
     }
 
-    void Snake::Update(float deltaTime)
+    void Snake::Update(float deltaTime, Apple::Apple& apple)
     {
         if (alive == false)
         {
             return;
         }
-        
+
         // Закладка на возможное будущее, не уверен, что пока будет использоваться
         accumulator += deltaTime;
-        
+
         float moveInterval = settings.moveSpeed / speed;
-        
+
         if (accumulator < moveInterval)
         {
             return;
         }
-        
+
         accumulator = 0.0f;
-        
-        MoveSnake();
+
+        MoveSnake(apple);
     }
 
-    void Snake::MoveSnake()
+    void Snake::MoveSnake(Apple::Apple& apple)
     {
         head->previousPosition = head->position;
-        
+
         MoveHead();
+        if (CheckCollisions(apple, true))
+        {
+            apple.GenerateApplePosition(settings, *this);
+            AddSegment();
+        }
         MoveBody();
         CheckCollisions();
-        
+
         for (auto& segment : segments)
         {
-            segment.SetTexture(segment.direction, bodyAssets);
+            segment->SetTexture(segment->direction, bodyAssets);
         }
     }
 
     void Snake::MoveHead()
     {
         Math::Position newPosition = head->position;
-        
+
         switch (head->direction)
         {
-            case Snake_Direction::Direction::Up:
-                newPosition.y -= settings.partSize;
-                break;
-            case Snake_Direction::Direction::Down:
-                newPosition.y += settings.partSize;
-                break;
-            case Snake_Direction::Direction::Left:
-                newPosition.x -= settings.partSize;
-                break;
-            case Snake_Direction::Direction::Right:
-                newPosition.x += settings.partSize;
-                break;
-            default:
-                break;
+        case Snake_Direction::Direction::Up:
+            newPosition.y -= settings.partSize;
+            break;
+        case Snake_Direction::Direction::Down:
+            newPosition.y += settings.partSize;
+            break;
+        case Snake_Direction::Direction::Left:
+            newPosition.x -= settings.partSize;
+            break;
+        case Snake_Direction::Direction::Right:
+            newPosition.x += settings.partSize;
+            break;
+        default:
+            break;
         }
 
         if (newPosition.x < 0)
@@ -164,7 +169,7 @@ namespace Snake
         {
             newPosition.y = 0;
         }
-        
+
         head->SetPosition(newPosition);
     }
 
@@ -177,14 +182,14 @@ namespace Snake
         {
             turnCounters.resize(segments.size(), 0);
         }
-        
+
         // Создаем массив для отслеживания, какие сегменты уже обработали текущую точку поворота
         static std::vector<std::vector<bool>> processedTurns(segments.size(), std::vector<bool>(turnPositions.size(), false));
-        
-        if (processedTurns.size() != segments.size() || 
-           (processedTurns.empty() == false &&
-            turnPositions.empty() == false && 
-            processedTurns[0].size() != turnPositions.size()))
+
+        if (processedTurns.size() != segments.size() ||
+            (processedTurns.empty() == false &&
+                turnPositions.empty() == false &&
+                processedTurns[0].size() != turnPositions.size()))
         {
             processedTurns.resize(segments.size(), std::vector<bool>(turnPositions.size(), false));
 
@@ -195,7 +200,7 @@ namespace Snake
         }
 
         MoveSegments(processedTurns, turnCounters);
-        
+
         head->SetTexture(head->direction, bodyAssets);
     }
 
@@ -203,7 +208,7 @@ namespace Snake
     {
         for (size_t i = 1; i < segments.size(); i++)
         {
-            segments[i].FollowPreviousSegment();
+            segments[i]->FollowPreviousSegment();
 
             for (size_t turnIndex = 0; turnIndex < turnPositions.size(); turnIndex++)
             {
@@ -215,15 +220,15 @@ namespace Snake
 
                 Math::Position turnPosition = turnPositions[turnIndex].position;
 
-                if (IsAtTurnPoint(segments[i].position, turnPosition))
+                if (IsAtTurnPoint(segments[i]->position, turnPosition))
                 {
-                    segments[i].previousDirection = segments[i].direction;
+                    segments[i]->previousDirection = segments[i]->direction;
                     Snake_Direction::Direction newDirection = turnPositions[turnIndex].direction;
 
-                    segments[i].isTurn = true;
+                    segments[i]->isTurn = true;
                     turnCounters[i] = 0;
-                    segments[i].direction = newDirection;
-                    segments[i].position = turnPosition;
+                    segments[i]->direction = newDirection;
+                    segments[i]->position = turnPosition;
                     processedTurns[i][turnIndex] = true;
 
                     // Если это последний сегмент тела и он обработал самую первую точку поворота,
@@ -251,52 +256,52 @@ namespace Snake
                 }
             }
 
-            segments[i].SetTexture(segments[i].direction, bodyAssets);
-            segments[i].UpdateSpritePosition();
+            segments[i]->SetTexture(segments[i]->direction, bodyAssets);
+            segments[i]->UpdateSpritePosition();
 
-            if (segments[i].isTurn)
+            if (segments[i]->isTurn)
             {
                 turnCounters[i]++;
 
                 if (turnCounters[i] >= Settings::SNAKE_TURNS_COUNTER_VALUE)
                 {
-                    segments[i].isTurn = false;
+                    segments[i]->isTurn = false;
                     turnCounters[i] = 0;
                 }
             }
         }
     }
 
-    void Snake::SegmentStep(Snake_Segment::Segment& segment, Snake_Direction::Direction setDirection)
+    void Snake::SegmentStep(std::shared_ptr < Snake_Segment::Segment> segment, Snake_Direction::Direction setDirection)
     {
         float step = settings.partSize;
-        
+
         switch (setDirection)
         {
-            case Snake_Direction::Direction::Up:
-                segment.position.y -= step;
-                break;
-            case Snake_Direction::Direction::Down:
-                segment.position.y += step;
-                break;
-            case Snake_Direction::Direction::Left:
-                segment.position.x -= step;
-                break;
-            case Snake_Direction::Direction::Right:
-                segment.position.x += step;
-                break;
+        case Snake_Direction::Direction::Up:
+            segment->position.y -= step;
+            break;
+        case Snake_Direction::Direction::Down:
+            segment->position.y += step;
+            break;
+        case Snake_Direction::Direction::Left:
+            segment->position.x -= step;
+            break;
+        case Snake_Direction::Direction::Right:
+            segment->position.x += step;
+            break;
         }
-        
-        segment.UpdateSpritePosition();
+
+        segment->UpdateSpritePosition();
     }
 
     bool Snake::IsAtTurnPoint(Math::Position segmentPosition, Math::Position turnPosition)
     {
         // Порог для более надежного определения точки поворота
         const float epsilon = settings.partSize * 0.15f;
-        
+
         float distance = GetDistance(segmentPosition, turnPosition);
-        
+
         // Если расстояние меньше порога, считаем, что сегмент достиг точки поворота
         return distance <= epsilon;
     }
@@ -316,14 +321,14 @@ namespace Snake
         {
             return true;
         }
-        
+
         const auto& lastTurn = turnPositions.back();
         float distance = GetDistance(position, lastTurn.position);
-        
+
         // Увеличиваем минимальное расстояние между точками поворота
         // чтобы избежать проблем с близкими точками поворота
         float minDistance = settings.partSize * 1.2f;
-        
+
         // Возвращаем true, если расстояние достаточно большое
         return distance >= minDistance;
     }
@@ -332,21 +337,63 @@ namespace Snake
     {
         for (size_t i = 0; i < segments.size(); i++)
         {
-            segments[i].SetTexture(segments[i].direction, bodyAssets);
+            segments[i]->SetTexture(segments[i]->direction, bodyAssets);
         }
     }
 
     void Snake::AddSegment()
     {
-        auto& lastSegment = segments.back();
-        lastSegment.isTail = false;
-        
-        InitSegment(false, true, lastSegment.direction);
-        
+        auto lastSegment = segments.back();
+        lastSegment->isTail = false;
+
+        auto segmentGap = (settings.partSize * 0.95f);
+
+        Math::Position newPos;
+        sf::Texture newTexture;
+
+        if (lastSegment->direction == Snake_Direction::Direction::Down || lastSegment->direction == Snake_Direction::Direction::Up)
+        {
+            newPos = { lastSegment->position.x, lastSegment->position.y + segmentGap };
+
+            if (lastSegment->direction == Snake_Direction::Direction::Down)
+            {
+                newTexture = bodyAssets.tail.down;
+            }
+            else
+            {
+                newTexture = bodyAssets.tail.up;
+            }
+        }
+        else
+        {
+            newPos = { lastSegment->position.x + segmentGap, lastSegment->position.y };
+            if (lastSegment->direction == Snake_Direction::Direction::Left)
+            {
+                newTexture = bodyAssets.tail.left;
+            }
+            else
+            {
+                newTexture = bodyAssets.tail.right;
+            }
+        }
+
+        auto segment = InitSegment(newTexture, newPos);
+        segment->isTail = true;
+        segment->previousPosition = segment->position;
+        segment->direction = lastSegment->direction;
+        segment->previousDirection = lastSegment->direction;
+
+        segments.push_back(segment);
+
         // Увеличиваем счет
         score++;
+
+        if (segments.size() > 1)
+        {
+            segments.back()->previousSegment = lastSegment;
+        }
     }
-    
+
     bool Snake::CheckCollisions()
     {
         // Проверяем столкновение головы с каждым сегментом тела
@@ -363,39 +410,55 @@ namespace Snake
         return false;
     }
 
+    bool Snake::CheckCollisions(const Apple::Apple& apple, bool checkOnlyHead)
+    {
+        if (checkOnlyHead)
+        {
+            return head->CheckCollision(apple);
+        }
+
+        bool result = false;
+        for (size_t i = 0; i < segments.size(); i++)
+        {
+            result |= segments[i]->CheckCollision(apple);
+        }
+
+        return result;
+    }
+
     void Snake::Draw(sf::RenderWindow& window)
     {
         // Рисуем сегменты в обратном порядке (сначала хвост, затем тело, в конце голова)
         for (int i = static_cast<int>(segments.size()) - 1; i >= 0; i--)
         {
-            window.draw(segments[i].sprite);
+            window.draw(segments[i]->sprite);
         }
     }
 
-    void Snake::SetDirection(Snake_Direction::Direction setDirection)
-    {        
+    void Snake::SetDirection(Snake_Direction::Direction setDirection, Apple::Apple& apple)
+    {
         if (setDirection == head->direction)
         {
             return;
         }
-        
+
         head->previousDirection = head->direction;
-        
+
         if (CanAddTurnPoint(head->position))
         {
             Turn turnPoint;
-            
+
             turnPoint.position = head->position;
             turnPoint.direction = setDirection;
-            
+
             turnPositions.push_back(turnPoint);
-            
+
             // Установим флаг поворота для головы
             head->isTurn = true;
             head->direction = setDirection;
             head->SetTexture(head->direction, bodyAssets);
-            
-            MoveSnake();
+
+            MoveSnake(apple);
         }
         else
         {
