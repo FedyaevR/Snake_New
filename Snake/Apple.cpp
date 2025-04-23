@@ -9,8 +9,8 @@ namespace Apple
         auto ready = false;
         while (ready == false)
         {
-            position.x = (float)(rand() % ((int)settings.screenWidth + 1));
-            position.y = (float)(rand() % ((int)settings.screenHeight + 1));
+            position.x = (float)(rand() % ((int)settings.screenWidth - (Settings::APPLE_SIZE + 15)));
+            position.y = (float)(rand() % ((int)settings.screenHeight - (Settings::APPLE_SIZE + 15)));
 
             if (snake.CheckCollisions(*this))
             {
