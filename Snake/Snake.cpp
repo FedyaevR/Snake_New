@@ -117,32 +117,13 @@ namespace Snake
         head->previousPosition = head->position;
 
         MoveHead();
-        for (size_t i = 1; i < segments.size(); i++)
-        {
-            std::cout << "is tail, index " << segments[i]->isTail << " " << i << "previous segment x, y " << segments[i]->previousSegment->position.x << " , " << segments[i]->previousSegment->position.y << "\n";
-        }
         if (CheckCollisions(apple, true))
         {
             apple.GenerateApplePosition(settings, *this);
             AddSegment();
-            if (segments.size() > 1)
-            {
-                segments.back()->previousSegment = segments[segments.size() - 2];
-            }
-
-            for (size_t i = 1; i < segments.size(); i++)
-            {
-                std::cout << "is tail, index " << segments[i]->isTail << " " << i << "previous segment x, y " <<  segments[i]->previousSegment->position.x << " , " << segments[i]->previousSegment->position.y << "\n";
-            }
-            //AddSegment();
         }
         MoveBody();
         CheckCollisions();
-        for (size_t i = 1; i < segments.size(); i++)
-        {
-            std::cout << "is tail, index " << segments[i]->isTail << " " << i << "previous segment x, y " << segments[i]->previousSegment->position.x << " , " << segments[i]->previousSegment->position.y << "\n";
-        }
-
 
         for (auto& segment : segments)
         {
@@ -402,10 +383,7 @@ namespace Snake
         segment->direction = lastSegment->direction;
         segment->previousDirection = lastSegment->direction;
 
-
-        std::cout << "Segments size: " << segments.size() << "\n";
         segments.push_back(segment);
-        std::cout << "Segments size after add: " << segments.size() << "\n";
 
         // Увеличиваем счет
         score++;
