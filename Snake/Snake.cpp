@@ -47,7 +47,7 @@ namespace Snake
 
         // Сбрасываем счет и статус
         score = 0;
-        alive = true;
+        isAlive = true;
         accumulator = 0.0f;
 
     }
@@ -92,7 +92,7 @@ namespace Snake
 
     void Snake::Update(float deltaTime, Apple::Apple& apple)
     {
-        if (alive == false)
+        if (isAlive == false)
         {
             return;
         }
@@ -401,7 +401,7 @@ namespace Snake
         {
             if (head->CheckCollision(segments[i]))
             {
-                alive = false;
+                isAlive = false;
 
                 return true;
             }

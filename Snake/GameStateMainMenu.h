@@ -1,5 +1,6 @@
 #pragma once
 #include "Menu.h"
+#include "Game.h"
 
 namespace GameStateMainMenuData
 {
@@ -20,7 +21,7 @@ namespace GameStateMainMenuData
         void ShutdownGameStateMainMenu();
     };
 
-    void HandleGameStateMainMenuWindowEvent(GameStateMainMenuData& data, Core_Controller::Controller& controller, const sf::Event& event);
+    void HandleGameStateMainMenuWindowEvent(GameStateMainMenuData& data, Core_Game::Game& game, const sf::Event& event);
     void UpdateGameStateMainMenu(GameStateMainMenuData& data, float timeDelta);
     void DrawGameStateMainMenu(GameStateMainMenuData& data, sf::RenderWindow& window);
 }

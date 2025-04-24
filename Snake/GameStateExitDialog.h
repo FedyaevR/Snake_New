@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "Controller.h"
+#include "Game.h"
 
 namespace GameStateExitDialogData
 {
@@ -14,7 +14,7 @@ namespace GameStateExitDialogData
         void ShutdownGameStateExitDialog();
     };
 
-    void HandleGameStateExitDialogWindowEvent(GameStateExitDialogData& data, Core_Controller::Controller& controller, const sf::Event& event);
+    void HandleGameStateExitDialogWindowEvent(GameStateExitDialogData& data, Core_Game::Game& game, const sf::Event& event);
     void UpdateGameStateExitDialog(GameStateExitDialogData& data, float timeDelta);
     void DrawGameStateExitDialog(GameStateExitDialogData& data, sf::RenderWindow& window);
 }

@@ -27,7 +27,7 @@ namespace Snake
         float deltaTime;
         float accumulator = 0.0f; // Накопитель времени для контроля скорости движения
         float minTurnDistance = Settings::SNAKE_PART_SIZE * 0.9f; // Минимальное расстояние между поворотами
-        bool alive = true;
+        bool isAlive = true;
         Settings::Settings settings;
         
         // Флаг для отслеживания поворота. Пока не применяется
@@ -49,7 +49,7 @@ namespace Snake
         void AddSegment();
         bool CheckCollisions();
         bool CheckCollisions(const Apple::Apple& apple, bool checkOnlyHead = false);
-        bool IsAlive() const { return alive; }
+        bool IsAlive() const { return isAlive; }
         Snake_Direction::Direction GetDirection() const { return head ? head->direction : Snake_Direction::Direction::None; }
         
         //int GetScore() const { return segments.size() - 3; } 

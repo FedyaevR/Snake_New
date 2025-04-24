@@ -35,17 +35,18 @@ namespace GameStateGameOverData
     {
     }
 
-    void HandleGameStateGameOverWindowEvent(GameStateGameOverData& data, Core_Controller::Controller& controller, const sf::Event& event)
+    void HandleGameStateGameOverWindowEvent(GameStateGameOverData& data, Core_Game::Game& game, const sf::Event& event)
     {
         if (event.type == sf::Event::KeyPressed)
         {
             if (event.key.code == sf::Keyboard::Space)
             {
-                controller.SwitchGameState(GameState::GameStateType::Playing);
+                game.RestartGame();
+                game.SwitchGameState(GameState::GameStateType::Playing);
             }
             else if (event.key.code == sf::Keyboard::Escape)
             {
-                controller.SwitchGameState(GameState::GameStateType::MainMenu);
+                game.SwitchGameState(GameState::GameStateType::MainMenu);
             }
         }
     }

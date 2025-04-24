@@ -23,7 +23,7 @@ void Game::Game()
         lastTime = currentTime;
 
         // Обрабатываем пользовательский ввод для установки нового направления
-        Controller::MoveInput(snake);
+        Game::MoveInput(snake);
         
         // Обновляем змейку один раз за кадр с текущим направлением
         snake.Update();

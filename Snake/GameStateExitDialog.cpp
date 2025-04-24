@@ -23,17 +23,17 @@ namespace GameStateExitDialogData
         // We dont need to free resources here, because they will be freed automatically
     }
 
-    void HandleGameStateExitDialogWindowEvent(GameStateExitDialogData& data, Core_Controller::Controller& controller, const sf::Event& event)
+    void HandleGameStateExitDialogWindowEvent(GameStateExitDialogData& data, Core_Game::Game& game, const sf::Event& event)
     {
         if (event.type == sf::Event::KeyPressed)
         {
             if (event.key.code == sf::Keyboard::Escape)
             {
-                controller.PopGameState();
+                game.PopGameState();
             }
             else if (event.key.code == sf::Keyboard::Enter)
             {
-                controller.SwitchGameState(GameState::GameStateType::MainMenu);
+                game.SwitchGameState(GameState::GameStateType::MainMenu);
             }
         }
     }

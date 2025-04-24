@@ -1,13 +1,13 @@
-#include "Controller.h"
+#include "Game.h"
 #include "GameStateMainMenu.h"
 #include "SFML/Window/Keyboard.hpp"
 #include "GameStateExitDialog.h"
 #include "GameStatePlaying.h"
 #include "GameStateGameOver.h"
 
-namespace Core_Controller
+namespace Core_Game
 {
-    void Controller::MoveInput(Snake::Snake& snake, Apple::Apple& apple)
+    void Game::MoveInput()
     {
         if (snake.IsAlive() == false)
         {
@@ -41,7 +41,7 @@ namespace Core_Controller
         }
     }
 
-    bool Controller::IsMoveUp(Snake_Direction::Direction currentDirection)
+    bool Game::IsMoveUp(Snake_Direction::Direction currentDirection)
     {
         if (currentDirection == Snake_Direction::Direction::Down)
         {
@@ -56,7 +56,7 @@ namespace Core_Controller
         return false;
     }
 
-    bool Controller::IsMoveDown(Snake_Direction::Direction currentDirection)
+    bool Game::IsMoveDown(Snake_Direction::Direction currentDirection)
     {
         if (currentDirection == Snake_Direction::Direction::Up)
         {
@@ -71,7 +71,7 @@ namespace Core_Controller
         return false;
     }
 
-    bool Controller::IsMoveLeft(Snake_Direction::Direction currentDirection)
+    bool Game::IsMoveLeft(Snake_Direction::Direction currentDirection)
     {
         if (currentDirection == Snake_Direction::Direction::Right)
         {
@@ -86,7 +86,7 @@ namespace Core_Controller
         return false;
     }
 
-    bool Controller::IsMoveRight(Snake_Direction::Direction currentDirection)
+    bool Game::IsMoveRight(Snake_Direction::Direction currentDirection)
     {
         if (currentDirection == Snake_Direction::Direction::Left)
         {
@@ -101,7 +101,7 @@ namespace Core_Controller
         return false;
     }
 
-    bool Controller::UpdateGame(float timeDelta)
+    bool Game::UpdateGame()
     {
         if (gameStateChangeType == GameState::GameStateChangeType::Switch)
         {
@@ -135,7 +135,7 @@ namespace Core_Controller
 
         if (gameStateStack.size() > 0)
         {
-            UpdateGameState(gameStateStack.back(), timeDelta);
+            UpdateGameState(gameStateStack.back());
 
             return true;
         }
@@ -143,7 +143,7 @@ namespace Core_Controller
         return false;
     }
 
-    void Controller::HandleWindowEvents(sf::RenderWindow& window)
+    void Game::HandleWindowEvents(sf::RenderWindow& window)
     {
         sf::Event event;
         while (window.pollEvent(event))
@@ -161,7 +161,7 @@ namespace Core_Controller
         }
     }
 
-    void Controller::HandleWindowEventGameState(sf::Event& event)
+    void Game::HandleWindowEventGameState(sf::Event& event)
     {
         auto state = gameStateStack.back();
 
@@ -194,28 +194,49 @@ namespace Core_Controller
         }
     }
 
-    void Controller::SwitchGameState(GameState::GameStateType newState)
+    void Game::SwitchGameState(GameState::GameStateType newState)
     {
         pendingGameStateType = newState;
         pendingGameStateIsExclusivelyVisible = false;
         gameStateChangeType = GameState::GameStateChangeType::Switch;
     }
 
-    void Controller::PushGameState(GameState::GameStateType stateType, bool isExclusivelyVisible)
+    void Game::RestartGame()
+    {
+        snake = Snake::Snake();
+        apple = Apple::Apple();
+
+        settings = Settings::Settings();
+        settings.deltaTime = 0.0f;
+
+        settings.partSize = Settings::SNAKE_PART_SIZE;
+        settings.screenWidth = 500;
+        settings.screenHeight = 500;
+        settings.moveSpeed = 0.25f;
+
+        score = 0;
+
+        snake.Initialize(settings);
+        apple.GenerateApplePosition(settings, snake);
+        isStart = true;
+        
+    }
+
+    void Game::PushGameState(GameState::GameStateType stateType, bool isExclusivelyVisible)
     {
         pendingGameStateType = stateType;
         pendingGameStateIsExclusivelyVisible = isExclusivelyVisible;
         gameStateChangeType = GameState::GameStateChangeType::Push;
     }
 
-    void Controller::PopGameState()
+    void Game::PopGameState()
     {
         pendingGameStateType = GameState::GameStateType::None;
         pendingGameStateIsExclusivelyVisible = false;
         gameStateChangeType = GameState::GameStateChangeType::Pop;
     }
 
-    void Controller::InitGameState(GameState::GameState& state)
+    void Game::InitGameState(GameState::GameState& state)
     {
         switch (state.type)
         {
@@ -258,31 +279,31 @@ namespace Core_Controller
         }
     }
 
-    void Controller::UpdateGameState(GameState::GameState& state, float timeDelta)
+    void Game::UpdateGameState(GameState::GameState& state)
     {
         switch (state.type)
         {
             case GameState::GameStateType::MainMenu:
             {
-                UpdateGameStateMainMenu(*(GameStateMainMenuData::GameStateMainMenuData*)state.data, timeDelta);
+                UpdateGameStateMainMenu(*(GameStateMainMenuData::GameStateMainMenuData*)state.data, deltaTime);
 
                 break;
             }
             case GameState::GameStateType::Playing:
             {
-                UpdateGameStatePlaying(*(GameStatePlayingData::GameStatePlayingData*)state.data, timeDelta);
+                UpdateGameStatePlaying(*(GameStatePlayingData::GameStatePlayingData*)state.data, *this);
 
                 break;
             }
             case GameState::GameStateType::GameOver:
             {
-                UpdateGameStateGameOver(*(GameStateGameOverData::GameStateGameOverData*)state.data, timeDelta);
+                UpdateGameStateGameOver(*(GameStateGameOverData::GameStateGameOverData*)state.data, deltaTime);
 
                 break;
             }
             case GameState::GameStateType::ExitDialog:
             {
-                UpdateGameStateExitDialog(*(GameStateExitDialogData::GameStateExitDialogData*)state.data, timeDelta);
+                UpdateGameStateExitDialog(*(GameStateExitDialogData::GameStateExitDialogData*)state.data, deltaTime);
 
                 break;
             }
@@ -292,7 +313,7 @@ namespace Core_Controller
         }
     }
 
-    void Controller::DrawGameState(GameState::GameState& state, sf::RenderWindow& window)
+    void Game::DrawGameState(GameState::GameState& state, sf::RenderWindow& window)
     {
         switch (state.type)
         {
@@ -304,7 +325,7 @@ namespace Core_Controller
         }
         case GameState::GameStateType::Playing:
         {
-            DrawGameStatePlaying(*(GameStatePlayingData::GameStatePlayingData*)state.data, window);
+            DrawGameStatePlaying(*(GameStatePlayingData::GameStatePlayingData*)state.data, *this, window);
 
             break;
         }
@@ -326,7 +347,7 @@ namespace Core_Controller
         }
     }
 
-    void Controller::DrawGame(sf::RenderWindow& window)
+    void Game::DrawGame(sf::RenderWindow& window)
     {
         if (gameStateStack.size() > 0)
         {

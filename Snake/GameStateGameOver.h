@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Controller.h"
+#include "Game.h"
 
 namespace GameStateGameOverData
 {
@@ -20,7 +20,7 @@ namespace GameStateGameOverData
         void ShutdownGameStateGameOver();
     };
 
-    void HandleGameStateGameOverWindowEvent(GameStateGameOverData& data, Core_Controller::Controller& controller, const sf::Event& event);
+    void HandleGameStateGameOverWindowEvent(GameStateGameOverData& data, Core_Game::Game& game, const sf::Event& event);
     void UpdateGameStateGameOver(GameStateGameOverData& data, float timeDelta);
     void DrawGameStateGameOver(GameStateGameOverData& data, sf::RenderWindow& window);
 }

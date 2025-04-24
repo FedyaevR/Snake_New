@@ -159,7 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Apple.cpp" />
-    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GameStateExitDialog.cpp" />
     <ClCompile Include="GameStateExitDialog.h" />
@@ -175,7 +175,7 @@
   <ItemGroup>
     <ClInclude Include="Apple.h" />
     <ClInclude Include="AppleAsset.h" />
-    <ClInclude Include="Controller.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateGameOver.h" />

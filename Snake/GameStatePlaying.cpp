@@ -24,23 +24,37 @@ namespace GameStatePlayingData
     {
     }
 
-    void HandleGameStatePlayingWindowEvent(GameStatePlayingData& data, Core_Controller::Controller& controller, const sf::Event& event)
+    void HandleGameStatePlayingWindowEvent(GameStatePlayingData& data, Core_Game::Game& game, const sf::Event& event)
     {
         if (event.type == sf::Event::KeyPressed)
         {
             if (event.key.code == sf::Keyboard::Escape)
             {
-                controller.PushGameState(GameState::GameStateType::ExitDialog, false);
+                game.PushGameState(GameState::GameStateType::ExitDialog, false);
             }
         }
     }
 
-    void UpdateGameStatePlaying(GameStatePlayingData& data, float timeDelta)
+    void UpdateGameStatePlaying(GameStatePlayingData& data, Core_Game::Game& game)
     {
-        // ћожно будет сюда перенести управление состо€нием игры как раз, но позже
+        if (game.isStart == false)
+        {
+            game.snake.Initialize(game.settings);
+            game.apple.GenerateApplePosition(game.settings, game.snake);
+            game.isStart = true;
+        }
+
+        game.MoveInput();
+        
+        game.snake.Update(game.deltaTime, game.apple);
+
+        if (game.snake.IsAlive() == false)
+        {
+            game.SwitchGameState(GameState::GameStateType::GameOver);
+        }
     }
 
-    void DrawGameStatePlaying(GameStatePlayingData& data, sf::RenderWindow& window)
+    void DrawGameStatePlaying(GameStatePlayingData& data, Core_Game::Game& game, sf::RenderWindow& window)
     {
         data.scoreText.setPosition(10.f, 10.f);
         window.draw(data.scoreText);
@@ -48,5 +62,8 @@ namespace GameStatePlayingData
         sf::Vector2f viewSize = window.getView().getSize();
         data.inputHintText.setPosition(viewSize.x - 10.f, 10.f);
         window.draw(data.inputHintText);
+
+        game.snake.Draw(window);
+        game.apple.Draw(window);
     }
 }

@@ -1,4 +1,3 @@
-#include "Controller.h"
 #include "GameStateMainMenu.h"
 #include "Math.h"
 #include "Settings.h"
@@ -77,7 +76,7 @@ namespace GameStateMainMenuData
         // No need to do anything here
     }
 
-    void HandleGameStateMainMenuWindowEvent(GameStateMainMenuData& data,Core_Controller::Controller& controller, const sf::Event& event)
+    void HandleGameStateMainMenuWindowEvent(GameStateMainMenuData& data,Core_Game::Game& game, const sf::Event& event)
     {
         if (!data.menu.selectedItem)
         {
@@ -94,7 +93,7 @@ namespace GameStateMainMenuData
             {
                 if (data.menu.selectedItem == &data.startGameItem)
                 {
-                    controller.SwitchGameState(GameState::GameStateType::Playing);
+                    game.SwitchGameState(GameState::GameStateType::Playing);
                 }
                 else if (data.menu.selectedItem == &data.optionsItem)
                 {
@@ -114,7 +113,7 @@ namespace GameStateMainMenuData
                 }
                 else if (data.menu.selectedItem == &data.yesItem)
                 {
-                    controller.SwitchGameState(GameState::GameStateType::None);
+                    game.SwitchGameState(GameState::GameStateType::None);
                 }
                 else if (data.menu.selectedItem == &data.noItem)
                 {
