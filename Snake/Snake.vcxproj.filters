@@ -55,10 +55,10 @@
     <ClCompile Include="GameStateMainMenu.cpp">
       <Filter>Sources\GameState</Filter>
     </ClCompile>
-    <ClCompile Include="GameStateExitDialog.h">
+    <ClCompile Include="GameStatePauseDialog.h">
       <Filter>Sources\GameState</Filter>
     </ClCompile>
-    <ClCompile Include="GameStateExitDialog.cpp">
+    <ClCompile Include="GameStatePauseDialog.cpp">
       <Filter>Sources\GameState</Filter>
     </ClCompile>
     <ClCompile Include="GameStatePlaying.cpp">

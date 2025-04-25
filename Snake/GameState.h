@@ -8,7 +8,7 @@ namespace GameState
         MainMenu,
         Playing,
         GameOver,
-        ExitDialog,
+        PauseDialog,
     };
 
     struct GameState

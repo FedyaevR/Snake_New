@@ -161,8 +161,8 @@
     <ClCompile Include="Apple.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMain.cpp" />
-    <ClCompile Include="GameStateExitDialog.cpp" />
-    <ClCompile Include="GameStateExitDialog.h" />
+    <ClCompile Include="GameStatePauseDialog.cpp" />
+    <ClCompile Include="GameStatePauseDialog.h" />
     <ClCompile Include="GameStateGameOver.cpp" />
     <ClCompile Include="GameStateMainMenu.cpp" />
     <ClCompile Include="GameStatePlaying.cpp" />

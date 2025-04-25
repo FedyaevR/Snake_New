@@ -16,6 +16,8 @@ namespace Settings
     const int APPLE_INIT_COUNT = 3;
     const int APPLE_SIZE = 43.3f;
 
+    const int TIME_FOR_DELAY_AFTER_PAUSE = 800;
+
     struct Settings
     {
         float deltaTime;

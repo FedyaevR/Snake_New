@@ -21,6 +21,7 @@ namespace Core_Game
         Apple::Apple apple;
         Settings::Settings settings;
 
+        bool wasPause = false;
         bool isStart = false;
 
         int scoreForApple = 2;

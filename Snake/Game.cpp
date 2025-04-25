@@ -1,7 +1,7 @@
 #include "Game.h"
 #include "GameStateMainMenu.h"
 #include "SFML/Window/Keyboard.hpp"
-#include "GameStateExitDialog.h"
+#include "GameStatePauseDialog.h"
 #include "GameStatePlaying.h"
 #include "GameStateGameOver.h"
 
@@ -219,9 +219,9 @@ namespace Core_Game
                 GameStateGameOverData::HandleGameStateGameOverWindowEvent(*(GameStateGameOverData::GameStateGameOverData*)state.data, *this, event);
                 break;
             }
-            case GameState::GameStateType::ExitDialog:
+            case GameState::GameStateType::PauseDialog:
             {
-                GameStateExitDialogData::HandleGameStateExitDialogWindowEvent(*(GameStateExitDialogData::GameStateExitDialogData*)state.data, *this, event);
+                GameStatePauseDialogData::HandleGameStatePauseDialogWindowEvent(*(GameStatePauseDialogData::GameStatePauseDialogData*)state.data, *this, event);
                 break;
             }
             default:
@@ -301,10 +301,10 @@ namespace Core_Game
 
                 break;
             }
-        case GameState::GameStateType::ExitDialog:
+        case GameState::GameStateType::PauseDialog:
             {
-                auto data = new GameStateExitDialogData::GameStateExitDialogData();
-                data->InitGameStateExitDialog();
+                auto data = new GameStatePauseDialogData::GameStatePauseDialogData();
+                data->InitGameStatePauseDialog();
                 state.data = data;
 
                 break;
@@ -337,9 +337,9 @@ namespace Core_Game
 
                 break;
             }
-            case GameState::GameStateType::ExitDialog:
+            case GameState::GameStateType::PauseDialog:
             {
-                UpdateGameStateExitDialog(*(GameStateExitDialogData::GameStateExitDialogData*)state.data, deltaTime);
+                UpdateGameStatePauseDialog(*(GameStatePauseDialogData::GameStatePauseDialogData*)state.data, deltaTime);
 
                 break;
             }
@@ -371,14 +371,14 @@ namespace Core_Game
 
             break;
         }
-        case GameState::GameStateType::ExitDialog:
+        case GameState::GameStateType::PauseDialog:
         {
-            DrawGameStateExitDialog(*(GameStateExitDialogData::GameStateExitDialogData*)state.data, window);
+            DrawGameStatePauseDialog(*(GameStatePauseDialogData::GameStatePauseDialogData*)state.data, window);
 
             break;
         }
         default:
-            assert(false); // We want to know if we forgot to implement new game statee
+            assert(false); // We want to know if we forgot to implement new game state
             break;
         }
     }
@@ -400,6 +400,7 @@ namespace Core_Game
             for (auto it = visibleGameStates.rbegin(); it != visibleGameStates.rend(); ++it)
             {
                 DrawGameState(**it, window);
+
             }
         }
     }

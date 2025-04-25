@@ -6,6 +6,8 @@
 #include "Snake.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
+#include <chrono>
+#include <thread>
 
 const std::string RESOURCES_PATH = "Resources/";
 
@@ -44,6 +46,12 @@ int main()
 
             // End the current frame, display window contents on screen
             window.display();
+
+            if (game.wasPause)
+            {
+                std::this_thread::sleep_for(std::chrono::milliseconds(Settings::TIME_FOR_DELAY_AFTER_PAUSE));
+                game.wasPause = false;
+            }
         }
         else
         {

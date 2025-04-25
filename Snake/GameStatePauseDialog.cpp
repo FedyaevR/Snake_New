@@ -1,49 +1,51 @@
-#include "GameStateExitDialog.h"
+#include "GameStatePauseDialog.h"
 #include "Settings.h"
 #include "Math.h"
 #include <cassert>
 
-namespace GameStateExitDialogData
+namespace GameStatePauseDialogData
 {
-    void GameStateExitDialogData::InitGameStateExitDialog()
+    void GameStatePauseDialogData::InitGameStatePauseDialog()
     {
         assert(font.loadFromFile(Settings::DEFAULT_FONT_PATH));
 
-        hintText.setString("Are you sure you want to stop this game? Enter - Yes, Esc - No");
+        hintText.setString("Enter - Continue, Esc - Exit game");
         hintText.setFont(font);
         hintText.setCharacterSize(24);
         hintText.setFillColor(sf::Color::White);
         hintText.setOrigin(Math::GetItemOrigin(hintText, { 0.5f, 0.5f }));
 
-        background.setFillColor(sf::Color(0, 0, 0, 128)); // Semi-transparent black
+        background.setFillColor(sf::Color(0, 0, 0, 128)); 
     }
 
-    void GameStateExitDialogData::ShutdownGameStateExitDialog()
+    void GameStatePauseDialogData::ShutdownGameStatePauseDialog()
     {
         // We dont need to free resources here, because they will be freed automatically
     }
 
-    void HandleGameStateExitDialogWindowEvent(GameStateExitDialogData& data, Core_Game::Game& game, const sf::Event& event)
+    void HandleGameStatePauseDialogWindowEvent(GameStatePauseDialogData& data, Core_Game::Game& game, const sf::Event& event)
     {
         if (event.type == sf::Event::KeyPressed)
         {
-            if (event.key.code == sf::Keyboard::Escape)
+            if (event.key.code == sf::Keyboard::Enter)
             {
                 game.PopGameState();
+                game.wasPause = true;
             }
-            else if (event.key.code == sf::Keyboard::Enter)
+            else if (event.key.code == sf::Keyboard::Escape)
             {
                 game.SwitchGameState(GameState::GameStateType::MainMenu);
             }
         }
+
     }
 
-    void UpdateGameStateExitDialog(GameStateExitDialogData& data, float timeDelta)
+    void UpdateGameStatePauseDialog(GameStatePauseDialogData& data, float timeDelta)
     {
 
     }
 
-    void DrawGameStateExitDialog(GameStateExitDialogData& data, sf::RenderWindow& window)
+    void DrawGameStatePauseDialog(GameStatePauseDialogData& data, sf::RenderWindow& window)
     {
         sf::Vector2f windowSize = (sf::Vector2f)window.getSize();
 

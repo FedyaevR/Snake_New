@@ -3,7 +3,6 @@
 #include "Math.h"
 #include <cassert>
 
-
 namespace GameStatePlayingData
 {
     void GameStatePlayingData::InitGameStatePlaying()
@@ -16,7 +15,7 @@ namespace GameStatePlayingData
         inputHintText.setFont(font);
         inputHintText.setCharacterSize(24);
         inputHintText.setFillColor(sf::Color::White);
-        inputHintText.setString("Use arrow keys to move, ESC to exit");
+        inputHintText.setString("P key for pause.");
         inputHintText.setOrigin(Math::GetItemOrigin(inputHintText, { 1.f, 0.f }));
     }
 
@@ -28,9 +27,9 @@ namespace GameStatePlayingData
     {
         if (event.type == sf::Event::KeyPressed)
         {
-            if (event.key.code == sf::Keyboard::Escape)
+            if (event.key.code == sf::Keyboard::P)
             {
-                game.PushGameState(GameState::GameStateType::ExitDialog, false);
+                game.PushGameState(GameState::GameStateType::PauseDialog, false);
             }
         }
     }
