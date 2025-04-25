@@ -37,7 +37,7 @@ namespace Core_Game
         // Устанавливаем новое направление только если оно изменилось
         if (newDirection != currentDirection)
         {
-            snake.SetDirection(newDirection, apple);
+            snake.SetDirection(newDirection, *this);
         }
     }
 

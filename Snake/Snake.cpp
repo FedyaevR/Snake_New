@@ -1,8 +1,7 @@
 #include "Snake.h"
-#include "Math.h"
+#include "Game.h"
 #include <iostream>
 #include <cmath>
-#include "GameState.h"
 
 struct TurnPoint
 {
@@ -91,14 +90,14 @@ namespace Snake
         return segment;
     }
 
-    void Snake::Update(float deltaTime, Apple::Apple& apple)
+    void Snake::Update(Core_Game::Game& game)
     {
         if (isAlive == false)
         {
             return;
         }
 
-        accumulator += deltaTime;
+        accumulator += game.deltaTime;
 
         float moveInterval = settings.moveSpeed / speed;
 
@@ -109,17 +108,18 @@ namespace Snake
 
         accumulator = 0.0f;
 
-        MoveSnake(apple);
+        MoveSnake(game);
     }
 
-    void Snake::MoveSnake(Apple::Apple& apple)
+    void Snake::MoveSnake(Core_Game::Game& game)
     {
         head->previousPosition = head->position;
 
         MoveHead();
-        if (CheckCollisions(apple, true))
+        if (CheckCollisions(game.apple, true))
         {
-            apple.GenerateApplePosition(settings, *this);
+            game.score += game.scoreForApple;
+            game.apple.GenerateApplePosition(settings, *this);
             AddSegment();
         }
         MoveBody();
@@ -435,7 +435,7 @@ namespace Snake
         }
     }
 
-    void Snake::SetDirection(Snake_Direction::Direction setDirection, Apple::Apple& apple)
+    void Snake::SetDirection(Snake_Direction::Direction setDirection, Core_Game::Game& game)
     {
         if (setDirection == head->direction)
         {
@@ -458,7 +458,7 @@ namespace Snake
             head->direction = setDirection;
             head->SetTexture(head->direction, bodyAssets);
 
-            MoveSnake(apple);
+            MoveSnake(game);
         }
         else
         {

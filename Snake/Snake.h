@@ -1,11 +1,12 @@
-#pragma once
 #include "Apple.h"
-#include "Math.h"
 #include "Segment.h"
 #include "Settings.h"
 #include "SnakeBodyAssets.h"
 #include <deque>
 #include <vector>
+#pragma once
+
+namespace Core_Game { struct Game; }
 
 namespace Snake
 {
@@ -41,8 +42,8 @@ namespace Snake
         }
 
         void Initialize(Settings::Settings settings);
-        void Update(float deltaTime, Apple::Apple& apple);
-        void SetDirection(Snake_Direction::Direction newDirection, Apple::Apple& apple);
+        void Update(Core_Game::Game& game);
+        void SetDirection(Snake_Direction::Direction newDirection, Core_Game::Game& game);
         void UpdateSegmentsTexture(Views::SnakeBodyViews bodyAssets);
         void Draw(sf::RenderWindow& window);
 
@@ -63,7 +64,7 @@ namespace Snake
         void MoveHead();
         void MoveBody();
         void MoveSegments(static std::vector<std::vector<bool>>& processedTurns, static std::vector<int>& turnCounters);
-        void MoveSnake(Apple::Apple& apple);
+        void MoveSnake(Core_Game::Game& game);
         void SegmentStep(std::shared_ptr < Snake_Segment::Segment> segment, Snake_Direction::Direction setDirection);
         bool IsAtTurnPoint(Math::Position segmentPosition, Math::Position turnPosition);
         float GetDistance(Math::Position p1, Math::Position p2);

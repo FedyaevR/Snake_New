@@ -46,7 +46,7 @@ namespace GameStatePlayingData
 
         game.MoveInput();
         
-        game.snake.Update(game.deltaTime, game.apple);
+        game.snake.Update(game);
 
         if (game.snake.IsAlive() == false)
         {
@@ -56,6 +56,7 @@ namespace GameStatePlayingData
 
     void DrawGameStatePlaying(GameStatePlayingData& data, Core_Game::Game& game, sf::RenderWindow& window)
     {
+        data.scoreText.setString("Score: " + std::to_string(game.score));
         data.scoreText.setPosition(10.f, 10.f);
         window.draw(data.scoreText);
 
