@@ -101,6 +101,42 @@ namespace Core_Game
         return false;
     }
 
+    void Game::SetSettingsWithDifficultyLevel()
+    {
+        snake.speed = 1.f;
+
+        if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::Easy)
+        {
+            snake.speed = 1.f;
+            scoreForApple = 2;
+        }
+        else if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::HarderThanEasy)
+        {
+            snake.speed *= 2;
+            scoreForApple = 4;
+        }
+        else if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::Medium)
+        {
+            snake.speed *= 3;
+            scoreForApple = 6;
+        }
+        else if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::EasierThanHard)
+        {
+            snake.speed *= 4;
+            scoreForApple = 8;
+        }
+        else if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::Hard)
+        {
+            snake.speed *= 5;
+            scoreForApple = 10;
+        }
+        else if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::Default)
+        {
+            snake.speed = 1.f;
+            scoreForApple = 2;
+        }
+    }
+
     bool Game::UpdateGame()
     {
         if (gameStateChangeType == GameState::GameStateChangeType::Switch)

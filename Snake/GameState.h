@@ -25,4 +25,17 @@ namespace GameState
         Pop,
         Switch
     };
+
+    enum class GameOptions : std::uint8_t
+    {
+        Easy = 1 << 0,
+        HarderThanEasy = 1 << 1,
+        Medium = 1 << 2,
+        EasierThanHard = 1 << 3,
+        Hard = 1 << 4,
+
+        Default = HarderThanEasy,
+        Empty = 0
+
+    };
 }

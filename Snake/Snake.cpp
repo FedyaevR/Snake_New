@@ -2,6 +2,7 @@
 #include "Math.h"
 #include <iostream>
 #include <cmath>
+#include "GameState.h"
 
 struct TurnPoint
 {
@@ -97,7 +98,6 @@ namespace Snake
             return;
         }
 
-        // Закладка на возможное будущее, не уверен, что пока будет использоваться
         accumulator += deltaTime;
 
         float moveInterval = settings.moveSpeed / speed;

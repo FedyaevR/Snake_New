@@ -13,6 +13,8 @@ namespace Core_Game
         GameState::GameStateType pendingGameStateType = GameState::GameStateType::None;
         bool pendingGameStateIsExclusivelyVisible = false;
 
+        GameState::GameOptions options = GameState::GameOptions::Default;
+
         float deltaTime;
 
         Snake::Snake snake;
@@ -20,6 +22,8 @@ namespace Core_Game
         Settings::Settings settings;
 
         bool isStart = false;
+
+        int scoreForApple = 2;
 
         int score = 0;
 
@@ -32,9 +36,9 @@ namespace Core_Game
             settings.deltaTime = 0.0f;
 
             settings.partSize = Settings::SNAKE_PART_SIZE;
+            settings.moveSpeed = 0.8f;
             settings.screenWidth = 500;
             settings.screenHeight = 500;
-            settings.moveSpeed = 0.25f;
 
             gameStateChangeType = GameState::GameStateChangeType::None;
             pendingGameStateType = GameState::GameStateType::None;
@@ -48,6 +52,8 @@ namespace Core_Game
         bool IsMoveDown(Snake_Direction::Direction currentDirection);
         bool IsMoveLeft(Snake_Direction::Direction currentDirection);
         bool IsMoveRight(Snake_Direction::Direction currentDirection);
+
+        void SetSettingsWithDifficultyLevel();
 
         bool UpdateGame();
 

@@ -35,16 +35,45 @@ namespace GameStateMainMenuData
         optionsItem.childrenOrientation = Math::Orientation::Vertical;
         optionsItem.childrenAlignment = Math::Alignment::Middle;
         optionsItem.childrenSpacing = 10.f;
-        optionsItem.children.push_back(&optionsInfiniteApplesItem);
-        optionsItem.children.push_back(&optionsWithAccelerationItem);
+        optionsItem.children.push_back(&optionsDifficultyLevel);
 
-        optionsInfiniteApplesItem.text.setString("Infinite Apples: On/Off");
-        optionsInfiniteApplesItem.text.setFont(font);
-        optionsInfiniteApplesItem.text.setCharacterSize(24);
+        optionsDifficultyLevel.text.setString("Difficulty level");
+        optionsDifficultyLevel.text.setFont(font);
+        optionsDifficultyLevel.text.setCharacterSize(24);
+        optionsDifficultyLevel.hintText.setString("Difficulty level");
+        optionsDifficultyLevel.hintText.setFont(font);
+        optionsDifficultyLevel.hintText.setCharacterSize(48);
+        optionsDifficultyLevel.hintText.setFillColor(sf::Color::Red);
 
-        optionsWithAccelerationItem.text.setString("With Acceleration: On/Off");
-        optionsWithAccelerationItem.text.setFont(font);
-        optionsWithAccelerationItem.text.setCharacterSize(24);
+        optionsDifficultyLevel.childrenOrientation = Math::Orientation::Vertical;
+        optionsDifficultyLevel.childrenAlignment = Math::Alignment::Middle;
+        optionsDifficultyLevel.childrenSpacing = 10.f;
+
+        optionsDifficultyLevel.children.push_back(&optionsEasyLevel);
+        optionsDifficultyLevel.children.push_back(&optionsHarderThanEasyLevel);
+        optionsDifficultyLevel.children.push_back(&optionsMediumLevel);
+        optionsDifficultyLevel.children.push_back(&optionsEasierThanHardLevel);
+        optionsDifficultyLevel.children.push_back(&optionsHardLevel);
+
+        optionsEasyLevel.text.setString("Easy level");
+        optionsEasyLevel.text.setFont(font);
+        optionsEasyLevel.text.setCharacterSize(24);
+
+        optionsHarderThanEasyLevel.text.setString("Harder than easy level");
+        optionsHarderThanEasyLevel.text.setFont(font);
+        optionsHarderThanEasyLevel.text.setCharacterSize(24);
+
+        optionsMediumLevel.text.setString("Medium level");
+        optionsMediumLevel.text.setFont(font);
+        optionsMediumLevel.text.setCharacterSize(24);
+
+        optionsEasierThanHardLevel.text.setString("Easier than hard level");
+        optionsEasierThanHardLevel.text.setFont(font);
+        optionsEasierThanHardLevel.text.setCharacterSize(24);
+
+        optionsHardLevel.text.setString("Hard level");
+        optionsHardLevel.text.setFont(font);
+        optionsHardLevel.text.setCharacterSize(24);
 
         exitGameItem.text.setString("Exit Game");
         exitGameItem.text.setFont(font);
@@ -99,13 +128,35 @@ namespace GameStateMainMenuData
                 {
                     ExpandSelectedItem(data.menu);
                 }
-                else if (data.menu.selectedItem == &data.optionsInfiniteApplesItem)
+                else if (data.menu.selectedItem == &data.optionsEasyLevel)
                 {
-                    //game.options = (GameOptions)((std::uint8_t)game.options ^ (std::uint8_t)GameOptions::InfiniteApples);
+                    game.options = GameState::GameOptions::Easy;
+
+                    CollapseSelectedItem(data.menu);
                 }
-                else if (data.menu.selectedItem == &data.optionsWithAccelerationItem)
+                else if (data.menu.selectedItem == &data.optionsHarderThanEasyLevel)
                 {
-                    //game.options = (GameOptions)((std::uint8_t)game.options ^ (std::uint8_t)GameOptions::WithAcceleration);
+                    game.options = GameState::GameOptions::HarderThanEasy;
+
+                    CollapseSelectedItem(data.menu);
+                }
+                else if (data.menu.selectedItem == &data.optionsMediumLevel)
+                {
+                    game.options = GameState::GameOptions::Medium;
+
+                    CollapseSelectedItem(data.menu);
+                }
+                else if (data.menu.selectedItem == &data.optionsEasierThanHardLevel)
+                {
+                    game.options = GameState::GameOptions::EasierThanHard;
+
+                    CollapseSelectedItem(data.menu);
+                }
+                else if (data.menu.selectedItem == &data.optionsHardLevel)
+                {
+                    game.options = GameState::GameOptions::Hard;
+
+                    CollapseSelectedItem(data.menu);
                 }
                 else if (data.menu.selectedItem == &data.exitGameItem)
                 {
@@ -125,6 +176,7 @@ namespace GameStateMainMenuData
                 }
             }
 
+
             Math::Orientation orientation = data.menu.selectedItem->parent->childrenOrientation;
             if (orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::Up ||
                 orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::Left)
@@ -136,6 +188,8 @@ namespace GameStateMainMenuData
             {
                 SelectNextMenuItem(data.menu);
             }
+
+            game.SetSettingsWithDifficultyLevel();
         }
     }
 

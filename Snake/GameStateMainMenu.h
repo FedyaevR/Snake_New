@@ -10,8 +10,13 @@ namespace GameStateMainMenuData
 
         Menu::MenuItem startGameItem;
         Menu::MenuItem optionsItem;
-        Menu::MenuItem optionsInfiniteApplesItem;
-        Menu::MenuItem optionsWithAccelerationItem;
+        
+        Menu::MenuItem optionsDifficultyLevel;
+        Menu::MenuItem optionsEasyLevel;
+        Menu::MenuItem optionsHarderThanEasyLevel;
+        Menu::MenuItem optionsMediumLevel;
+        Menu::MenuItem optionsEasierThanHardLevel;
+        Menu::MenuItem optionsHardLevel;
         Menu::MenuItem exitGameItem;
         Menu::MenuItem yesItem;
         Menu::MenuItem noItem;
