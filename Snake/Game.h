@@ -24,7 +24,7 @@ namespace Core_Game
         bool wasPause = false;
         bool isStart = false;
 
-        int scoreForApple = 2;
+        int scoreForApple = Settings::SCORE_FOR_APPLE;
 
         int score = 0;
 

@@ -254,7 +254,9 @@ namespace Core_Game
 
         snake.Initialize(settings);
         apple.GenerateApplePosition(settings, snake);
+        snake.speed = Settings::SNAKE_INIT_SPEED;
         isStart = true;
+        wasPause = false;
         
     }
 

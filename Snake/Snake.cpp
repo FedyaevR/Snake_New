@@ -45,11 +45,8 @@ namespace Snake
             segment->SetTexture(segment->direction, bodyAssets);
         }
 
-        // Сбрасываем счет и статус
-        score = 0;
         isAlive = true;
         accumulator = 0.0f;
-
     }
 
     void Snake::InitSegment(bool isHead, bool isTail, Snake_Direction::Direction setDirection)
@@ -120,7 +117,10 @@ namespace Snake
         {
             game.score += game.scoreForApple;
             game.apple.GenerateApplePosition(settings, *this);
-            AddSegment();
+            for (size_t i = 0; i < Settings::SNAKE_PART_COUNT_AFTER_EATEN_APPLE; i++)
+            {
+                AddSegment();
+            }
         }
         MoveBody();
         CheckCollisions();
@@ -384,9 +384,6 @@ namespace Snake
         segment->previousDirection = lastSegment->direction;
 
         segments.push_back(segment);
-
-        // Увеличиваем счет
-        score++;
 
         if (segments.size() > 1)
         {

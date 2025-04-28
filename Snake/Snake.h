@@ -24,7 +24,7 @@ namespace Snake
 
         Views::SnakeBodyViews bodyAssets;
 
-        float speed = 0.5f; 
+        float speed = Settings::SNAKE_INIT_SPEED;
         float deltaTime;
         float accumulator = 0.0f; // Накопитель времени для контроля скорости движения
         float minTurnDistance = Settings::SNAKE_PART_SIZE * 0.9f; // Минимальное расстояние между поворотами
@@ -55,9 +55,7 @@ namespace Snake
         
         //int GetScore() const { return segments.size() - 3; } 
 
-    private:
-        int score = 0; // Счет игрока
-        
+    private:        
         void InitSegment(bool isHead = false, bool isTail = false, Snake_Direction::Direction setDirection = Snake_Direction::Direction::Up);
         std::shared_ptr<Snake_Segment::Segment> InitSegment(sf::Texture texture, Math::Position position);
         void InitSegment(Math::Position position, Snake_Direction::Direction setDirection);
