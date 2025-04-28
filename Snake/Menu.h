@@ -5,6 +5,7 @@
 
 namespace Menu
 {
+	// Добавить чекбокс для пунктов настроек
 	struct MenuItem
 	{
 		sf::Text text;

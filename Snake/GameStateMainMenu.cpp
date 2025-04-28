@@ -18,62 +18,74 @@ namespace GameStateMainMenuData
         menu.rootItem.childrenAlignment = Math::Alignment::Middle;
         menu.rootItem.childrenSpacing = 10.f;
         menu.rootItem.children.push_back(&startGameItem);
-        menu.rootItem.children.push_back(&optionsItem);
+        menu.rootItem.children.push_back(&difficultyLevel);
+        menu.rootItem.children.push_back(&settings);
         menu.rootItem.children.push_back(&exitGameItem);
 
         startGameItem.text.setString("Start Game");
         startGameItem.text.setFont(font);
         startGameItem.text.setCharacterSize(24);
 
-        optionsItem.text.setString("Options");
-        optionsItem.text.setFont(font);
-        optionsItem.text.setCharacterSize(24);
-        optionsItem.hintText.setString("Options");
-        optionsItem.hintText.setFont(font);
-        optionsItem.hintText.setCharacterSize(48);
-        optionsItem.hintText.setFillColor(sf::Color::Red);
-        optionsItem.childrenOrientation = Math::Orientation::Vertical;
-        optionsItem.childrenAlignment = Math::Alignment::Middle;
-        optionsItem.childrenSpacing = 10.f;
-        optionsItem.children.push_back(&optionsDifficultyLevel);
+        settings.text.setString("Settings");
+        settings.text.setFont(font);
+        settings.text.setCharacterSize(24);
+        settings.hintText.setString("Settings");
+        settings.hintText.setFont(font);
+        settings.hintText.setCharacterSize(48);
+        settings.hintText.setFillColor(sf::Color::Red);
+        settings.childrenOrientation = Math::Orientation::Vertical;
+        settings.childrenAlignment = Math::Alignment::Middle;
+        settings.childrenSpacing = 10.f;
 
-        optionsDifficultyLevel.text.setString("Difficulty level");
-        optionsDifficultyLevel.text.setFont(font);
-        optionsDifficultyLevel.text.setCharacterSize(24);
-        optionsDifficultyLevel.hintText.setString("Difficulty level");
-        optionsDifficultyLevel.hintText.setFont(font);
-        optionsDifficultyLevel.hintText.setCharacterSize(48);
-        optionsDifficultyLevel.hintText.setFillColor(sf::Color::Red);
+        settings.children.push_back(&settingsMusic);
+        settings.children.push_back(&settingsSound);
 
-        optionsDifficultyLevel.childrenOrientation = Math::Orientation::Vertical;
-        optionsDifficultyLevel.childrenAlignment = Math::Alignment::Middle;
-        optionsDifficultyLevel.childrenSpacing = 10.f;
+        settingsMusic.text.setString("Music");
+        settingsMusic.text.setFont(font);
+        settingsMusic.text.setCharacterSize(24);
 
-        optionsDifficultyLevel.children.push_back(&optionsEasyLevel);
-        optionsDifficultyLevel.children.push_back(&optionsHarderThanEasyLevel);
-        optionsDifficultyLevel.children.push_back(&optionsMediumLevel);
-        optionsDifficultyLevel.children.push_back(&optionsEasierThanHardLevel);
-        optionsDifficultyLevel.children.push_back(&optionsHardLevel);
+        settingsSound.text.setString("Sound");
+        settingsSound.text.setFont(font);
+        settingsSound.text.setCharacterSize(24);
 
-        optionsEasyLevel.text.setString("Easy level");
-        optionsEasyLevel.text.setFont(font);
-        optionsEasyLevel.text.setCharacterSize(24);
 
-        optionsHarderThanEasyLevel.text.setString("Harder than easy level");
-        optionsHarderThanEasyLevel.text.setFont(font);
-        optionsHarderThanEasyLevel.text.setCharacterSize(24);
+        difficultyLevel.text.setString("Difficulty level");
+        difficultyLevel.text.setFont(font);
+        difficultyLevel.text.setCharacterSize(24);
+        difficultyLevel.hintText.setString("Difficulty level");
+        difficultyLevel.hintText.setFont(font);
+        difficultyLevel.hintText.setCharacterSize(48);
+        difficultyLevel.hintText.setFillColor(sf::Color::Red);
 
-        optionsMediumLevel.text.setString("Medium level");
-        optionsMediumLevel.text.setFont(font);
-        optionsMediumLevel.text.setCharacterSize(24);
+        difficultyLevel.childrenOrientation = Math::Orientation::Vertical;
+        difficultyLevel.childrenAlignment = Math::Alignment::Middle;
+        difficultyLevel.childrenSpacing = 10.f;
 
-        optionsEasierThanHardLevel.text.setString("Easier than hard level");
-        optionsEasierThanHardLevel.text.setFont(font);
-        optionsEasierThanHardLevel.text.setCharacterSize(24);
+        difficultyLevel.children.push_back(&difficultyEasyLevel);
+        difficultyLevel.children.push_back(&difficultyHarderThanEasyLevel);
+        difficultyLevel.children.push_back(&difficultyMediumLevel);
+        difficultyLevel.children.push_back(&difficultyEasierThanHardLevel);
+        difficultyLevel.children.push_back(&difficultyHardLevel);
 
-        optionsHardLevel.text.setString("Hard level");
-        optionsHardLevel.text.setFont(font);
-        optionsHardLevel.text.setCharacterSize(24);
+        difficultyEasyLevel.text.setString("Easy level");
+        difficultyEasyLevel.text.setFont(font);
+        difficultyEasyLevel.text.setCharacterSize(24);
+
+        difficultyHarderThanEasyLevel.text.setString("Harder than easy level");
+        difficultyHarderThanEasyLevel.text.setFont(font);
+        difficultyHarderThanEasyLevel.text.setCharacterSize(24);
+
+        difficultyMediumLevel.text.setString("Medium level");
+        difficultyMediumLevel.text.setFont(font);
+        difficultyMediumLevel.text.setCharacterSize(24);
+
+        difficultyEasierThanHardLevel.text.setString("Easier than hard level");
+        difficultyEasierThanHardLevel.text.setFont(font);
+        difficultyEasierThanHardLevel.text.setCharacterSize(24);
+
+        difficultyHardLevel.text.setString("Hard level");
+        difficultyHardLevel.text.setFont(font);
+        difficultyHardLevel.text.setCharacterSize(24);
 
         exitGameItem.text.setString("Exit Game");
         exitGameItem.text.setFont(font);
@@ -124,35 +136,35 @@ namespace GameStateMainMenuData
                 {
                     game.SwitchGameState(GameState::GameStateType::Playing);
                 }
-                else if (data.menu.selectedItem == &data.optionsItem)
+                else if (data.menu.selectedItem == &data.settings)
                 {
                     ExpandSelectedItem(data.menu);
                 }
-                else if (data.menu.selectedItem == &data.optionsEasyLevel)
+                else if (data.menu.selectedItem == &data.difficultyEasyLevel)
                 {
                     game.options = GameState::GameOptions::Easy;
 
                     CollapseSelectedItem(data.menu);
                 }
-                else if (data.menu.selectedItem == &data.optionsHarderThanEasyLevel)
+                else if (data.menu.selectedItem == &data.difficultyHarderThanEasyLevel)
                 {
                     game.options = GameState::GameOptions::HarderThanEasy;
 
                     CollapseSelectedItem(data.menu);
                 }
-                else if (data.menu.selectedItem == &data.optionsMediumLevel)
+                else if (data.menu.selectedItem == &data.difficultyMediumLevel)
                 {
                     game.options = GameState::GameOptions::Medium;
 
                     CollapseSelectedItem(data.menu);
                 }
-                else if (data.menu.selectedItem == &data.optionsEasierThanHardLevel)
+                else if (data.menu.selectedItem == &data.difficultyEasierThanHardLevel)
                 {
                     game.options = GameState::GameOptions::EasierThanHard;
 
                     CollapseSelectedItem(data.menu);
                 }
-                else if (data.menu.selectedItem == &data.optionsHardLevel)
+                else if (data.menu.selectedItem == &data.difficultyHardLevel)
                 {
                     game.options = GameState::GameOptions::Hard;
 

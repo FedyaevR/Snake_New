@@ -9,14 +9,18 @@ namespace GameStateMainMenuData
         sf::Font font;
 
         Menu::MenuItem startGameItem;
-        Menu::MenuItem optionsItem;
-        
-        Menu::MenuItem optionsDifficultyLevel;
-        Menu::MenuItem optionsEasyLevel;
-        Menu::MenuItem optionsHarderThanEasyLevel;
-        Menu::MenuItem optionsMediumLevel;
-        Menu::MenuItem optionsEasierThanHardLevel;
-        Menu::MenuItem optionsHardLevel;
+        Menu::MenuItem settings;
+
+        Menu::MenuItem settings;
+        Menu::MenuItem settingsMusic;
+        Menu::MenuItem settingsSound;
+
+        Menu::MenuItem difficultyLevel;
+        Menu::MenuItem difficultyEasyLevel;
+        Menu::MenuItem difficultyHarderThanEasyLevel;
+        Menu::MenuItem difficultyMediumLevel;
+        Menu::MenuItem difficultyEasierThanHardLevel;
+        Menu::MenuItem difficultyHardLevel;
         Menu::MenuItem exitGameItem;
         Menu::MenuItem yesItem;
         Menu::MenuItem noItem;
