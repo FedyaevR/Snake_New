@@ -43,10 +43,20 @@ namespace GameStateMainMenuData
         settingsMusic.text.setString("Music");
         settingsMusic.text.setFont(font);
         settingsMusic.text.setCharacterSize(24);
+        
+        settingsMusic.switchText.setString("Off");
+        settingsMusic.switchText.setFont(font);
+        settingsMusic.switchText.setCharacterSize(24);
+        settingsMusic.switchText.setFillColor(sf::Color::White);
 
         settingsSound.text.setString("Sound");
         settingsSound.text.setFont(font);
         settingsSound.text.setCharacterSize(24);
+
+        settingsSound.switchText.setString("Off");
+        settingsSound.switchText.setFont(font);
+        settingsSound.switchText.setCharacterSize(24);
+        settingsSound.switchText.setFillColor(sf::Color::White);
 
 
         difficultyLevel.text.setString("Difficulty level");
@@ -117,7 +127,7 @@ namespace GameStateMainMenuData
         // No need to do anything here
     }
 
-    void HandleGameStateMainMenuWindowEvent(GameStateMainMenuData& data,Core_Game::Game& game, const sf::Event& event)
+    void HandleGameStateMainMenuWindowEvent(GameStateMainMenuData& data, Core_Game::Game& game, const sf::Event& event)
     {
         if (!data.menu.selectedItem)
         {
@@ -182,6 +192,18 @@ namespace GameStateMainMenuData
                 {
                     CollapseSelectedItem(data.menu);
                 }
+                else if (data.menu.selectedItem == &data.settingsMusic)
+                {
+                    game.music = !game.music;
+
+                    SelectSwitchSetting(*data.menu.selectedItem, game);
+                }
+                else if (data.menu.selectedItem == &data.settingsSound)
+                {
+                    game.sound = !game.sound;
+
+                    SelectSwitchSetting(*data.menu.selectedItem, game);
+                }
                 else
                 {
                     ExpandSelectedItem(data.menu);
@@ -223,6 +245,12 @@ namespace GameStateMainMenuData
         hintText->setOrigin(Math::GetItemOrigin(*hintText, { 0.5f, 0.f }));
         hintText->setPosition(viewSize.x / 2.f, 150.f);
         window.draw(*hintText);
+
+        auto currentMenu = data.menu.selectedItem;
+        sf::Text* switchText = &currentMenu->switchText;
+        switchText->setOrigin(Math::GetItemOrigin(*switchText, { 0.5f, 0.f }));
+        switchText->setPosition(currentMenu->text.getPosition().x + 100.f, currentMenu->text.getPosition().y);
+        window.draw(*switchText);
 
         DrawMenu(data.menu, window, viewSize / 2.f, { 0.5f, 0.f });
     }

@@ -100,6 +100,18 @@ namespace Menu
         return false;
     }
 
+    void SelectSwitchSetting(MenuItem& menu, Core_Game::Game& game)
+    {
+        if (menu.text.getString() == "Music")
+        {
+            menu.switchText.setString(game.GetSettingInString("music"));
+        }
+        else if (menu.text.getString() == "Sound")
+        {
+            menu.switchText.setString(game.GetSettingInString("sound"));
+        }
+    }
+
     MenuItem* GetCurrentMenuContext(Menu& menu)
     {
         return menu.selectedItem ? menu.selectedItem->parent : &menu.rootItem;

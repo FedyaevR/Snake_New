@@ -28,6 +28,9 @@ namespace Core_Game
 
         int score = 0;
 
+        bool music = false;
+        bool sound = false;
+
         Game()
         {
             snake = Snake::Snake();
@@ -75,5 +78,7 @@ namespace Core_Game
         void UpdateGameState(GameState::GameState& state);
         void DrawGameState(GameState::GameState& state, sf::RenderWindow& window);
         void DrawGame(sf::RenderWindow& window);
+        std::string GetSettingInString(std::string settingName);
+        std::string GetInString(bool value);
     };
 }

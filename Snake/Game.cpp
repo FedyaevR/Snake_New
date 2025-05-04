@@ -406,4 +406,26 @@ namespace Core_Game
             }
         }
     }
+
+    std::string Game::GetSettingInString(std::string settingName)
+    {
+        if (settingName.compare("music") == 0)
+        {
+            return (GetInString(music));
+        }
+        else if (settingName.compare("sound") == 0)
+        {
+            return (GetInString(sound));
+        }
+    }
+
+    std::string Game::GetInString(bool value)
+    {
+        if (value)
+        {
+            return "On";
+        }
+
+        return "Off";
+    }
 }

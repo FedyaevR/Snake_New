@@ -1,6 +1,7 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "Game.h"
 #include "Math.h"
+#include <SFML/Graphics.hpp>
 
 
 namespace Menu
@@ -10,6 +11,7 @@ namespace Menu
 	{
 		sf::Text text;
 		sf::Text hintText; // Visible when child item is selected
+		sf::Text switchText;
 		Math::Orientation childrenOrientation = Math::Orientation::Vertical;
 		Math::Alignment childrenAlignment = Math::Alignment::Min;
 		float childrenSpacing;
@@ -36,6 +38,7 @@ namespace Menu
 	bool SelectNextMenuItem(Menu& menu);
 	bool ExpandSelectedItem(Menu& menu);
 	bool CollapseSelectedItem(Menu& menu);
+	void SelectSwitchSetting(MenuItem& menu, Core_Game::Game& game);
 
 	MenuItem* GetCurrentMenuContext(Menu& menu);
 
