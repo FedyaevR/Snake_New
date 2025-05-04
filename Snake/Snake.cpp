@@ -1,5 +1,5 @@
 #include "Snake.h"
-#include "Math.h"
+#include "Game.h"
 #include <iostream>
 #include <cmath>
 
@@ -45,11 +45,8 @@ namespace Snake
             segment->SetTexture(segment->direction, bodyAssets);
         }
 
-        // Сбрасываем счет и статус
-        score = 0;
-        alive = true;
+        isAlive = true;
         accumulator = 0.0f;
-
     }
 
     void Snake::InitSegment(bool isHead, bool isTail, Snake_Direction::Direction setDirection)
@@ -90,15 +87,14 @@ namespace Snake
         return segment;
     }
 
-    void Snake::Update(float deltaTime, Apple::Apple& apple)
+    void Snake::Update(Core_Game::Game& game)
     {
-        if (alive == false)
+        if (isAlive == false)
         {
             return;
         }
 
-        // Закладка на возможное будущее, не уверен, что пока будет использоваться
-        accumulator += deltaTime;
+        accumulator += game.deltaTime;
 
         float moveInterval = settings.moveSpeed / speed;
 
@@ -109,18 +105,22 @@ namespace Snake
 
         accumulator = 0.0f;
 
-        MoveSnake(apple);
+        MoveSnake(game);
     }
 
-    void Snake::MoveSnake(Apple::Apple& apple)
+    void Snake::MoveSnake(Core_Game::Game& game)
     {
         head->previousPosition = head->position;
 
         MoveHead();
-        if (CheckCollisions(apple, true))
+        if (CheckCollisions(game.apple, true))
         {
-            apple.GenerateApplePosition(settings, *this);
-            AddSegment();
+            game.score += game.scoreForApple;
+            game.apple.GenerateApplePosition(settings, *this);
+            for (size_t i = 0; i < Settings::SNAKE_PART_COUNT_AFTER_EATEN_APPLE; i++)
+            {
+                AddSegment();
+            }
         }
         MoveBody();
         CheckCollisions();
@@ -385,9 +385,6 @@ namespace Snake
 
         segments.push_back(segment);
 
-        // Увеличиваем счет
-        score++;
-
         if (segments.size() > 1)
         {
             segments.back()->previousSegment = lastSegment;
@@ -401,7 +398,7 @@ namespace Snake
         {
             if (head->CheckCollision(segments[i]))
             {
-                alive = false;
+                isAlive = false;
 
                 return true;
             }
@@ -435,7 +432,7 @@ namespace Snake
         }
     }
 
-    void Snake::SetDirection(Snake_Direction::Direction setDirection, Apple::Apple& apple)
+    void Snake::SetDirection(Snake_Direction::Direction setDirection, Core_Game::Game& game)
     {
         if (setDirection == head->direction)
         {
@@ -458,7 +455,7 @@ namespace Snake
             head->direction = setDirection;
             head->SetTexture(head->direction, bodyAssets);
 
-            MoveSnake(apple);
+            MoveSnake(game);
         }
         else
         {

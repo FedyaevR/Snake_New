@@ -2,10 +2,12 @@
 // Authored by Aleksandr Rybalka (polterageist@gmail.com)
 
 #include "Settings.h"
-#include "Controller.h"
+#include "Game.h"
 #include "Snake.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
+#include <chrono>
+#include <thread>
 
 const std::string RESOURCES_PATH = "Resources/";
 
@@ -13,53 +15,50 @@ int main()
 {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-    bool isStart = false;
     sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
-    auto settings = Settings::Settings();
-    settings.deltaTime = 0.0f;
 
-    settings.partSize = Settings::SNAKE_PART_SIZE;
-    settings.screenWidth = 500;
-    settings.screenHeight = 500;
-    settings.moveSpeed = 0.25f;
-
-    auto snake = Snake::Snake();
-    auto apple = Apple::Apple();
+    auto game = Core_Game::Game();
 
     sf::Clock game_clock;
     sf::Time lastTime = game_clock.getElapsedTime();
 
+    // Game loop
     while (window.isOpen())
     {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-            {
-                window.close();
-            }
-        }
-
         sf::Time currentTime = game_clock.getElapsedTime();
-        float deltaTime = currentTime.asSeconds() - lastTime.asSeconds();
+        game.deltaTime = currentTime.asSeconds() - lastTime.asSeconds();
         lastTime = currentTime;
 
-        if (isStart == false)
+        game.HandleWindowEvents(window);
+
+        if (!window.isOpen())
         {
-            snake.Initialize(settings);
-            apple.GenerateApplePosition(settings, snake);
-            isStart = true;
+            break;
         }
 
-        Core_Controller::MoveInput(snake, apple);
+        if (game.UpdateGame())
+        {
+            // Draw everything here
+            // Clear the window first
+            window.clear();
 
-        snake.Update(deltaTime, apple);
+            game.DrawGame(window);
 
-        window.clear();
-        snake.Draw(window);
-        apple.Draw(window);
-        window.display();
+            // End the current frame, display window contents on screen
+            window.display();
+
+            if (game.wasPause)
+            {
+                std::this_thread::sleep_for(std::chrono::milliseconds(Settings::TIME_FOR_DELAY_AFTER_PAUSE));
+                game.wasPause = false;
+            }
+        }
+        else
+        {
+            window.close();
+        }
     }
+
 
     return 0;
 }
