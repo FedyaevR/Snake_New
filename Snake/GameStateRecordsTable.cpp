@@ -3,11 +3,19 @@
 #include "Math.h"
 #include <cassert>
 
-namespace GameStateRecordsTable
+namespace GameStateNameForRecordsTable
 {
-    void GameStateRecordsTable::InitGameStatePlaying()
+    void GameStateNameForRecordsTable::InitGameStatePlaying()
     {
         assert(font.loadFromFile(Settings::DEFAULT_FONT_PATH));
+
+        inputNameMenuItem.text.setString("Input name");
+        inputNameMenuItem.text.setFont(font);
+        inputNameMenuItem.text.setCharacterSize(24);
+        inputNameMenuItem.hintText.setString("Input name");
+        inputNameMenuItem.hintText.setFont(font);
+        inputNameMenuItem.hintText.setCharacterSize(48);
+        inputNameMenuItem.hintText.setFillColor(sf::Color::White);
 
 
     }

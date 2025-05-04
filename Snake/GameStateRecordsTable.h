@@ -1,18 +1,19 @@
 #include <SFML/Graphics.hpp>
+#include "Menu.h"
 #pragma once
 
-namespace GameStateRecordsTable
+namespace GameStateNameForRecordsTable
 {
-    struct GameStateRecordsTable
+    struct GameStateNameForRecordsTable
     {
         // Resources
         sf::Font font;
 
-        // UI data
-        sf::Text scoreText;
-        sf::Text inputHintText;
+        Menu::MenuItem inputNameMenuItem;
+        Menu::MenuItem yesItem;
+        Menu::MenuItem noItem;
+        
 
         void InitGameStatePlaying();
-        void ShutdownGameStatePlaying();
     };
 }

@@ -335,7 +335,7 @@ namespace Core_Game
             }
             case GameState::GameStateType::GameOver:
             {
-                UpdateGameStateGameOver(*(GameStateGameOverData::GameStateGameOverData*)state.data, deltaTime);
+                UpdateGameStateGameOver(*(GameStateGameOverData::GameStateGameOverData*)state.data, *this, deltaTime);
 
                 break;
             }
