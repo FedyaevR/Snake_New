@@ -9,7 +9,6 @@ namespace GameStateMainMenuData
         sf::Font font;
 
         Menu::MenuItem startGameItem;
-        Menu::MenuItem settings;
 
         Menu::MenuItem settings;
         Menu::MenuItem settingsMusic;

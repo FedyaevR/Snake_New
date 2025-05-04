@@ -248,16 +248,16 @@ namespace Core_Game
         settings.partSize = Settings::SNAKE_PART_SIZE;
         settings.screenWidth = 500;
         settings.screenHeight = 500;
-        settings.moveSpeed = 0.25f;
+        settings.moveSpeed = 0.8f;
 
         score = 0;
 
         snake.Initialize(settings);
         apple.GenerateApplePosition(settings, snake);
-        snake.speed = Settings::SNAKE_INIT_SPEED;
         isStart = true;
         wasPause = false;
-        
+
+        SetSettingsWithDifficultyLevel();
     }
 
     void Game::PushGameState(GameState::GameStateType stateType, bool isExclusivelyVisible)
