@@ -428,4 +428,21 @@ namespace Core_Game
 
         return "Off";
     }
+
+    void Game::InitRecordTable()
+    {
+        recordsTable.push_back({"XYZ", 0});
+        recordsTable.push_back({ "Alice", 123 / 2 });
+        recordsTable.push_back({  "John", 123 });
+        recordsTable.push_back({ "Clementine", 123 / 4 });
+        recordsTable.push_back({ "Bob", 123 / 3 });
+
+
+        std::sort(recordsTable.begin(), recordsTable.end(),
+            [](const RecordsTableItem& a, const RecordsTableItem& b) 
+            {
+                return a.score > b.score; 
+            }
+        );
+    }
 }

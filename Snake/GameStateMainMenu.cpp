@@ -18,6 +18,7 @@ namespace GameStateMainMenuData
         menu.rootItem.childrenAlignment = Math::Alignment::Middle;
         menu.rootItem.childrenSpacing = 10.f;
         menu.rootItem.children.push_back(&startGameItem);
+        menu.rootItem.children.push_back(&recordsTable);
         menu.rootItem.children.push_back(&difficultyLevel);
         menu.rootItem.children.push_back(&settings);
         menu.rootItem.children.push_back(&exitGameItem);
@@ -118,6 +119,14 @@ namespace GameStateMainMenuData
         noItem.text.setFont(font);
         noItem.text.setCharacterSize(24);
 
+        recordsTable.text.setString("Records table");
+        recordsTable.text.setFont(font);
+        recordsTable.text.setCharacterSize(24);
+        recordsTable.hintText.setString("Records table");
+        recordsTable.hintText.setFont(font);
+        recordsTable.hintText.setCharacterSize(48);
+        recordsTable.hintText.setFillColor(sf::Color::Red);
+
         InitMenuItem(menu.rootItem);
         SelectMenuItem(menu, &startGameItem);
     }
@@ -203,6 +212,29 @@ namespace GameStateMainMenuData
                     game.sound = !game.sound;
 
                     SelectSwitchSetting(*data.menu.selectedItem, game);
+                }
+                else if (data.menu.selectedItem == &data.recordsTable)
+                {
+                    auto& selectedItem = data.menu.selectedItem;
+                    selectedItem->childrenOrientation = Math::Orientation::Vertical;
+                    selectedItem->childrenAlignment = Math::Alignment::Middle;
+                    selectedItem->childrenSpacing = 10.f;
+
+                    for (size_t i = 0; i < game.recordsTable.size(); i++)
+                    {
+                        auto item = game.recordsTable[i];
+                        auto menuItem = new Menu::MenuItem();
+                        menuItem->text.setString(item.name + "\t\t" + std::to_string(item.score));
+                        menuItem->text.setFont(data.font);
+                        menuItem->text.setCharacterSize(24);
+                        menuItem->parent = selectedItem;
+
+                        data.playersForTable.push_back(*menuItem);
+
+                        selectedItem->children.push_back(menuItem);
+                    }
+
+                    ExpandSelectedItem(data.menu);
                 }
                 else
                 {

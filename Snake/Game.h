@@ -6,6 +6,12 @@
 
 namespace Core_Game
 {
+    struct RecordsTableItem
+    {
+        std::string name;
+        int score = 0;
+    };
+
     struct Game
     {
         std::vector<GameState::GameState> gameStateStack;
@@ -31,6 +37,8 @@ namespace Core_Game
         bool music = false;
         bool sound = false;
 
+        std::vector<RecordsTableItem> recordsTable;
+
         Game()
         {
             snake = Snake::Snake();
@@ -48,6 +56,7 @@ namespace Core_Game
             pendingGameStateType = GameState::GameStateType::None;
             pendingGameStateIsExclusivelyVisible = false;
             SwitchGameState(GameState::GameStateType::MainMenu);
+            InitRecordTable();
         }
 
 
@@ -80,5 +89,7 @@ namespace Core_Game
         void DrawGame(sf::RenderWindow& window);
         std::string GetSettingInString(std::string settingName);
         std::string GetInString(bool value);
+
+        void InitRecordTable();
     };
 }
