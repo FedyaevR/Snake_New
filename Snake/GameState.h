@@ -7,6 +7,7 @@ namespace GameState
         None = 0,
         MainMenu,
         Playing,
+        NameForRecord,
         GameOver,
         PauseDialog,
     };

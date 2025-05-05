@@ -10,6 +10,7 @@ namespace Core_Game
     {
         std::string name;
         int score = 0;
+        bool isCurrentPlayer = false;
     };
 
     struct Game
@@ -37,6 +38,8 @@ namespace Core_Game
         bool music = false;
         bool sound = false;
 
+        std::string userName;
+
         std::vector<RecordsTableItem> recordsTable;
 
         Game()
@@ -55,6 +58,9 @@ namespace Core_Game
             gameStateChangeType = GameState::GameStateChangeType::None;
             pendingGameStateType = GameState::GameStateType::None;
             pendingGameStateIsExclusivelyVisible = false;
+
+            userName = "XYZ test";
+
             SwitchGameState(GameState::GameStateType::MainMenu);
             InitRecordTable();
         }
@@ -91,5 +97,6 @@ namespace Core_Game
         std::string GetInString(bool value);
 
         void InitRecordTable();
+        void SortRecordTable();
     };
 }

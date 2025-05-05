@@ -28,7 +28,6 @@ namespace GameStateGameOverData
         scoreText.setFont(font);
         scoreText.setCharacterSize(24);
         scoreText.setFillColor(sf::Color::White);
-        scoreText.setString("Your score: " + std::to_string(100));
         scoreText.setOrigin(Math::GetItemOrigin(scoreText, { 0.5f, 1.f }));
 
         recordsTableText.setFont(font);
@@ -78,6 +77,7 @@ namespace GameStateGameOverData
     void UpdateGameStateGameOver(GameStateGameOverData& data, Core_Game::Game& game, float timeDelta)
     {
         data.timeSinceGameOver += timeDelta;
+        data.scoreText.setString("Your score: " + std::to_string(game.score));
 
         data.recordsTableText.setString("Records:");
         for (const auto& item : game.recordsTable)

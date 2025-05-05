@@ -49,7 +49,7 @@ namespace GameStatePlayingData
 
         if (game.snake.IsAlive() == false)
         {
-            game.SwitchGameState(GameState::GameStateType::GameOver);
+            game.SwitchGameState(GameState::GameStateType::NameForRecord);
         }
     }
 

@@ -4,6 +4,7 @@
 #include "GameStatePauseDialog.h"
 #include "GameStatePlaying.h"
 #include "GameStateGameOver.h"
+#include "GameStateNameForRecordsTable.h"
 
 namespace Core_Game
 {
@@ -212,16 +213,25 @@ namespace Core_Game
             case GameState::GameStateType::Playing:
             {
                 GameStatePlayingData::HandleGameStatePlayingWindowEvent(*(GameStatePlayingData::GameStatePlayingData*)state.data, *this, event);
+
+                break;
+            }
+            case GameState::GameStateType::NameForRecord:
+            {
+                GameStateNameForRecordsTable::HandleGameStateNameForRecordWindowEvent(*(GameStateNameForRecordsTable::GameStateNameForRecordsTable*)state.data, *this, event);
+
                 break;
             }
             case GameState::GameStateType::GameOver:
             {
                 GameStateGameOverData::HandleGameStateGameOverWindowEvent(*(GameStateGameOverData::GameStateGameOverData*)state.data, *this, event);
+
                 break;
             }
             case GameState::GameStateType::PauseDialog:
             {
                 GameStatePauseDialogData::HandleGameStatePauseDialogWindowEvent(*(GameStatePauseDialogData::GameStatePauseDialogData*)state.data, *this, event);
+
                 break;
             }
             default:
@@ -278,7 +288,7 @@ namespace Core_Game
     {
         switch (state.type)
         {
-        case GameState::GameStateType::MainMenu:
+            case GameState::GameStateType::MainMenu:
             {
                 auto data = new GameStateMainMenuData::GameStateMainMenuData();
                 data->InitGameStateMainMenu();
@@ -286,7 +296,7 @@ namespace Core_Game
 
                 break;
             }
-        case GameState::GameStateType::Playing:
+            case GameState::GameStateType::Playing:
             {
                 auto data = new GameStatePlayingData::GameStatePlayingData();
                 data->InitGameStatePlaying();
@@ -294,7 +304,15 @@ namespace Core_Game
 
                 break;
             }
-        case GameState::GameStateType::GameOver:
+            case GameState::GameStateType::NameForRecord:
+            {
+                auto data = new GameStateNameForRecordsTable::GameStateNameForRecordsTable();
+                data->InitGameStateNameForRecords();
+                state.data = data;
+
+                break;
+            }
+            case GameState::GameStateType::GameOver:
             {
                 auto data = new GameStateGameOverData::GameStateGameOverData();
                 data->InitGameStateGameOver();
@@ -303,7 +321,7 @@ namespace Core_Game
 
                 break;
             }
-        case GameState::GameStateType::PauseDialog:
+            case GameState::GameStateType::PauseDialog:
             {
                 auto data = new GameStatePauseDialogData::GameStatePauseDialogData();
                 data->InitGameStatePauseDialog();
@@ -330,6 +348,12 @@ namespace Core_Game
             case GameState::GameStateType::Playing:
             {
                 UpdateGameStatePlaying(*(GameStatePlayingData::GameStatePlayingData*)state.data, *this);
+
+                break;
+            }
+            case GameState::GameStateType::NameForRecord:
+            {
+                UpdateGameStateNameForRecord(*(GameStateNameForRecordsTable::GameStateNameForRecordsTable*)state.data, deltaTime, *this);
 
                 break;
             }
@@ -364,6 +388,12 @@ namespace Core_Game
         case GameState::GameStateType::Playing:
         {
             DrawGameStatePlaying(*(GameStatePlayingData::GameStatePlayingData*)state.data, *this, window);
+
+            break;
+        }
+        case GameState::GameStateType::NameForRecord:
+        {
+            DrawGameStateNameForRecord(*(GameStateNameForRecordsTable::GameStateNameForRecordsTable*)state.data, window);
 
             break;
         }
@@ -431,17 +461,22 @@ namespace Core_Game
 
     void Game::InitRecordTable()
     {
-        recordsTable.push_back({"XYZ", 0});
+        recordsTable.push_back({userName, 0, true});
         recordsTable.push_back({ "Alice", 123 / 2 });
         recordsTable.push_back({  "John", 123 });
         recordsTable.push_back({ "Clementine", 123 / 4 });
         recordsTable.push_back({ "Bob", 123 / 3 });
 
 
+        SortRecordTable();
+    }
+
+    void Game::SortRecordTable()
+    {
         std::sort(recordsTable.begin(), recordsTable.end(),
-            [](const RecordsTableItem& a, const RecordsTableItem& b) 
+            [](const RecordsTableItem& a, const RecordsTableItem& b)
             {
-                return a.score > b.score; 
+                return a.score > b.score;
             }
         );
     }

@@ -67,7 +67,7 @@
     <ClCompile Include="GameStateGameOver.cpp">
       <Filter>Sources\GameState</Filter>
     </ClCompile>
-    <ClCompile Include="GameStateRecordsTable.cpp">
+    <ClCompile Include="GameStateNameForRecordsTable.cpp">
       <Filter>Sources\GameState</Filter>
     </ClCompile>
   </ItemGroup>
@@ -114,7 +114,7 @@
     <ClInclude Include="GameStateGameOver.h">
       <Filter>Sources\GameState</Filter>
     </ClInclude>
-    <ClInclude Include="GameStateRecordsTable.h">
+    <ClInclude Include="GameStateNameForRecordsTable.h">
       <Filter>Sources\GameState</Filter>
     </ClInclude>
   </ItemGroup>
