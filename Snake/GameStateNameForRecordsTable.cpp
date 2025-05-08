@@ -107,8 +107,6 @@ namespace GameStateNameForRecordsTable
                 SelectNextMenuItem(data.menu);
             }
         }
-
-        std::cout << data.inputNameText.getString().toAnsiString() <<  "\n";
     }
 
     void UpdateGameStateNameForRecord(GameStateNameForRecordsTable& data, float timeDelta, Core_Game::Game& game)
