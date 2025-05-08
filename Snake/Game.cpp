@@ -461,12 +461,8 @@ namespace Core_Game
 
     void Game::InitRecordTable()
     {
+        Deserialize();
         recordsTable.push_back({userName, 0, true});
-        recordsTable.push_back({ "Alice", 123 / 2 });
-        recordsTable.push_back({  "John", 123 });
-        recordsTable.push_back({ "Clementine", 123 / 4 });
-        recordsTable.push_back({ "Bob", 123 / 3 });
-
 
         SortRecordTable();
     }
@@ -479,5 +475,49 @@ namespace Core_Game
                 return a.score > b.score;
             }
         );
+    }
+
+    bool Game::Serialize()
+    {
+        std::ofstream file(Settings::RECORD_TABLE_FILE_PATH);
+        if (file.is_open())
+        {
+            for (const auto& record : recordsTable)
+            {
+                file << std::quoted(record.name) << " " << record.score << std::endl;
+            }
+
+            file.close();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    bool Game::Deserialize()
+    {
+        std::ifstream file(Settings::RECORD_TABLE_FILE_PATH);
+        if (!file.is_open())
+        {
+            return false;
+        }
+
+        recordsTable.clear();
+
+        std::string line;
+        while (std::getline(file, line))
+        {
+            std::istringstream iss(line);
+            std::string name;
+            int score;
+
+            if (iss >> std::quoted(name) >> score)
+            {
+                recordsTable.push_back({ name, score });
+            }
+        }
+
+        return true;
     }
 }

@@ -2,7 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include "Snake.h"
 #include "GameState.h"
-
+#include <fstream>
+#include <iomanip>
+#include <sstream>
 
 namespace Core_Game
 {
@@ -98,5 +100,8 @@ namespace Core_Game
 
         void InitRecordTable();
         void SortRecordTable();
+
+        bool Serialize();
+        bool Deserialize();
     };
 }

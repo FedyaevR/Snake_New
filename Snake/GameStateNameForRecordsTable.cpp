@@ -91,6 +91,7 @@ namespace GameStateNameForRecordsTable
                     }
 
                     game.SortRecordTable();
+                    game.Serialize();
                     game.SwitchGameState(GameState::GameStateType::GameOver);
                 }
             }
