@@ -14,7 +14,6 @@ namespace Menu
 
     void SelectMenuItem(Menu& menu, MenuItem* item)
     {
-        // It is definitely error to select root item
         assert(item != &menu.rootItem);
 
         if (menu.selectedItem == item)
@@ -24,7 +23,6 @@ namespace Menu
 
         if (item && !item->isEnabled)
         {
-            // Don't allow to select disabled item
             return;
         }
 
@@ -46,7 +44,7 @@ namespace Menu
         if (menu.selectedItem)
         {
             MenuItem* parent = menu.selectedItem->parent;
-            assert(parent); // There always should be parent
+            assert(parent); 
 
             auto it = std::find(parent->children.begin(), parent->children.end(), menu.selectedItem);
             if (it != parent->children.begin())
@@ -65,7 +63,8 @@ namespace Menu
         if (menu.selectedItem)
         {
             MenuItem* parent = menu.selectedItem->parent;
-            assert(parent); // There always should be parent
+            assert(parent); 
+
             auto it = std::find(parent->children.begin(), parent->children.end(), menu.selectedItem);
             if (it != parent->children.end() - 1)
             {

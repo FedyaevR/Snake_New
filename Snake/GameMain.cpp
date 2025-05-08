@@ -4,7 +4,6 @@
 #include "Settings.h"
 #include "Game.h"
 #include "Snake.h"
-#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <thread>
@@ -15,16 +14,20 @@ int main()
 {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-    sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+    sf::RenderWindow window(desktop, "Snake", sf::Style::Fullscreen);
 
     Core_Game::Game game;
+    game.screenWidth = window.getSize().x;
+    game.screenHeight = window.getSize().y;
+    game.InitScreenSize();
+    
 
     sf::Clock game_clock;
     sf::Time lastTime = game_clock.getElapsedTime();
 
     window.setKeyRepeatEnabled(true);
 
-    // Game loop
     while (window.isOpen())
     {
         sf::Time currentTime = game_clock.getElapsedTime();
@@ -40,13 +43,8 @@ int main()
 
         if (game.UpdateGame())
         {
-            // Draw everything here
-            // Clear the window first
             window.clear();
-
             game.DrawGame(window);
-
-            // End the current frame, display window contents on screen
             window.display();
 
             if (game.wasPause)
@@ -60,7 +58,6 @@ int main()
             window.close();
         }
     }
-
 
     return 0;
 }

@@ -10,7 +10,7 @@ namespace GameStateMainMenuData
     {
         assert(font.loadFromFile(Settings::DEFAULT_FONT_PATH));
 
-        menu.rootItem.hintText.setString("Apples Game");
+        menu.rootItem.hintText.setString("Snake Game");
         menu.rootItem.hintText.setFont(font);
         menu.rootItem.hintText.setCharacterSize(48);
         menu.rootItem.hintText.setFillColor(sf::Color::Red);
@@ -131,7 +131,6 @@ namespace GameStateMainMenuData
 
     void GameStateMainMenuData::ShutdownGameStateMainMenu()
     {
-        // No need to do anything here
     }
 
     void HandleGameStateMainMenuWindowEvent(GameStateMainMenuData& data, Core_Game::Game& game, const sf::Event& event)
@@ -225,23 +224,28 @@ namespace GameStateMainMenuData
                 }
                 else if (data.menu.selectedItem == &data.recordsTable)
                 {
-                    auto& selectedItem = data.menu.selectedItem;
-                    selectedItem->childrenOrientation = Math::Orientation::Vertical;
-                    selectedItem->childrenAlignment = Math::Alignment::Middle;
-                    selectedItem->childrenSpacing = 10.f;
-
-                    for (size_t i = 0; i < game.recordsTable.size(); i++)
+                    if (data.isRecordTablePrepared == false)
                     {
-                        auto item = game.recordsTable[i];
-                        auto menuItem = new Menu::MenuItem();
-                        menuItem->text.setString(item.name + "\t\t" + std::to_string(item.score));
-                        menuItem->text.setFont(data.font);
-                        menuItem->text.setCharacterSize(24);
-                        menuItem->parent = selectedItem;
+                        auto& selectedItem = data.menu.selectedItem;
+                        selectedItem->childrenOrientation = Math::Orientation::Vertical;
+                        selectedItem->childrenAlignment = Math::Alignment::Middle;
+                        selectedItem->childrenSpacing = 10.f;
 
-                        data.playersForTable.push_back(*menuItem);
+                        for (size_t i = 0; i < game.recordsTable.size(); i++)
+                        {
+                            auto item = game.recordsTable[i];
+                            auto menuItem = new Menu::MenuItem();
+                            menuItem->text.setString(item.name + "\t\t" + std::to_string(item.score));
+                            menuItem->text.setFont(data.font);
+                            menuItem->text.setCharacterSize(24);
+                            menuItem->parent = selectedItem;
 
-                        selectedItem->children.push_back(menuItem);
+                            data.playersForTable.push_back(*menuItem);
+
+                            selectedItem->children.push_back(menuItem);
+                        }
+
+                        data.isRecordTablePrepared = true;
                     }
 
                     ExpandSelectedItem(data.menu);
@@ -255,12 +259,16 @@ namespace GameStateMainMenuData
 
             Math::Orientation orientation = data.menu.selectedItem->parent->childrenOrientation;
             if (orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::Up ||
-                orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::Left)
+                orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::W ||
+                orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::Left ||
+                orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::A)
             {
                 SelectPreviousMenuItem(data.menu);
             }
             else if (orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::Down ||
-                orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::Right)
+                     orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::S ||
+                     orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::Right ||
+                     orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::D)
             {
                 SelectNextMenuItem(data.menu);
             }

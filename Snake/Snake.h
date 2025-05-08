@@ -52,13 +52,10 @@ namespace Snake
         bool CheckCollisions(const Apple::Apple& apple, bool checkOnlyHead = false);
         bool IsAlive() const { return isAlive; }
         Snake_Direction::Direction GetDirection() const { return head ? head->direction : Snake_Direction::Direction::None; }
-        
-        //int GetScore() const { return segments.size() - 3; } 
 
     private:        
         void InitSegment(bool isHead = false, bool isTail = false, Snake_Direction::Direction setDirection = Snake_Direction::Direction::Up);
         std::shared_ptr<Snake_Segment::Segment> InitSegment(sf::Texture texture, Math::Position position);
-        void InitSegment(Math::Position position, Snake_Direction::Direction setDirection);
         void MoveHead();
         void MoveBody();
         void MoveSegments(static std::vector<std::vector<bool>>& processedTurns, static std::vector<int>& turnCounters);

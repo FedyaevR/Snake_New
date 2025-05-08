@@ -71,7 +71,7 @@ namespace Snake_Segment
                     texture = bodyAssets.tail.left;
                     break;
                 default:
-                    texture = bodyAssets.tail.up;
+                    texture = bodyAssets.tail.down;
                     break;
             }
         }

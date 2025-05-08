@@ -53,6 +53,9 @@ namespace Core_Game
         sf::Sound loseSound;
         sf::Music backgroundMusic;
 
+        float screenWidth;
+        float screenHeight;
+
         Game(): snake(),
                 apple(),
                 settings()
@@ -61,14 +64,12 @@ namespace Core_Game
 
             settings.partSize = Settings::SNAKE_PART_SIZE;
             settings.moveSpeed = 0.8f;
-            settings.screenWidth = 500;
-            settings.screenHeight = 500;
 
             gameStateChangeType = GameState::GameStateChangeType::None;
             pendingGameStateType = GameState::GameStateType::None;
             pendingGameStateIsExclusivelyVisible = false;
 
-            userName = "XYZ test";
+            userName = "XYZ";
 
             SwitchGameState(GameState::GameStateType::MainMenu);
             InitRecordTable();
@@ -100,10 +101,8 @@ namespace Core_Game
 
         void RestartGame();
 
-        // Add new game state on top of the stack
         void PushGameState(GameState::GameStateType stateType, bool isExclusivelyVisible);
 
-        // Remove current game state from the stack
         void PopGameState();
 
         void InitGameState(GameState::GameState& state);
@@ -120,5 +119,6 @@ namespace Core_Game
         bool Deserialize();
 
         void InitSound();
+        void InitScreenSize();
     };
 }

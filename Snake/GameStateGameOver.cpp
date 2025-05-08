@@ -57,17 +57,22 @@ namespace GameStateGameOverData
                 {
                     game.SwitchGameState(GameState::GameStateType::MainMenu);
                 }
+
                 game.RestartGame();
             }
 
             Math::Orientation orientation = data.menu.selectedItem->parent->childrenOrientation;
             if (orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::Up ||
-                orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::W)
+                orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::W ||
+                orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::Left ||
+                orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::A)
             {
                 SelectPreviousMenuItem(data.menu);
             }
             else if (orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::Down ||
-                orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::S)
+                orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::S ||
+                orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::Right ||
+                orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::D)
             {
                 SelectNextMenuItem(data.menu);
             }
@@ -90,12 +95,13 @@ namespace GameStateGameOverData
 
     void DrawGameStateGameOver(GameStateGameOverData& data, sf::RenderWindow& window)
     {
-        sf::Vector2f viewSize = window.getView().getSize();
+        sf::Vector2f viewSize = window.getView()
+                                      .getSize();
 
         data.scoreText.setPosition(viewSize.x / 2.f, 30.f);
         window.draw(data.scoreText);
 
-        data.recordsTableText.setPosition(viewSize.x / 2.f, data.scoreText.getPosition().y + 15.f);
+        data.recordsTableText.setPosition((viewSize.x / 2.f) + 90.f, data.scoreText.getPosition().y + 35.f);
         window.draw(data.recordsTableText);
 
         DrawMenu(data.menu, window, viewSize / 2.f, { 0.5f, 0.f });

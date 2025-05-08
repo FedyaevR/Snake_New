@@ -170,7 +170,6 @@
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Segment.cpp" />
-    <ClCompile Include="Serializer.cpp" />
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="SnakeBodyAssets.cpp" />
   </ItemGroup>
@@ -184,7 +183,6 @@
     <ClInclude Include="GameStateMainMenu.h" />
     <ClInclude Include="GameStatePlaying.h" />
     <ClInclude Include="GameStateNameForRecordsTable.h" />
-    <ClInclude Include="Serializer.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Segment.h" />
