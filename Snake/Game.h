@@ -54,13 +54,9 @@ namespace Core_Game
         sf::Music backgroundMusic;
 
         Game(): snake(),
-            apple(),
-            settings()
+                apple(),
+                settings()
         {
-            /*snake = Snake::Snake();
-            apple = Apple::Apple();*/
-
-            //settings = Settings::Settings();
             settings.deltaTime = 0.0f;
 
             settings.partSize = Settings::SNAKE_PART_SIZE;
@@ -80,11 +76,9 @@ namespace Core_Game
             InitSound();
         }
 
-        // Запрещаем копирование и присваивание
         Game(const Game&) = delete;
         Game& operator=(const Game&) = delete;
 
-        // Разрешаем перемещение (опционально)
         Game(Game&&) = default;
         Game& operator=(Game&&) = default;
 
