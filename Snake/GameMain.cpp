@@ -17,7 +17,7 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
 
-    auto game = Core_Game::Game();
+    Core_Game::Game game;
 
     sf::Clock game_clock;
     sf::Time lastTime = game_clock.getElapsedTime();

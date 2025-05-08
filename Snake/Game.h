@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include <SFML/Audio.hpp>
 
 namespace Core_Game
 {
@@ -37,19 +38,25 @@ namespace Core_Game
 
         int score = 0;
 
-        bool music = false;
-        bool sound = false;
+        bool music = true;
+        bool sound = true;
 
         std::string userName;
 
         std::vector<RecordsTableItem> recordsTable;
 
-        Game()
-        {
-            snake = Snake::Snake();
-            apple = Apple::Apple();
+        sf::SoundBuffer appleSoundBuffer;
+        sf::Sound appleSound;
+        sf::SoundBuffer hitSoundBuffer;
+        sf::Sound hitSound;
+        sf::SoundBuffer loseSoundBuffer;
+        sf::Sound loseSound;
+        sf::Music backgroundMusic;
 
-            settings = Settings::Settings();
+        Game(): snake(),
+                apple(),
+                settings()
+        {
             settings.deltaTime = 0.0f;
 
             settings.partSize = Settings::SNAKE_PART_SIZE;
@@ -65,7 +72,15 @@ namespace Core_Game
 
             SwitchGameState(GameState::GameStateType::MainMenu);
             InitRecordTable();
+
+            InitSound();
         }
+
+        Game(const Game&) = delete;
+        Game& operator=(const Game&) = delete;
+
+        Game(Game&&) = default;
+        Game& operator=(Game&&) = default;
 
 
         void MoveInput();
@@ -103,5 +118,7 @@ namespace Core_Game
 
         bool Serialize();
         bool Deserialize();
+
+        void InitSound();
     };
 }

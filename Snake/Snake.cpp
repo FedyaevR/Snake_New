@@ -115,6 +115,11 @@ namespace Snake
         MoveHead();
         if (CheckCollisions(game.apple, true))
         {
+            if (game.sound)
+            {
+                game.appleSound.play();
+            }
+
             game.score += game.scoreForApple;
             game.apple.GenerateApplePosition(settings, *this);
             for (size_t i = 0; i < Settings::SNAKE_PART_COUNT_AFTER_EATEN_APPLE; i++)
@@ -123,7 +128,13 @@ namespace Snake
             }
         }
         MoveBody();
-        CheckCollisions();
+        if (CheckCollisions())
+        {
+            if (game.sound)
+            {
+                game.hitSound.play();
+            }
+        }
 
         for (auto& segment : segments)
         {
