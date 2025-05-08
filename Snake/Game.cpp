@@ -108,33 +108,33 @@ namespace Core_Game
 
         if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::Easy)
         {
-            snake.speed = 1.f;
-            scoreForApple = 2;
+            snake.speed = Settings::SNAKE_SPEED_LVL_EASY;
+            scoreForApple = Settings::SCORE_FOR_APPLE_LVL_EASY;
         }
         else if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::HarderThanEasy)
         {
-            snake.speed *= 2;
-            scoreForApple = 4;
+            snake.speed *= Settings::SNAKE_SPEED_LVL_HARDERTHANEASY;
+            scoreForApple = Settings::SCORE_FOR_APPLE_LVL_HARDERTHANEASY;
         }
         else if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::Medium)
         {
-            snake.speed *= 3;
-            scoreForApple = 6;
+            snake.speed *= Settings::SNAKE_SPEED_LVL_MEDIUM;
+            scoreForApple = Settings::SCORE_FOR_APPLE_LVL_MEDIUM;
         }
         else if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::EasierThanHard)
         {
-            snake.speed *= 4;
-            scoreForApple = 8;
+            snake.speed *= Settings::SNAKE_SPEED_LVL_EASIERTHANHARD;
+            scoreForApple = Settings::SCORE_FOR_APPLE_LVL_EASIERTHANHARD;
         }
         else if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::Hard)
         {
-            snake.speed *= 5;
-            scoreForApple = 10;
+            snake.speed *= Settings::SNAKE_SPEED_LVL_HARD;
+            scoreForApple = Settings::SCORE_FOR_APPLE_LVL_HARD;
         }
         else if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::Default)
         {
-            snake.speed = 1.f;
-            scoreForApple = 2;
+            snake.speed = Settings::SNAKE_SPEED_LVL_DEFAULT;
+            scoreForApple = Settings::SCORE_FOR_APPLE_LVL_DEFAULT;
         }
     }
 
@@ -185,7 +185,6 @@ namespace Core_Game
         sf::Event event;
         while (window.pollEvent(event))
         {
-            // Close window if close button or Escape key pressed
             if (event.type == sf::Event::Closed)
             {
                 window.close();
@@ -256,8 +255,6 @@ namespace Core_Game
         settings.deltaTime = 0.0f;
 
         settings.partSize = Settings::SNAKE_PART_SIZE;
-        settings.screenWidth = 500;
-        settings.screenHeight = 500;
         settings.moveSpeed = 0.8f;
 
         score = 0;
@@ -410,7 +407,7 @@ namespace Core_Game
             break;
         }
         default:
-            assert(false); // We want to know if we forgot to implement new game state
+            assert(false); 
             break;
         }
     }
@@ -536,6 +533,5 @@ namespace Core_Game
 
         backgroundMusic.setLoop(true);
         backgroundMusic.play();
-        
     }
 }
