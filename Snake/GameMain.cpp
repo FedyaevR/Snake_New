@@ -15,18 +15,19 @@ int main()
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-    sf::RenderWindow window(desktop, "Snake");
+    sf::RenderWindow window(desktop, "Snake", sf::Style::Fullscreen);
 
     Core_Game::Game game;
-    game.settings.screenWidth = window.getSize().x;
-    game.settings.screenHeight = window.getSize().y;
+    game.screenWidth = window.getSize().x;
+    game.screenHeight = window.getSize().y;
+    game.InitScreenSize();
+    
 
     sf::Clock game_clock;
     sf::Time lastTime = game_clock.getElapsedTime();
 
     window.setKeyRepeatEnabled(true);
 
-    // Game loop
     while (window.isOpen())
     {
         sf::Time currentTime = game_clock.getElapsedTime();

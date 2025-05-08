@@ -104,7 +104,7 @@ namespace Core_Game
 
     void Game::SetSettingsWithDifficultyLevel()
     {
-        snake.speed = 1.f;
+        snake.speed = Settings::SNAKE_SPEED_LVL_EASY;
 
         if ((std::uint8_t)options & (std::uint8_t)GameState::GameOptions::Easy)
         {
@@ -253,7 +253,8 @@ namespace Core_Game
 
         settings = Settings::Settings();
         settings.deltaTime = 0.0f;
-
+        settings.screenWidth = screenWidth;
+        settings.screenHeight = screenHeight;
         settings.partSize = Settings::SNAKE_PART_SIZE;
         settings.moveSpeed = 0.8f;
 
@@ -533,5 +534,11 @@ namespace Core_Game
 
         backgroundMusic.setLoop(true);
         backgroundMusic.play();
+    }
+
+    void Game::InitScreenSize()
+    {
+        settings.screenHeight = screenHeight;
+        settings.screenWidth = screenWidth;
     }
 }

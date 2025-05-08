@@ -57,6 +57,7 @@ namespace GameStateGameOverData
                 {
                     game.SwitchGameState(GameState::GameStateType::MainMenu);
                 }
+
                 game.RestartGame();
             }
 
@@ -94,12 +95,13 @@ namespace GameStateGameOverData
 
     void DrawGameStateGameOver(GameStateGameOverData& data, sf::RenderWindow& window)
     {
-        sf::Vector2f viewSize = window.getView().getSize();
+        sf::Vector2f viewSize = window.getView()
+                                      .getSize();
 
         data.scoreText.setPosition(viewSize.x / 2.f, 30.f);
         window.draw(data.scoreText);
 
-        data.recordsTableText.setPosition(viewSize.x / 2.f, data.scoreText.getPosition().y + 15.f);
+        data.recordsTableText.setPosition((viewSize.x / 2.f) + 90.f, data.scoreText.getPosition().y + 35.f);
         window.draw(data.recordsTableText);
 
         DrawMenu(data.menu, window, viewSize / 2.f, { 0.5f, 0.f });

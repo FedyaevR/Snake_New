@@ -9,7 +9,6 @@ namespace Math
         float y;
     };
 
-	// Helper method for organizing text items
 	enum class Orientation
 	{
 		Horizontal,

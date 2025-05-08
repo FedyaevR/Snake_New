@@ -20,7 +20,6 @@ namespace GameStatePauseDialogData
 
     void GameStatePauseDialogData::ShutdownGameStatePauseDialog()
     {
-        // We dont need to free resources here, because they will be freed automatically
     }
 
     void HandleGameStatePauseDialogWindowEvent(GameStatePauseDialogData& data, Core_Game::Game& game, const sf::Event& event)

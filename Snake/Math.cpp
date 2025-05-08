@@ -5,7 +5,7 @@ namespace Math
     void DrawItemsList(sf::RenderWindow& window, const std::vector<sf::Text*>& items, float spacing, Orientation orientation, Alignment alignment, const sf::Vector2f& position, const sf::Vector2f& origin)
     {
         sf::FloatRect totalRect;
-        // Calculate total height/width of all texts
+
         for (auto it = items.begin(); it != items.end(); ++it)
         {
             sf::FloatRect itemRect = (*it)->getGlobalBounds();

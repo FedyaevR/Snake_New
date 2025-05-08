@@ -127,6 +127,7 @@ namespace Snake
                 AddSegment();
             }
         }
+
         MoveBody();
         if (CheckCollisions())
         {
@@ -148,20 +149,20 @@ namespace Snake
 
         switch (head->direction)
         {
-        case Snake_Direction::Direction::Up:
-            newPosition.y -= settings.partSize;
-            break;
-        case Snake_Direction::Direction::Down:
-            newPosition.y += settings.partSize;
-            break;
-        case Snake_Direction::Direction::Left:
-            newPosition.x -= settings.partSize;
-            break;
-        case Snake_Direction::Direction::Right:
-            newPosition.x += settings.partSize;
-            break;
-        default:
-            break;
+            case Snake_Direction::Direction::Up:
+                newPosition.y -= settings.partSize;
+                break;
+            case Snake_Direction::Direction::Down:
+                newPosition.y += settings.partSize;
+                break;
+            case Snake_Direction::Direction::Left:
+                newPosition.x -= settings.partSize;
+                break;
+            case Snake_Direction::Direction::Right:
+                newPosition.x += settings.partSize;
+                break;
+            default:
+                break;
         }
 
         if (newPosition.x < 0)
@@ -289,18 +290,18 @@ namespace Snake
 
         switch (setDirection)
         {
-        case Snake_Direction::Direction::Up:
-            segment->position.y -= step;
-            break;
-        case Snake_Direction::Direction::Down:
-            segment->position.y += step;
-            break;
-        case Snake_Direction::Direction::Left:
-            segment->position.x -= step;
-            break;
-        case Snake_Direction::Direction::Right:
-            segment->position.x += step;
-            break;
+            case Snake_Direction::Direction::Up:
+                segment->position.y -= step;
+                break;
+            case Snake_Direction::Direction::Down:
+                segment->position.y += step;
+                break;
+            case Snake_Direction::Direction::Left:
+                segment->position.x -= step;
+                break;
+            case Snake_Direction::Direction::Right:
+                segment->position.x += step;
+                break;
         }
 
         segment->UpdateSpritePosition();

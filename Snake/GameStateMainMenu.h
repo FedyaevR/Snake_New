@@ -27,6 +27,8 @@ namespace GameStateMainMenuData
         Menu::MenuItem noItem;
         Menu::Menu menu;
 
+        bool isRecordTablePrepared = false;
+
         void InitGameStateMainMenu();
         void ShutdownGameStateMainMenu();
     };

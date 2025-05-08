@@ -18,6 +18,7 @@ namespace Snake_Segment
         Snake_Direction::Direction direction;
         Snake_Direction::Direction previousDirection;
 
+        // ак € пон€л тут может быть утечка пам€ти, так как идут цикличные ссылки. Ќо как исправить не придумал.
         std::shared_ptr<Segment> previousSegment;
 
         bool isTail = false;
