@@ -22,6 +22,8 @@ int main()
     sf::Clock game_clock;
     sf::Time lastTime = game_clock.getElapsedTime();
 
+    window.setKeyRepeatEnabled(true);
+
     // Game loop
     while (window.isOpen())
     {

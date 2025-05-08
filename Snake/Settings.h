@@ -8,6 +8,8 @@ namespace Settings
     const std::string FONTS_PATH = RESOURCES_PATH + "Fonts";
     const std::string DEFAULT_FONT_PATH = FONTS_PATH + "/Roboto-Regular.ttf";
 
+    const std::string RECORD_TABLE_FILE_PATH = "records.dat";
+
     const float SNAKE_PART_SIZE = 35.f;
     // Значение для плавности поворота
     const int SNAKE_TURNS_COUNTER_VALUE = 2;

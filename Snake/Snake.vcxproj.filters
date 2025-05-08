@@ -67,6 +67,12 @@
     <ClCompile Include="GameStateGameOver.cpp">
       <Filter>Sources\GameState</Filter>
     </ClCompile>
+    <ClCompile Include="GameStateNameForRecordsTable.cpp">
+      <Filter>Sources\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="Serializer.cpp">
+      <Filter>Sources\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SnakeBodyAssets.h">
@@ -110,6 +116,12 @@
     </ClInclude>
     <ClInclude Include="GameStateGameOver.h">
       <Filter>Sources\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateNameForRecordsTable.h">
+      <Filter>Sources\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="Serializer.h">
+      <Filter>Sources\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

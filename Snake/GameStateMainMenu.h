@@ -10,6 +10,8 @@ namespace GameStateMainMenuData
 
         Menu::MenuItem startGameItem;
 
+        Menu::MenuItem recordsTable;
+        std::vector<Menu::MenuItem> playersForTable;
         Menu::MenuItem settings;
         Menu::MenuItem settingsMusic;
         Menu::MenuItem settingsSound;

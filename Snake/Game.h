@@ -2,10 +2,19 @@
 #include <SFML/Graphics.hpp>
 #include "Snake.h"
 #include "GameState.h"
-
+#include <fstream>
+#include <iomanip>
+#include <sstream>
 
 namespace Core_Game
 {
+    struct RecordsTableItem
+    {
+        std::string name;
+        int score = 0;
+        bool isCurrentPlayer = false;
+    };
+
     struct Game
     {
         std::vector<GameState::GameState> gameStateStack;
@@ -31,6 +40,10 @@ namespace Core_Game
         bool music = false;
         bool sound = false;
 
+        std::string userName;
+
+        std::vector<RecordsTableItem> recordsTable;
+
         Game()
         {
             snake = Snake::Snake();
@@ -47,7 +60,11 @@ namespace Core_Game
             gameStateChangeType = GameState::GameStateChangeType::None;
             pendingGameStateType = GameState::GameStateType::None;
             pendingGameStateIsExclusivelyVisible = false;
+
+            userName = "XYZ test";
+
             SwitchGameState(GameState::GameStateType::MainMenu);
+            InitRecordTable();
         }
 
 
@@ -80,5 +97,11 @@ namespace Core_Game
         void DrawGame(sf::RenderWindow& window);
         std::string GetSettingInString(std::string settingName);
         std::string GetInString(bool value);
+
+        void InitRecordTable();
+        void SortRecordTable();
+
+        bool Serialize();
+        bool Deserialize();
     };
 }

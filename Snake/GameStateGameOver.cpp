@@ -11,24 +11,32 @@ namespace GameStateGameOverData
 
         timeSinceGameOver = 0.f;
 
-        gameOverText.setFont(font);
-        gameOverText.setCharacterSize(48);
-        gameOverText.setStyle(sf::Text::Bold);
-        gameOverText.setFillColor(sf::Color::Red);
-        gameOverText.setString("GAME OVER");
-        gameOverText.setOrigin(Math::GetItemOrigin(gameOverText, { 0.5f, 0.5f }));
+        menu.rootItem.childrenOrientation = Math::Orientation::Vertical;
+        menu.rootItem.childrenAlignment = Math::Alignment::Middle;
+        menu.rootItem.childrenSpacing = 10.f;
+        menu.rootItem.children.push_back(&restartGameItem);
+        menu.rootItem.children.push_back(&inMainMenu);
 
-        hintText.setFont(font);
-        hintText.setCharacterSize(24);
-        hintText.setFillColor(sf::Color::White);
-        hintText.setString("Press Space to restart");
-        hintText.setOrigin(Math::GetItemOrigin(hintText, { 0.5f, 1.f }));
+        restartGameItem.text.setString("Restart Game");
+        restartGameItem.text.setFont(font);
+        restartGameItem.text.setCharacterSize(24);
+
+        inMainMenu.text.setString("Exit in main menu");
+        inMainMenu.text.setFont(font);
+        inMainMenu.text.setCharacterSize(24);
+
+        scoreText.setFont(font);
+        scoreText.setCharacterSize(24);
+        scoreText.setFillColor(sf::Color::White);
+        scoreText.setOrigin(Math::GetItemOrigin(scoreText, { 0.5f, 1.f }));
 
         recordsTableText.setFont(font);
         recordsTableText.setCharacterSize(24);
         recordsTableText.setFillColor(sf::Color::Green);
-        recordsTableText.setString("Records:\nPlayer: 999\nPlayer: 999\nPlayer: 999\nPlayer: 999\nPlayer: 999");
         recordsTableText.setOrigin(Math::GetItemOrigin(recordsTableText, { 0.5f, 0.f }));
+
+        InitMenuItem(menu.rootItem);
+        SelectMenuItem(menu, &restartGameItem);
     }
 
     void GameStateGameOverData::ShutdownGameStateGameOver()
@@ -39,33 +47,43 @@ namespace GameStateGameOverData
     {
         if (event.type == sf::Event::KeyPressed)
         {
-            if (event.key.code == sf::Keyboard::Space)
+            if (event.key.code == sf::Keyboard::Enter)
             {
+                if (data.menu.selectedItem == &data.restartGameItem)
+                {
+                    game.SwitchGameState(GameState::GameStateType::Playing);
+                }
+                else if (data.menu.selectedItem == &data.inMainMenu)
+                {
+                    game.SwitchGameState(GameState::GameStateType::MainMenu);
+                }
                 game.RestartGame();
-                game.SwitchGameState(GameState::GameStateType::Playing);
             }
-            else if (event.key.code == sf::Keyboard::Escape)
+
+            Math::Orientation orientation = data.menu.selectedItem->parent->childrenOrientation;
+            if (orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::Up ||
+                orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::W)
             {
-                game.SwitchGameState(GameState::GameStateType::MainMenu);
+                SelectPreviousMenuItem(data.menu);
+            }
+            else if (orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::Down ||
+                orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::S)
+            {
+                SelectNextMenuItem(data.menu);
             }
         }
     }
 
-    // ѕозже передать саму таблицу рекордов
-    void UpdateGameStateGameOver(GameStateGameOverData& data, float timeDelta)
+    void UpdateGameStateGameOver(GameStateGameOverData& data, Core_Game::Game& game, float timeDelta)
     {
         data.timeSinceGameOver += timeDelta;
-
-        sf::Color gameOverTextColor = (int)data.timeSinceGameOver % 2 ? sf::Color::Red : sf::Color::Yellow;
-        data.gameOverText.setFillColor(gameOverTextColor);
+        data.scoreText.setString("Your score: " + std::to_string(game.score));
 
         data.recordsTableText.setString("Records:");
-
-        // а тут таблица будет использоватьс€ как раз
-     /*   for (const RecordsTableItem& item : recordsTable)
+        for (const auto& item : game.recordsTable)
         {
-            recordsTableText.setString(recordsTableText.getString() + "\n" + item.name + ": " + std::to_string(item.score));
-        }*/
+            data.recordsTableText.setString(data.recordsTableText.getString() + "\n" + item.name + ": " + std::to_string(item.score));
+        }
 
         data.recordsTableText.setOrigin(Math::GetItemOrigin(data.recordsTableText, { 0.5f, 0.f }));
     }
@@ -74,13 +92,12 @@ namespace GameStateGameOverData
     {
         sf::Vector2f viewSize = window.getView().getSize();
 
-        data.gameOverText.setPosition(viewSize.x / 2.f, viewSize.y / 2.f);
-        window.draw(data.gameOverText);
+        data.scoreText.setPosition(viewSize.x / 2.f, 30.f);
+        window.draw(data.scoreText);
 
-        data.recordsTableText.setPosition(viewSize.x / 2.f, 30.f);
+        data.recordsTableText.setPosition(viewSize.x / 2.f, data.scoreText.getPosition().y + 15.f);
         window.draw(data.recordsTableText);
 
-        data.hintText.setPosition(viewSize.x / 2.f, viewSize.y - 10.f);
-        window.draw(data.hintText);
+        DrawMenu(data.menu, window, viewSize / 2.f, { 0.5f, 0.f });
     }
 }
