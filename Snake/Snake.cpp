@@ -368,23 +368,24 @@ namespace Snake
 
             if (lastSegment->direction == Snake_Direction::Direction::Down)
             {
-                newTexture = bodyAssets.tail.down;
+                newTexture = bodyAssets.tail.up;
             }
             else
             {
-                newTexture = bodyAssets.tail.up;
+                newTexture = bodyAssets.tail.down;
             }
         }
         else
         {
             newPos = { lastSegment->position.x + segmentGap, lastSegment->position.y };
+
             if (lastSegment->direction == Snake_Direction::Direction::Left)
             {
-                newTexture = bodyAssets.tail.left;
+                newTexture = bodyAssets.tail.right;
             }
             else
             {
-                newTexture = bodyAssets.tail.right;
+                newTexture = bodyAssets.tail.left;
             }
         }
 
