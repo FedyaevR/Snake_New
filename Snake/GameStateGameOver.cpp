@@ -62,12 +62,16 @@ namespace GameStateGameOverData
 
             Math::Orientation orientation = data.menu.selectedItem->parent->childrenOrientation;
             if (orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::Up ||
-                orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::W)
+                orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::W ||
+                orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::Left ||
+                orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::A)
             {
                 SelectPreviousMenuItem(data.menu);
             }
             else if (orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::Down ||
-                orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::S)
+                orientation == Math::Orientation::Vertical && event.key.code == sf::Keyboard::S ||
+                orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::Right ||
+                orientation == Math::Orientation::Horizontal && event.key.code == sf::Keyboard::D)
             {
                 SelectNextMenuItem(data.menu);
             }
