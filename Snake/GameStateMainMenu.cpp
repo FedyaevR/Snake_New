@@ -45,7 +45,6 @@ namespace GameStateMainMenuData
         settingsMusic.text.setFont(font);
         settingsMusic.text.setCharacterSize(24);
         
-        settingsMusic.switchText.setString("Off");
         settingsMusic.switchText.setFont(font);
         settingsMusic.switchText.setCharacterSize(24);
         settingsMusic.switchText.setFillColor(sf::Color::White);
@@ -54,7 +53,6 @@ namespace GameStateMainMenuData
         settingsSound.text.setFont(font);
         settingsSound.text.setCharacterSize(24);
 
-        settingsSound.switchText.setString("Off");
         settingsSound.switchText.setFont(font);
         settingsSound.switchText.setCharacterSize(24);
         settingsSound.switchText.setFillColor(sf::Color::White);
@@ -157,6 +155,9 @@ namespace GameStateMainMenuData
                 }
                 else if (data.menu.selectedItem == &data.settings)
                 {
+                    data.settingsMusic.switchText.setString(game.GetSettingInString("music"));
+                    data.settingsSound.switchText.setString(game.GetSettingInString("sound"));
+
                     ExpandSelectedItem(data.menu);
                 }
                 else if (data.menu.selectedItem == &data.difficultyEasyLevel)
@@ -204,6 +205,15 @@ namespace GameStateMainMenuData
                 else if (data.menu.selectedItem == &data.settingsMusic)
                 {
                     game.music = !game.music;
+
+                    if (game.music)
+                    {
+                        game.backgroundMusic.play();
+                    }
+                    else 
+                    {
+                        game.backgroundMusic.stop();
+                    }
 
                     SelectSwitchSetting(*data.menu.selectedItem, game);
                 }
@@ -261,12 +271,6 @@ namespace GameStateMainMenuData
 
     void UpdateGameStateMainMenu(GameStateMainMenuData& data, float timeDelta)
     {
-        // Добавить опции!!
-        //bool isInfiniteApples = ((std::uint8_t)game.options & (std::uint8_t)GameOptions::InfiniteApples) != (std::uint8_t)GameOptions::Empty;
-        //optionsInfiniteApplesItem.text.setString("Infinite Apples: " + std::string(isInfiniteApples ? "On" : "Off"));
-
-        //bool isWithAcceleration = ((std::uint8_t)game.options & (std::uint8_t)GameOptions::WithAcceleration) != (std::uint8_t)GameOptions::Empty;
-        //optionsWithAccelerationItem.text.setString("With Acceleration: " + std::string(isWithAcceleration ? "On" : "Off"));
     }
 
     void DrawGameStateMainMenu(GameStateMainMenuData& data, sf::RenderWindow& window)

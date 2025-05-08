@@ -520,4 +520,22 @@ namespace Core_Game
 
         return true;
     }
+
+    void Game::InitSound()
+    {
+        assert(appleSoundBuffer.loadFromFile(Settings::SOUND_PATH + "/Theevilsocks__menu-hover.wav"));
+        appleSound.setBuffer(appleSoundBuffer);
+
+        assert(hitSoundBuffer.loadFromFile(Settings::SOUND_PATH + "/Owlstorm__Snake_hit.wav"));
+        hitSound.setBuffer(hitSoundBuffer);
+
+        assert(loseSoundBuffer.loadFromFile(Settings::SOUND_PATH + "/Maodin204__Lose.wav"));
+        loseSound.setBuffer(loseSoundBuffer);
+
+        assert(backgroundMusic.openFromFile(Settings::SOUND_PATH + "/Clinthammer__Background_Music.wav"));
+
+        backgroundMusic.setLoop(true);
+        backgroundMusic.play();
+        
+    }
 }

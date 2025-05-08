@@ -49,6 +49,10 @@ namespace GameStatePlayingData
 
         if (game.snake.IsAlive() == false)
         {
+            if (game.sound)
+            {
+                game.loseSound.play();
+            }
             game.SwitchGameState(GameState::GameStateType::NameForRecord);
         }
     }

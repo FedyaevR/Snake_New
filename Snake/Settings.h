@@ -5,6 +5,7 @@ namespace Settings
 {
     const std::string RESOURCES_PATH = "Resources/";
     const std::string ASSETS_PATH = RESOURCES_PATH + "Assets";
+    const std::string SOUND_PATH = RESOURCES_PATH + "/Sound";
     const std::string FONTS_PATH = RESOURCES_PATH + "Fonts";
     const std::string DEFAULT_FONT_PATH = FONTS_PATH + "/Roboto-Regular.ttf";
 
