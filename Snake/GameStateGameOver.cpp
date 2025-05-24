@@ -7,7 +7,12 @@ namespace GameStateGameOverData
 {
     void GameStateGameOverData::InitGameStateGameOver()
     {
-        assert(font.loadFromFile(Settings::DEFAULT_FONT_PATH));
+        if(font.loadFromFile(Settings::DEFAULT_FONT_PATH))
+        {
+            std::cout << "Loaded Default font path is failed" << std::endl;
+
+            throw std::invalid_argument("Default font path could not be loaded");
+        }
 
         timeSinceGameOver = 0.f;
 

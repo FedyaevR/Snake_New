@@ -2,6 +2,7 @@
 #include <string>
 #include "Settings.h"
 #include <cassert>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
 namespace Views
@@ -15,11 +16,16 @@ namespace Views
 
         AppleAsset() : texture(std::make_shared<sf::Texture>())
         {
-            assert(texture->loadFromFile(ASSETS_APPLE));
+            if (texture->loadFromFile(ASSETS_APPLE))
+            {
+                std::cout << "Loaded Apple texture is failed" << std::endl;
+
+                throw std::invalid_argument("Apple texture could not be loaded");
+            }
 
             sprite.setTexture(*texture);
-            sprite.setOrigin(Math::GetItemOrigin(sprite, { 0.5f, 0.5f }));
-            sprite.setScale(Math::GetSpriteScale(sprite, { Settings::APPLE_SIZE, Settings::APPLE_SIZE }));
+            sprite.setOrigin(Math::GetItemOrigin(sprite, {0.5f, 0.5f}));
+            sprite.setScale(Math::GetSpriteScale(sprite, {Settings::APPLE_SIZE, Settings::APPLE_SIZE}));
         }
     };
 }

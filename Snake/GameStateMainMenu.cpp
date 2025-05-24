@@ -8,7 +8,12 @@ namespace GameStateMainMenuData
 {
     void GameStateMainMenuData::InitGameStateMainMenu()
     {
-        assert(font.loadFromFile(Settings::DEFAULT_FONT_PATH));
+        if(font.loadFromFile(Settings::DEFAULT_FONT_PATH))
+        {
+            std::cout << "Loaded Default font path is failed" << std::endl;
+
+            throw std::invalid_argument("Default font path could not be loaded");
+        }
 
         menu.rootItem.hintText.setString("Snake Game");
         menu.rootItem.hintText.setFont(font);
