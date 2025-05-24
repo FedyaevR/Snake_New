@@ -7,7 +7,12 @@ namespace GameStatePauseDialogData
 {
     void GameStatePauseDialogData::InitGameStatePauseDialog()
     {
-        assert(font.loadFromFile(Settings::DEFAULT_FONT_PATH));
+        if (font.loadFromFile(Settings::DEFAULT_FONT_PATH) == false)
+        {
+            std::cout << "Loaded Default font path is failed" << std::endl;
+
+            throw std::invalid_argument("Default font path could not be loaded");
+        }
 
         hintText.setString("Enter - Continue, Esc - Exit game");
         hintText.setFont(font);

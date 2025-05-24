@@ -15,7 +15,7 @@ int main()
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-    sf::RenderWindow window(desktop, "Snake", sf::Style::Fullscreen);
+    sf::RenderWindow window(desktop, "Snake");
 
     Core_Game::Game game;
     game.screenWidth = window.getSize().x;

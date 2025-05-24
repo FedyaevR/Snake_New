@@ -216,7 +216,7 @@ namespace Snake
         head->SetTexture(head->direction, bodyAssets);
     }
 
-    void Snake::MoveSegments(static std::vector<std::vector<bool>>& processedTurns, static std::vector<int>& turnCounters)
+    void Snake::MoveSegments(std::vector<std::vector<bool>>& processedTurns, std::vector<int>& turnCounters)
     {
         for (size_t i = 1; i < segments.size(); i++)
         {
