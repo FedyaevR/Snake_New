@@ -7,7 +7,7 @@ namespace GameStatePlayingData
 {
     void GameStatePlayingData::InitGameStatePlaying()
     {
-        if (font.loadFromFile(Settings::DEFAULT_FONT_PATH))
+        if (font.loadFromFile(Settings::DEFAULT_FONT_PATH) == false)
         {
             std::cout << "Loaded Default font path is failed" << std::endl;
 

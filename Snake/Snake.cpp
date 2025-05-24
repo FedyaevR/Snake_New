@@ -188,7 +188,7 @@ namespace Snake
     void Snake::MoveBody()
     {
         // Массив для хранения счетчиков поворотов для каждого сегмента
-        static std::vector<int> turnCounters(segments.size(), 0);
+        std::vector<int> turnCounters(segments.size(), 0);
 
         if (turnCounters.size() != segments.size())
         {
@@ -196,7 +196,7 @@ namespace Snake
         }
 
         // Создаем массив для отслеживания, какие сегменты уже обработали текущую точку поворота
-        static std::vector<std::vector<bool>> processedTurns(segments.size(), std::vector<bool>(turnPositions.size(), false));
+        std::vector<std::vector<bool>> processedTurns(segments.size(), std::vector<bool>(turnPositions.size(), false));
 
         if (processedTurns.size() != segments.size() ||
             (processedTurns.empty() == false &&
@@ -216,7 +216,7 @@ namespace Snake
         head->SetTexture(head->direction, bodyAssets);
     }
 
-    void Snake::MoveSegments(static std::vector<std::vector<bool>>& processedTurns, static std::vector<int>& turnCounters)
+    void Snake::MoveSegments(std::vector<std::vector<bool>>& processedTurns, std::vector<int>& turnCounters)
     {
         for (size_t i = 1; i < segments.size(); i++)
         {

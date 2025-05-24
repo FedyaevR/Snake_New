@@ -38,28 +38,28 @@ namespace Views
 
         Head()
         {
-            if(up.loadFromFile(ASSETS_SNAKE_HEAD_UP))
+            if(up.loadFromFile(ASSETS_SNAKE_HEAD_UP) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_HEAD_UP font path is failed" << std::endl;
 
                 throw std::invalid_argument("ASSETS_SNAKE_HEAD_UP could not be loaded");
             }
             
-            if(down.loadFromFile(ASSETS_SNAKE_HEAD_DOWN))
+            if(down.loadFromFile(ASSETS_SNAKE_HEAD_DOWN) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_HEAD_DOWN font path is failed" << std::endl;
 
                 throw std::invalid_argument("ASSETS_SNAKE_HEAD_DOWN could not be loaded");
             }
             
-            if(left.loadFromFile(ASSETS_SNAKE_HEAD_LEFT))
+            if(left.loadFromFile(ASSETS_SNAKE_HEAD_LEFT) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_HEAD_LEFT font path is failed" << std::endl;
 
                 throw std::invalid_argument("ASSETS_SNAKE_HEAD_LEFT could not be loaded");
             }
             
-            if(right.loadFromFile(ASSETS_SNAKE_HEAD_RIGHT))
+            if(right.loadFromFile(ASSETS_SNAKE_HEAD_RIGHT) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_HEAD_RIGHT font path is failed" << std::endl;
 
@@ -79,42 +79,42 @@ namespace Views
 
         Body()
         {
-            if(vertical.loadFromFile(ASSETS_SNAKE_BODY_VERTICAL))
+            if(vertical.loadFromFile(ASSETS_SNAKE_BODY_VERTICAL) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_BODY_VERTICAL font path is failed" << std::endl;
 
                 throw std::invalid_argument("ASSETS_SNAKE_BODY_VERTICAL could not be loaded");
             }
             
-            if(horizontal.loadFromFile(ASSETS_SNAKE_BODY_HORIZONTAL))
+            if(horizontal.loadFromFile(ASSETS_SNAKE_BODY_HORIZONTAL) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_BODY_HORIZONTAL font path is failed" << std::endl;
 
                 throw std::invalid_argument("ASSETS_SNAKE_BODY_HORIZONTAL could not be loaded");
             }
             
-            if(topLeft.loadFromFile(ASSETS_SNAKE_BODY_TOPLEFT))
+            if(topLeft.loadFromFile(ASSETS_SNAKE_BODY_TOPLEFT) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_BODY_TOPLEFT font path is failed" << std::endl;
 
                 throw std::invalid_argument("ASSETS_SNAKE_BODY_TOPLEFT could not be loaded");
             }
             
-            if(topRight.loadFromFile(ASSETS_SNAKE_BODY_TOPRIGHT))
+            if(topRight.loadFromFile(ASSETS_SNAKE_BODY_TOPRIGHT) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_BODY_TOPRIGHT font path is failed" << std::endl;
 
                 throw std::invalid_argument("ASSETS_SNAKE_BODY_TOPRIGHT could not be loaded");
             }
             
-            if(bottomLeft.loadFromFile(ASSETS_SNAKE_BODY_BOTTOMLEFT))
+            if(bottomLeft.loadFromFile(ASSETS_SNAKE_BODY_BOTTOMLEFT) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_BODY_BOTTOMLEFT font path is failed" << std::endl;
 
                 throw std::invalid_argument("ASSETS_SNAKE_BODY_BOTTOMLEFT could not be loaded");
             }
             
-            if(bottomRight.loadFromFile(ASSETS_SNAKE_BODY_BOTTOMRIGHT))
+            if(bottomRight.loadFromFile(ASSETS_SNAKE_BODY_BOTTOMRIGHT) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_BODY_BOTTOMRIGHT font path is failed" << std::endl;
 
@@ -133,28 +133,28 @@ namespace Views
 
         Tail()
         {
-            if(up.loadFromFile(ASSETS_SNAKE_TAIL_UP))
+            if(up.loadFromFile(ASSETS_SNAKE_TAIL_UP) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_TAIL_UP font path is failed" << std::endl;
 
                 throw std::invalid_argument("ASSETS_SNAKE_TAIL_UP could not be loaded");
             }
             
-            if(down.loadFromFile(ASSETS_SNAKE_TAIL_DOWN))
+            if(down.loadFromFile(ASSETS_SNAKE_TAIL_DOWN) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_TAIL_DOWN font path is failed" << std::endl;
 
                 throw std::invalid_argument("ASSETS_SNAKE_TAIL_DOWN could not be loaded");
             }
             
-            if(left.loadFromFile(ASSETS_SNAKE_TAIL_LEFT))
+            if(left.loadFromFile(ASSETS_SNAKE_TAIL_LEFT) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_TAIL_LEFT font path is failed" << std::endl;
 
                 throw std::invalid_argument("ASSETS_SNAKE_TAIL_LEFT could not be loaded");
             }
             
-            if(right.loadFromFile(ASSETS_SNAKE_TAIL_RIGHT))
+            if(right.loadFromFile(ASSETS_SNAKE_TAIL_RIGHT) == false)
             {
                 std::cout << "Loaded ASSETS_SNAKE_TAIL_RIGHT font path is failed" << std::endl;
 

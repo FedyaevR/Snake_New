@@ -58,7 +58,7 @@ namespace Snake
         std::shared_ptr<Snake_Segment::Segment> InitSegment(sf::Texture texture, Math::Position position);
         void MoveHead();
         void MoveBody();
-        void MoveSegments(static std::vector<std::vector<bool>>& processedTurns, static std::vector<int>& turnCounters);
+        void MoveSegments(std::vector<std::vector<bool>>& processedTurns, std::vector<int>& turnCounters);
         void MoveSnake(Core_Game::Game& game);
         void SegmentStep(std::shared_ptr < Snake_Segment::Segment> segment, Snake_Direction::Direction setDirection);
         bool IsAtTurnPoint(Math::Position segmentPosition, Math::Position turnPosition);

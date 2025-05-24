@@ -16,7 +16,7 @@ namespace Views
 
         AppleAsset() : texture(std::make_shared<sf::Texture>())
         {
-            if (texture->loadFromFile(ASSETS_APPLE))
+            if (texture->loadFromFile(ASSETS_APPLE) == false)
             {
                 std::cout << "Loaded Apple texture is failed" << std::endl;
 
